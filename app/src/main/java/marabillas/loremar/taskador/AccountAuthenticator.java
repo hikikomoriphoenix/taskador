@@ -46,7 +46,36 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) {
-        return null;
+        AccountManager am = AccountManager.get(context);
+
+        String authToken = am.peekAuthToken(account, authTokenType);
+
+        // If no auth token, log in to receive a new auth token.
+        if (authToken == null) {
+            // TODO Put code here for directly logging in to the server using the password stored
+            // in the AccountManager. If login is successful, a new auth token should be stored
+            // and the account authentication process is repeated.
+        }
+
+        // If an auth token is retrieved, return the required bundle containing the auth token.
+        if (authToken != null) {
+            final Bundle result = new Bundle();
+            result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
+            result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type);
+            result.putString(AccountManager.KEY_AUTHTOKEN, authToken);
+            return result;
+        }
+
+        // If an auth token could not be possibly retrieved then the user should be directed to
+        // the Login screen for account credentials.
+        final Intent intent = new Intent(context, LoginActivity.class);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
+        intent.putExtra(context.getPackageName(), account.type);
+        intent.putExtra("full_access", authTokenType);
+
+        Bundle retBundle = new Bundle();
+        retBundle.putParcelable(AccountManager.KEY_INTENT, intent);
+        return retBundle;
     }
 
     @Override
