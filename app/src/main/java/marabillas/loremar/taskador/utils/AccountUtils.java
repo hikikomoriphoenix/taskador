@@ -1,4 +1,4 @@
-package marabillas.loremar.taskador;
+package marabillas.loremar.taskador.utils;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

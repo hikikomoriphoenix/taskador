@@ -1,4 +1,4 @@
-package marabillas.loremar.taskador;
+package marabillas.loremar.taskador.account;
 
 import android.accounts.AbstractAccountAuthenticator;
 import android.accounts.Account;
