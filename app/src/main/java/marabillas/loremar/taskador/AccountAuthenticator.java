@@ -12,9 +12,14 @@ import marabillas.loremar.taskador.ui.activity.LoginActivity;
 
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private Context context;
+    private String accountType;
+    private String authTokenType;
+
     public AccountAuthenticator(Context context) {
         super(context);
         this.context = context;
+        accountType = context.getPackageName();
+        authTokenType = "full_access";
     }
 
     @Override
@@ -29,8 +34,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         final Intent intent = new Intent(context, LoginActivity.class);
 
-        intent.putExtra(context.getPackageName(), accountType);
-        intent.putExtra("full_access", authTokenType);
+        intent.putExtra(this.accountType, accountType);
+        intent.putExtra(this.authTokenType, authTokenType);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
 
         final Bundle bundle = new Bundle();
@@ -70,8 +75,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         // the Login screen for account credentials.
         final Intent intent = new Intent(context, LoginActivity.class);
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response);
-        intent.putExtra(context.getPackageName(), account.type);
-        intent.putExtra("full_access", authTokenType);
+        intent.putExtra(this.accountType, account.type);
+        intent.putExtra(this.authTokenType, authTokenType);
 
         Bundle retBundle = new Bundle();
         retBundle.putParcelable(AccountManager.KEY_INTENT, intent);
