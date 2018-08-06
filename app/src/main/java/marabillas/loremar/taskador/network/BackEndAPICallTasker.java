@@ -22,7 +22,7 @@ public class BackEndAPICallTasker {
         thread.start();
         handler = new Handler(thread.getLooper());
 
-        client = new HttpClient(this);
+        client = new HttpClient();
     }
 
     public void signup(final String username, final String password) {
@@ -38,7 +38,6 @@ public class BackEndAPICallTasker {
     public void setCurrentTask(Runnable task) {
         currentTask = task;
     }
-
 
     @SuppressLint("SetJavaScriptEnabled")
     public void handleSharedHostingCookie(final String url) {

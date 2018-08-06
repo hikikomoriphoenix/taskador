@@ -13,11 +13,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class HttpClient {
-    private BackEndAPICallTasker tasker;
     private OkHttpClient client;
 
-    HttpClient(BackEndAPICallTasker tasker) {
-        this.tasker = tasker;
+    HttpClient() {
         client = new OkHttpClient();
     }
 
@@ -32,7 +30,7 @@ public class HttpClient {
         RequestBody requestBody = fb.build();
         Request request = createPostRequest(url, requestBody);
 
-        return executeRequest(request, url);
+        return executeRequest(request);
     }
 
     private Request createPostRequest(String url, RequestBody requestBody) {
@@ -50,23 +48,14 @@ public class HttpClient {
         return rb.build();
     }
 
-    private BackEndResponse executeRequest(Request request, String url) {
+    private BackEndResponse executeRequest(Request request) {
         try {
             Response response = client.newCall(request).execute();
-            String contentType = response.header("Content-Type");
-            if (contentType != null && contentType.contains("text/html")) {
-                tasker.handleSharedHostingCookie(url);
-                return null;
-            } else if (contentType != null && contentType.equals("application/json")) {
-                BackEndResponse backEndResponse = new BackEndResponse();
-                backEndResponse.setStatusCode(response.code());
-                backEndResponse.setContentType(contentType);
-                // backEndResponse.setResponseData(response.body());
-                return backEndResponse;
-            } else {
-                // TODO unexpected content type error
-                return null;
-            }
+            BackEndResponse backEndResponse = new BackEndResponse();
+            backEndResponse.setStatusCode(response.code());
+            backEndResponse.setContentType(response.header("Content-Type"));
+            // backEndResponse.setResponseData(response.body());
+            return backEndResponse;
         } catch (IOException e) {
             // TODO handle this exception
             return null;
