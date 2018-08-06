@@ -17,13 +17,14 @@ public class SignupTask implements Runnable {
 
     @Override
     public void run() {
-        tasker.setCurrentTask(this);
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("password", password);
         BackEndResponse response = tasker.getClient().postForm(form, url);
-        if (response != null) {
-            // TODO choose what the client activity will do based on response
+        if (tasker.validateResponse(response, url)) {
+            // TODO handle response
+        } else {
+            // TODO handle invalid response
         }
     }
 

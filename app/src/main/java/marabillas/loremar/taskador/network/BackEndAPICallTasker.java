@@ -2,48 +2,60 @@ package marabillas.loremar.taskador.network;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.util.concurrent.FutureTask;
+
 public class BackEndAPICallTasker {
     private Activity activity;
-    private Handler handler;
+    private FutureTask<?> task;
     private HttpClient client;
-    private Runnable currentTask;
+    private boolean recievedCookie;
 
     BackEndAPICallTasker(Activity activity) {
         this.activity = activity;
-
-        HandlerThread thread = new HandlerThread("BackEndAPICallTasker Thread");
-        thread.start();
-        handler = new Handler(thread.getLooper());
-
         client = new HttpClient();
     }
 
     public void signup(final String username, final String password) {
-        SignupTask task = new SignupTask(this, username, password);
-        task.setClient((SignupTask.Client) activity);
-        handler.post(task);
+        SignupTask signupTask = new SignupTask(this, username, password);
+        signupTask.setClient((SignupTask.Client) activity);
+        if (task != null) {
+            task.cancel(true);
+        }
+        task = new FutureTask<>(signupTask, null);
+        task.run();
     }
 
     public HttpClient getClient() {
         return client;
     }
 
-    public void setCurrentTask(Runnable task) {
-        currentTask = task;
+    public boolean validateResponse(BackEndResponse response, String url) {
+        if (response != null) {
+            String contentType = response.getContentType();
+            if (!recievedCookie && contentType.contains("text/html")) {
+                handleSharedHostingCookie(url);
+                return false;
+            } else return contentType.equals("application/json");
+        } else {
+            return false;
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    public void handleSharedHostingCookie(final String url) {
+    private void handleSharedHostingCookie(final String url) {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // Canceling task's thread here allows the execution of the following code.
+                // Otherwise, if cancel was called before runOnUiThread then runOnUiThread
+                // would have not been called, since runOnUiThread have to be called in the task's
+                // thread.
+                task.cancel(true);
                 WebView view = new WebView(activity);
                 WebSettings settings = view.getSettings();
                 settings.setJavaScriptEnabled(true);
@@ -55,8 +67,9 @@ public class BackEndAPICallTasker {
                                 .edit()
                                 .putString("shared_hosting_cookie", cookie)
                                 .apply();
+                        recievedCookie = true;
                         view.destroy();
-                        handler.post(currentTask);
+                        task.run();
                     }
                 });
                 view.loadUrl(url);
