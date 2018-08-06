@@ -39,6 +39,12 @@ public class BackEndAPICallTasker {
             String contentType = response.getContentType();
             if (!recievedCookie && contentType.contains("text/html")) {
                 handleSharedHostingCookie(url);
+                // The task's thread should do nothing while retrieving the cookie
+                try {
+                    Thread.sleep(Long.MAX_VALUE);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
                 return false;
             } else return contentType.equals("application/json");
         } else {
