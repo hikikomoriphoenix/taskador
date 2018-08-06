@@ -2,8 +2,10 @@ package marabillas.loremar.taskador.network;
 
 import java.util.HashMap;
 
+import marabillas.loremar.taskador.BuildConfig;
+
 public class SignupTask implements Runnable {
-    private final String url = "";
+    private String url;
     private BackEndAPICallTasker tasker;
     private String username;
     private String password;
@@ -13,6 +15,8 @@ public class SignupTask implements Runnable {
         this.tasker = tasker;
         this.username = username;
         this.password = password;
+
+        url = BuildConfig.backend_url + "signup.php";
     }
 
     @Override
