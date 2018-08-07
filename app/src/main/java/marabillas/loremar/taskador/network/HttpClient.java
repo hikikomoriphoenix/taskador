@@ -19,8 +19,8 @@ public class HttpClient {
         client = new OkHttpClient();
     }
 
-    public BackEndResponse postForm(final Map<String, String> formData, final String
-            url) {
+    public BackEndResponse postForm(final Map<String, String> formData, final String url) throws
+            IOException {
         FormBody.Builder fb = new FormBody.Builder();
         for (String key :
                 formData.keySet()) {
@@ -48,17 +48,12 @@ public class HttpClient {
         return rb.build();
     }
 
-    private BackEndResponse executeRequest(Request request) {
-        try {
-            Response response = client.newCall(request).execute();
-            BackEndResponse backEndResponse = new BackEndResponse();
-            backEndResponse.setStatusCode(response.code());
-            backEndResponse.setContentType(response.header("Content-Type"));
-            // backEndResponse.setResponseData(response.body());
-            return backEndResponse;
-        } catch (IOException e) {
-            // TODO handle this exception
-            return null;
-        }
+    private BackEndResponse executeRequest(Request request) throws IOException {
+        Response response = client.newCall(request).execute();
+        BackEndResponse backEndResponse = new BackEndResponse();
+        backEndResponse.setStatusCode(response.code());
+        backEndResponse.setContentType(response.header("Content-Type"));
+        // backEndResponse.setResponseData(response.body());
+        return backEndResponse;
     }
 }

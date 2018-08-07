@@ -12,12 +12,12 @@ import java.util.concurrent.FutureTask;
 public class BackEndAPICallTasker {
     private Activity activity;
     private FutureTask<?> task;
-    private HttpClient client;
+    private HttpClient httpClient;
     private boolean recievedCookie;
 
     BackEndAPICallTasker(Activity activity) {
         this.activity = activity;
-        client = new HttpClient();
+        httpClient = new HttpClient();
     }
 
     public void signup(final String username, final String password) {
@@ -30,8 +30,8 @@ public class BackEndAPICallTasker {
         task.run();
     }
 
-    public HttpClient getClient() {
-        return client;
+    public HttpClient getHttpClient() {
+        return httpClient;
     }
 
     public boolean validateResponse(BackEndResponse response, String url) {

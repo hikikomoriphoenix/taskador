@@ -1,5 +1,6 @@
 package marabillas.loremar.taskador.network;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import marabillas.loremar.taskador.BuildConfig;
@@ -24,7 +25,14 @@ public class SignupTask implements Runnable {
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("password", password);
-        BackEndResponse response = tasker.getClient().postForm(form, url);
+        BackEndResponse response = null;
+
+        try {
+            response = tasker.getHttpClient().postForm(form, url);
+        } catch (IOException e) {
+            client.failedToSubmitNewAccount(e.getMessage());
+        }
+
         if (tasker.validateResponse(response, url)) {
             // TODO handle response
         } else {
@@ -37,10 +45,10 @@ public class SignupTask implements Runnable {
     }
 
     public interface Client {
-        void newAccountSaved();
+        void newAccountSaved(String message);
 
-        void failedToSubmitNewAccount();
+        void failedToSubmitNewAccount(String message);
 
-        void backEndUnableToSaveNewAccount();
+        void backEndUnableToSaveNewAccount(String message);
     }
 }
