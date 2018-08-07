@@ -10,7 +10,7 @@ public class SignupTask implements Runnable {
     private BackEndAPICallTasker tasker;
     private String username;
     private String password;
-    private Client client;
+    private BackEndResponse response;
 
     SignupTask(BackEndAPICallTasker tasker, String username, String password) {
         this.tasker = tasker;
@@ -25,23 +25,20 @@ public class SignupTask implements Runnable {
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("password", password);
-        BackEndResponse response = null;
 
         try {
             response = tasker.getHttpClient().postForm(form, url);
         } catch (IOException e) {
-            client.failedToSubmitNewAccount(e.getMessage());
-        }
-
-        if (tasker.validateResponse(response, url)) {
-            // TODO handle response
-        } else {
-            // TODO handle invalid response
+            tasker.handleRequestFailure(this, e.getMessage());
         }
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void trackForResult(BackEndResponse response) {
+        this.response = response;
+    }
+
+    public String getSignupUrl() {
+        return url;
     }
 
     public interface Client {
