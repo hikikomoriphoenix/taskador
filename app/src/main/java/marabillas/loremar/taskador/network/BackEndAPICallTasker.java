@@ -41,6 +41,9 @@ public class BackEndAPICallTasker {
     }
 
     public void signup(final String username, final String password) {
+        if (!(activity.get() instanceof SignupTask.Client)) {
+            throw new RuntimeException("Activity needs to implement SignupTask.Client");
+        }
         recievedCookie = false;
         SignupTask signupTask = new SignupTask(this, username, password);
         signupTask.setClient((SignupTask.Client) (activity.get()));
