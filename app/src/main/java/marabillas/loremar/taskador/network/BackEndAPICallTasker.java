@@ -7,22 +7,43 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.FutureTask;
 
 public class BackEndAPICallTasker {
-    private Activity activity;
+    private static BackEndAPICallTasker instance;
+    private WeakReference<Activity> activity;
     private FutureTask<?> task;
     private HttpClient httpClient;
     private boolean recievedCookie;
 
-    BackEndAPICallTasker(Activity activity) {
-        this.activity = activity;
+    private BackEndAPICallTasker() {
+        instance = this;
         httpClient = new HttpClient();
     }
 
+    @Override
+    protected void finalize() {
+        if (task != null) {
+            task.cancel(true);
+        }
+    }
+
+    public static BackEndAPICallTasker getInstance() {
+        if (instance == null) {
+            new BackEndAPICallTasker();
+        }
+        return instance;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = new WeakReference<>(activity);
+    }
+
     public void signup(final String username, final String password) {
+        recievedCookie = false;
         SignupTask signupTask = new SignupTask(this, username, password);
-        signupTask.setClient((SignupTask.Client) activity);
+        signupTask.setClient((SignupTask.Client) (activity.get()));
         if (task != null) {
             task.cancel(true);
         }
@@ -54,7 +75,7 @@ public class BackEndAPICallTasker {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void handleSharedHostingCookie(final String url) {
-        activity.runOnUiThread(new Runnable() {
+        activity.get().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 // Canceling task's thread here allows the execution of the following code.
@@ -62,14 +83,14 @@ public class BackEndAPICallTasker {
                 // would have not been called, since runOnUiThread have to be called in the task's
                 // thread.
                 task.cancel(true);
-                WebView view = new WebView(activity);
+                WebView view = new WebView(activity.get());
                 WebSettings settings = view.getSettings();
                 settings.setJavaScriptEnabled(true);
                 view.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         String cookie = CookieManager.getInstance().getCookie(url);
-                        activity.getSharedPreferences("config", 0)
+                        activity.get().getSharedPreferences("config", 0)
                                 .edit()
                                 .putString("shared_hosting_cookie", cookie)
                                 .apply();
