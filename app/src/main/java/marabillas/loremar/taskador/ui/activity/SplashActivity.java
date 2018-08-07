@@ -8,17 +8,17 @@ import marabillas.loremar.taskador.network.SignupTask;
  */
 public class SplashActivity implements SignupTask.Client {
     @Override
-    public void newAccountSaved() {
+    public void newAccountSaved(String message) {
 
     }
 
     @Override
-    public void failedToSubmitNewAccount() {
+    public void failedToSubmitNewAccount(String message) {
 
     }
 
     @Override
-    public void backEndUnableToSaveNewAccount() {
+    public void backEndUnableToSaveNewAccount(String message) {
 
     }
 }
