@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import marabillas.loremar.taskador.BuildConfig;
+import marabillas.loremar.taskador.json.JSON;
 
-public class SignupTask implements Runnable {
+public class SignupTask implements Runnable, ResultListener {
     private String url;
     private BackEndAPICallTasker tasker;
     private String username;
     private String password;
     private BackEndResponse response;
+    private ResultHandler resultHandler;
 
     SignupTask(BackEndAPICallTasker tasker, String username, String password) {
         this.tasker = tasker;
@@ -39,6 +41,25 @@ public class SignupTask implements Runnable {
 
     public String getSignupUrl() {
         return url;
+    }
+
+    @Override
+    public void onStatusOK(String message, JSON data) {
+        resultHandler.newAccountSaved(message);
+    }
+
+    @Override
+    public void onClientError(String message) {
+        resultHandler.backEndUnableToSaveNewAccount(message);
+    }
+
+    @Override
+    public void onServerError(String message) {
+        resultHandler.backEndUnableToSaveNewAccount(message);
+    }
+
+    public void setResultHandler(ResultHandler resultHandler) {
+        this.resultHandler = resultHandler;
     }
 
     public interface ResultHandler {
