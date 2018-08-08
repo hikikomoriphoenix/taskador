@@ -13,7 +13,7 @@ public class BackEndResponseHandler {
         this.tasker = tasker;
     }
 
-    public void handleSignupTaskResponse(BackEndResponse response, SignupTask.Client client,
+    public void handleSignupTaskResponse(BackEndResponse response, SignupTask.ResultHandler resultHandler,
                                          boolean responseIsValid) {
         if (responseIsValid) {
             // TODO handle response

@@ -41,7 +41,7 @@ public class SignupTask implements Runnable {
         return url;
     }
 
-    public interface Client {
+    public interface ResultHandler {
         void newAccountSaved(String message);
 
         void failedToSubmitNewAccount(String message);

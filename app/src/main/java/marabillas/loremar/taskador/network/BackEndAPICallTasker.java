@@ -61,13 +61,13 @@ public class BackEndAPICallTasker {
             result = (BackEndResponse) task.get();
             boolean responseIsValid = responseHandler.validateResponse(result, signupTask
                     .getSignupUrl());
-            responseHandler.handleSignupTaskResponse(result, (SignupTask.Client) activity.get(),
+            responseHandler.handleSignupTaskResponse(result, (SignupTask.ResultHandler) activity.get(),
                     responseIsValid);
         } catch (InterruptedException e) {
-            responseHandler.handleSignupTaskResponse(null, (SignupTask.Client) activity.get(),
+            responseHandler.handleSignupTaskResponse(null, (SignupTask.ResultHandler) activity.get(),
                     false);
         } catch (ExecutionException e) {
-            responseHandler.handleSignupTaskResponse(null, (SignupTask.Client) activity.get(),
+            responseHandler.handleSignupTaskResponse(null, (SignupTask.ResultHandler) activity.get(),
                     false);
         }
     }
@@ -78,7 +78,7 @@ public class BackEndAPICallTasker {
 
     public void handleRequestFailure(Runnable task, String message) {
         if (task instanceof SignupTask) {
-            ((SignupTask.Client) activity.get()).failedToSubmitNewAccount(message);
+            ((SignupTask.ResultHandler) activity.get()).failedToSubmitNewAccount(message);
         }
     }
 
