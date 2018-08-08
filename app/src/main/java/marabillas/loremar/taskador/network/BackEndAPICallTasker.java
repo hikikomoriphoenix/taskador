@@ -49,27 +49,39 @@ public class BackEndAPICallTasker {
     public void signup(final String username, final String password) {
         receivedCookie = false;
         SignupTask signupTask = new SignupTask(this, username, password);
+        try {
+            performTask(signupTask);
+        } catch (ClassCastException e) {
+            taskError(SignupTask.ResultHandler.class);
+        }
+    }
+
+    private void performTask(RunnableTask runnableTask) {
+        receivedCookie = false;
+        runnableTask.setResultHandler((RunnableTask.ResultHandler) activity);
         if (task != null) {
             task.cancel(true);
         }
         BackEndResponse response = new BackEndResponse();
-        task = new FutureTask<>(signupTask, response);
-        signupTask.trackForResult(response);
+        task = new FutureTask<>(runnableTask, response);
+        runnableTask.trackForResult(response);
         task.run();
         BackEndResponse result;
         try {
             result = (BackEndResponse) task.get();
-            boolean responseIsValid = responseHandler.validateResponse(result, signupTask
-                    .getSignupUrl());
-            responseHandler.handleSignupTaskResponse(result, (SignupTask.ResultHandler) activity.get(),
-                    responseIsValid);
+            String url = runnableTask.getRequestUrl();
+            boolean responseIsValid = responseHandler.validateResponse(result, url);
+            responseHandler.handle(response, runnableTask, responseIsValid);
         } catch (InterruptedException e) {
-            responseHandler.handleSignupTaskResponse(null, (SignupTask.ResultHandler) activity.get(),
-                    false);
+            responseHandler.handle(null, runnableTask, false);
         } catch (ExecutionException e) {
-            responseHandler.handleSignupTaskResponse(null, (SignupTask.ResultHandler) activity.get(),
-                    false);
+            responseHandler.handle(null, runnableTask, false);
         }
+    }
+
+    private void taskError(Class resultHandlerInterface) {
+        throw new ClassCastException("Activity must implement " + resultHandlerInterface.getName()
+                + " for this operation");
     }
 
     public HttpClient getHttpClient() {
