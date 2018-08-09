@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class HttpClient {
     private OkHttpClient client;
@@ -50,10 +51,17 @@ public class HttpClient {
 
     private BackEndResponse executeRequest(Request request) throws IOException {
         Response response = client.newCall(request).execute();
+
         BackEndResponse backEndResponse = new BackEndResponse();
         backEndResponse.setStatusCode(response.code());
         backEndResponse.setContentType(response.header("Content-Type"));
-        // backEndResponse.setResponseData(response.body());
+
+        ResponseBody body = response.body();
+        if (body != null) {
+            String data = body.string();
+            backEndResponse.setData(data);
+        }
+
         return backEndResponse;
     }
 }

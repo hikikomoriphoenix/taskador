@@ -6,6 +6,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import marabillas.loremar.taskador.json.FailedToGetFieldException;
+import marabillas.loremar.taskador.json.FailedToParseException;
+import marabillas.loremar.taskador.json.JSON;
+import marabillas.loremar.taskador.json.JSONParser;
+
 public class BackEndResponseHandler {
     private BackEndAPICallTasker tasker;
 
@@ -16,9 +21,36 @@ public class BackEndResponseHandler {
     public void handle(BackEndResponse response, ResultListener resultListener, boolean
             responseIsValid) {
         if (responseIsValid) {
-            // TODO handle response
+            int statusCode = response.getStatusCode();
+            String data = response.getData();
+            String message;
+            switch (statusCode) {
+                case 200:
+                    JSON json = null;
+                    try {
+                        json = new JSONParser().parse(data);
+                    } catch (FailedToParseException ignore) {
+                    }
+                    resultListener.onStatusOK("Back-end process success.", json);
+                    break;
+                case 400:
+                case 422:
+                    message = getMessage(data);
+                    if (message == null) {
+                        message = "Client Error!";
+                    }
+                    resultListener.onClientError(message);
+                    break;
+                case 500:
+                    message = getMessage(data);
+                    if (message == null) {
+                        message = "Server Error!";
+                    }
+                    resultListener.onServerError(message);
+                    break;
+            }
         } else {
-            // TODO handle invalid response
+            resultListener.onServerError("Response is invalid");
         }
     }
 
@@ -58,5 +90,16 @@ public class BackEndResponseHandler {
                 view.loadUrl(url);
             }
         });
+    }
+
+    private String getMessage(String data) {
+        String message = null;
+        try {
+            JSON json = new JSONParser().parse(data);
+            message = json.getString("message");
+        } catch (FailedToParseException ignore) {
+        } catch (FailedToGetFieldException ignore) {
+        }
+        return message;
     }
 }
