@@ -1,9 +1,16 @@
 package marabillas.loremar.taskador.network.resulthandlers;
 
+import java.util.concurrent.CountDownLatch;
+
 import marabillas.loremar.taskador.network.SignupTask;
 
 public class TestSignup implements SignupTask.ResultHandler {
     private Result result;
+    private CountDownLatch countDownLatch;
+
+    public TestSignup() {
+        countDownLatch = new CountDownLatch(1);
+    }
 
     public enum Result {
         NEW_ACCOUNT_SAVED,
@@ -12,24 +19,25 @@ public class TestSignup implements SignupTask.ResultHandler {
     }
 
     @Override
-    public synchronized void newAccountSaved(String message) {
+    public void newAccountSaved(String message) {
         result = Result.NEW_ACCOUNT_SAVED;
-        notify();
     }
 
     @Override
-    public synchronized void failedToSubmitNewAccount(String message) {
+    public void failedToSubmitNewAccount(String message) {
         result = Result.FAILED_TO_SUBMIT_NEW_ACCOUNT;
-        notify();
     }
 
     @Override
-    public synchronized void backEndUnableToSaveNewAccount(String message) {
+    public void backEndUnableToSaveNewAccount(String message) {
         result = Result.BACK_END_UNABLE_TO_SAVE_NEW_ACCOUNT;
-        notify();
     }
 
     public Result getResult() {
         return result;
+    }
+
+    public CountDownLatch getCountDownLatch() {
+        return countDownLatch;
     }
 }
