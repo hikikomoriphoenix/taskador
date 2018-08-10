@@ -16,12 +16,6 @@ import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSONParser;
 
 public class BackEndResponseHandler {
-    private BackEndAPICallTasker tasker;
-
-    BackEndResponseHandler(BackEndAPICallTasker tasker) {
-        this.tasker = tasker;
-    }
-
     public void handle(BackEndResponse response, ResultListener resultListener, boolean
             responseIsValid) {
         if (responseIsValid) {
@@ -61,6 +55,7 @@ public class BackEndResponseHandler {
     public boolean validateResponse(BackEndResponse response, String url) {
         if (response != null) {
             String contentType = response.getContentType();
+            BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
             if (tasker.receivedCookie() && contentType.contains("text/html")) {
                 handleSharedHostingCookie(url);
                 return false;
@@ -88,6 +83,7 @@ public class BackEndResponseHandler {
                                 .edit()
                                 .putString("shared_hosting_cookie", cookie)
                                 .apply();
+                        BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
                         tasker.setReceivedCookie(true);
                         ((ViewGroup) view.getParent()).removeView(view);
                         view.destroy();

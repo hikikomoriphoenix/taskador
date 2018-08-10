@@ -15,7 +15,7 @@ public class BackEndAPICallTasker {
     private BackEndAPICallTasker() {
         instance = this;
         httpClient = new HttpClient();
-        responseHandler = new BackEndResponseHandler(this);
+        responseHandler = new BackEndResponseHandler();
     }
 
     @Override
