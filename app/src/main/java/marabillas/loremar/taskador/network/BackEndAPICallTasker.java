@@ -3,11 +3,10 @@ package marabillas.loremar.taskador.network;
 import android.support.annotation.NonNull;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
 public class BackEndAPICallTasker implements CookieHandledTracker {
     private static BackEndAPICallTasker instance;
-    private FutureTask<?> task;
+    private BackEndAPICallTask task;
     private HttpClient httpClient;
     private boolean cookieHandled;
     private BackEndResponseHandler responseHandler;
@@ -32,7 +31,7 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         return instance;
     }
 
-    public FutureTask<?> getTask() {
+    public BackEndAPICallTask getTask() {
         return task;
     }
 
@@ -49,15 +48,18 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
             task.cancel(true);
         }
         BackEndResponse response = new BackEndResponse();
-        task = new FutureTask<>(runnableTask, response);
+        task = new BackEndAPICallTask(runnableTask, response);
         runnableTask.trackForResult(response);
         task.run();
-        BackEndResponse result;
+        obtainAndProcessResult(runnableTask);
+    }
+
+    private void obtainAndProcessResult(RunnableTask runnableTask) {
         try {
-            result = (BackEndResponse) task.get();
+            BackEndResponse result = task.get();
             String url = runnableTask.getRequestUrl();
             boolean responseIsValid = responseHandler.validateResponse(result, url);
-            responseHandler.handle(response, runnableTask, responseIsValid);
+            responseHandler.handle(result, runnableTask, responseIsValid);
         } catch (InterruptedException e) {
             responseHandler.handle(null, runnableTask, false);
         } catch (ExecutionException e) {
@@ -82,6 +84,7 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
     @Override
     public void finalizeCookieHandling() {
         cookieHandled = true;
-        getTask().run();
+        task.run();
+        obtainAndProcessResult(task.getRunnableTask());
     }
 }
