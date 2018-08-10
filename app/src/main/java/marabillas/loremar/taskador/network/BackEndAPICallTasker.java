@@ -49,7 +49,6 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         }
         BackEndResponse response = new BackEndResponse();
         task = new BackEndAPICallTask(runnableTask, response);
-        runnableTask.trackForResult(response);
         task.run();
         obtainAndProcessResult(runnableTask);
     }

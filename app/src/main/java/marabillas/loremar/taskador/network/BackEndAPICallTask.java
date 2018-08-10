@@ -10,6 +10,7 @@ public class BackEndAPICallTask extends FutureTask<BackEndResponse> {
     public BackEndAPICallTask(@NonNull RunnableTask runnableTask, BackEndResponse result) {
         super(runnableTask, result);
         this.runnableTask = runnableTask;
+        runnableTask.trackForResult(result);
     }
 
     public RunnableTask getRunnableTask() {

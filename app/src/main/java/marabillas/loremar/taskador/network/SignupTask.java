@@ -28,7 +28,10 @@ public class SignupTask extends RunnableTask {
         form.put("password", password);
 
         try {
-            response = tasker.getHttpClient().postForm(form, url);
+            BackEndResponse backEndResponse = tasker.getHttpClient().postForm(form, url);
+            response.setStatusCode(backEndResponse.getStatusCode());
+            response.setContentType(backEndResponse.getContentType());
+            response.setData(backEndResponse.getData());
         } catch (IOException e) {
             ResultHandler resultHandler = resultHandlerReference.get();
             if (resultHandler != null) {
