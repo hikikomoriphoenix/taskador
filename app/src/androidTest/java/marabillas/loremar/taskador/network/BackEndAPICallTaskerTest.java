@@ -26,7 +26,9 @@ public class BackEndAPICallTaskerTest {
             @Override
             public void run() {
                 TestSignup.Result result = testSignup.getResult();
-                assertThat(result, is(TestSignup.Result.NEW_ACCOUNT_SAVED));
+                String message = testSignup.getMessage();
+                assertThat(result, is(TestSignup.Result.BACK_END_UNABLE_TO_SAVE_NEW_ACCOUNT));
+                assertThat(message, is("Server Error!"));
                 testSignup.getCountDownLatch().countDown();
             }
         }.start();
