@@ -56,10 +56,14 @@ public class BackEndResponseHandler {
         if (response != null) {
             String contentType = response.getContentType();
             BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
-            if (!tasker.receivedCookie() && contentType.contains("text/html")) {
-                handleSharedHostingCookie(url);
+            if (contentType != null) {
+                if (!tasker.receivedCookie() && contentType.contains("text/html")) {
+                    handleSharedHostingCookie(url);
+                    return false;
+                } else return contentType.equals("application/json");
+            } else {
                 return false;
-            } else return contentType.equals("application/json");
+            }
         } else {
             return false;
         }
