@@ -38,7 +38,6 @@ public class BackEndAPICallTasker {
 
     public void signup(@NonNull SignupTask.ResultHandler resultHandler, final String username, final String
             password) {
-        receivedCookie = false;
         SignupTask signupTask = new SignupTask(this, username, password);
         performTask(resultHandler, signupTask);
     }
