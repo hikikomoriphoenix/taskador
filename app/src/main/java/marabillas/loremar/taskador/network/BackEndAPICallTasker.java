@@ -5,17 +5,17 @@ import android.support.annotation.NonNull;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
-public class BackEndAPICallTasker {
+public class BackEndAPICallTasker implements CookieHandledTracker {
     private static BackEndAPICallTasker instance;
     private FutureTask<?> task;
     private HttpClient httpClient;
-    private boolean receivedCookie;
+    private boolean cookieHandled;
     private BackEndResponseHandler responseHandler;
 
     private BackEndAPICallTasker() {
         instance = this;
         httpClient = new HttpClient();
-        responseHandler = new BackEndResponseHandler();
+        responseHandler = new BackEndResponseHandler(this);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class BackEndAPICallTasker {
     }
 
     private void performTask(@NonNull RunnableTask.ResultHandler resultHandler, RunnableTask runnableTask) {
-        receivedCookie = false;
+        resetCookieHandledTracking();
         runnableTask.setResultHandler(resultHandler);
         if (task != null) {
             task.cancel(true);
@@ -69,11 +69,19 @@ public class BackEndAPICallTasker {
         return httpClient;
     }
 
-    public boolean receivedCookie() {
-        return receivedCookie;
+    @Override
+    public boolean isCookieHandled() {
+        return cookieHandled;
     }
 
-    public void setReceivedCookie(boolean receivedCookie) {
-        this.receivedCookie = receivedCookie;
+    @Override
+    public void resetCookieHandledTracking() {
+        cookieHandled = false;
+    }
+
+    @Override
+    public void finalizeCookieHandling() {
+        cookieHandled = true;
+        getTask().run();
     }
 }
