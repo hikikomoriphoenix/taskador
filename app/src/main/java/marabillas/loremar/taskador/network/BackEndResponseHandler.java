@@ -3,7 +3,6 @@ package marabillas.loremar.taskador.network;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
-import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -92,7 +91,6 @@ public class BackEndResponseHandler {
                                 .edit()
                                 .putString("shared_hosting_cookie", cookie)
                                 .apply();
-                        ((ViewGroup) view.getParent()).removeView(view);
                         view.destroy();
                         cookieHandledTracker.finalizeCookieHandling();
                     }
