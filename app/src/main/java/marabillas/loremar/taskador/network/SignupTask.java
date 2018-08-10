@@ -30,7 +30,10 @@ public class SignupTask extends RunnableTask {
         try {
             response = tasker.getHttpClient().postForm(form, url);
         } catch (IOException e) {
-            tasker.handleRequestFailure(this, e.getMessage());
+            ResultHandler resultHandler = resultHandlerReference.get();
+            if (resultHandler != null) {
+                resultHandler.failedToSubmitNewAccount(e.getMessage());
+            }
         }
     }
 

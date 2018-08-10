@@ -70,12 +70,6 @@ public class BackEndAPICallTasker {
         return httpClient;
     }
 
-    public void handleRequestFailure(Runnable task, String message) {
-        if (task instanceof SignupTask) {
-            ((SignupTask.ResultHandler) activity.get()).failedToSubmitNewAccount(message);
-        }
-    }
-
     public boolean receivedCookie() {
         return receivedCookie;
     }
