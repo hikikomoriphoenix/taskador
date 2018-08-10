@@ -1,14 +1,12 @@
 package marabillas.loremar.taskador.network;
 
-import android.app.Activity;
+import android.support.annotation.NonNull;
 
-import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 public class BackEndAPICallTasker {
     private static BackEndAPICallTasker instance;
-    private WeakReference<Activity> activity;
     private FutureTask<?> task;
     private HttpClient httpClient;
     private boolean receivedCookie;
@@ -34,31 +32,20 @@ public class BackEndAPICallTasker {
         return instance;
     }
 
-    public void setActivity(Activity activity) {
-        this.activity = new WeakReference<>(activity);
-    }
-
-    public Activity getActivity() {
-        return activity.get();
-    }
-
     public FutureTask<?> getTask() {
         return task;
     }
 
-    public void signup(final String username, final String password) {
+    public void signup(@NonNull SignupTask.ResultHandler resultHandler, final String username, final String
+            password) {
         receivedCookie = false;
         SignupTask signupTask = new SignupTask(this, username, password);
-        try {
-            performTask(signupTask);
-        } catch (ClassCastException e) {
-            taskError(SignupTask.ResultHandler.class);
-        }
+        performTask(resultHandler, signupTask);
     }
 
-    private void performTask(RunnableTask runnableTask) {
+    private void performTask(@NonNull RunnableTask.ResultHandler resultHandler, RunnableTask runnableTask) {
         receivedCookie = false;
-        runnableTask.setResultHandler((RunnableTask.ResultHandler) activity);
+        runnableTask.setResultHandler(resultHandler);
         if (task != null) {
             task.cancel(true);
         }
@@ -77,11 +64,6 @@ public class BackEndAPICallTasker {
         } catch (ExecutionException e) {
             responseHandler.handle(null, runnableTask, false);
         }
-    }
-
-    private void taskError(Class resultHandlerInterface) {
-        throw new ClassCastException("Activity must implement " + resultHandlerInterface.getName()
-                + " for this operation");
     }
 
     public HttpClient getHttpClient() {

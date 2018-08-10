@@ -1,11 +1,15 @@
 package marabillas.loremar.taskador.network;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.os.Handler;
+import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.FailedToParseException;
 import marabillas.loremar.taskador.json.JSON;
@@ -68,21 +72,24 @@ public class BackEndResponseHandler {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void handleSharedHostingCookie(final String url) {
-        tasker.getActivity().runOnUiThread(new Runnable() {
+        Context context = App.getInstance().getApplicationContext();
+        Handler handler = new Handler(context.getMainLooper());
+        handler.post(new Runnable() {
             @Override
             public void run() {
-                WebView view = new WebView(tasker.getActivity());
+                WebView view = new WebView(App.getInstance().getApplicationContext());
                 WebSettings settings = view.getSettings();
                 settings.setJavaScriptEnabled(true);
                 view.setWebViewClient(new WebViewClient() {
                     @Override
                     public void onPageFinished(WebView view, String url) {
                         String cookie = CookieManager.getInstance().getCookie(url);
-                        tasker.getActivity().getSharedPreferences("config", 0)
+                        App.getInstance().getSharedPreferences("config", 0)
                                 .edit()
                                 .putString("shared_hosting_cookie", cookie)
                                 .apply();
                         tasker.setReceivedCookie(true);
+                        ((ViewGroup) view.getParent()).removeView(view);
                         view.destroy();
                         tasker.getTask().run();
                     }
