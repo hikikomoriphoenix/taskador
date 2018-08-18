@@ -91,7 +91,6 @@ public class BackEndResponseHandler {
                                 .edit()
                                 .putString("shared_hosting_cookie", cookie)
                                 .apply();
-                        view.destroy();
                         cookieHandledTracker.finalizeCookieHandling();
                     }
                 });
