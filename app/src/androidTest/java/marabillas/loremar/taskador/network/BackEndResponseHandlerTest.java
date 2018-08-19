@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 
 import marabillas.loremar.taskador.BuildConfig;
+import marabillas.loremar.taskador.json.JSON;
 
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,6 +22,104 @@ public class BackEndResponseHandlerTest {
 
     @Test
     public void handle() {
+        class CookieHandledTrackerDummy implements CookieHandledTracker {
+            @Override
+            public boolean isCookieHandled() {
+                return false;
+            }
+
+            @Override
+            public void resetCookieHandledTracking() {
+
+            }
+
+            @Override
+            public void finalizeCookieHandling() {
+
+            }
+        }
+
+        class ResultsListenerTest implements ResultListener {
+            private String message;
+            private CountDownLatch pause;
+
+            private ResultsListenerTest() {
+                pause = new CountDownLatch(1);
+            }
+
+            @Override
+            public void onStatusOK(String message, JSON data) {
+                this.message = message;
+                pause.countDown();
+            }
+
+            @Override
+            public void onClientError(String message) {
+                this.message = message;
+                pause.countDown();
+            }
+
+            @Override
+            public void onServerError(String message) {
+                this.message = message;
+                pause.countDown();
+            }
+
+            private String getMessage() {
+                return message;
+            }
+
+            private void resetCountDownLatch() {
+                pause = new CountDownLatch(1);
+            }
+
+            private void waitForResult() {
+                try {
+                    pause.await();
+                } catch (InterruptedException e) {
+                    Assert.fail(e.getMessage());
+                }
+            }
+        }
+
+        BackEndResponseHandler backEndResponseHandler = new BackEndResponseHandler(new
+                CookieHandledTrackerDummy());
+        ResultsListenerTest resultsListenerTest = new ResultsListenerTest();
+        BackEndResponse response = new BackEndResponse();
+        response.setData("");
+
+        // Test 200
+        response.setStatusCode(200);
+        backEndResponseHandler.handle(response, resultsListenerTest, true);
+        resultsListenerTest.waitForResult();
+        assertThat(resultsListenerTest.getMessage(), is("Back-end process success."));
+
+        // Test 400
+        response.setStatusCode(400);
+        resultsListenerTest.resetCountDownLatch();
+        backEndResponseHandler.handle(response, resultsListenerTest, true);
+        resultsListenerTest.waitForResult();
+        assertThat(resultsListenerTest.getMessage(), is("Client Error!"));
+
+        // Test 422
+        response.setStatusCode(422);
+        resultsListenerTest.resetCountDownLatch();
+        backEndResponseHandler.handle(response, resultsListenerTest, true);
+        resultsListenerTest.waitForResult();
+        assertThat(resultsListenerTest.getMessage(), is("Client Error!"));
+
+        // Test 500
+        response.setStatusCode(500);
+        resultsListenerTest.resetCountDownLatch();
+        backEndResponseHandler.handle(response, resultsListenerTest, true);
+        resultsListenerTest.waitForResult();
+        assertThat(resultsListenerTest.getMessage(), is("Server Error!"));
+
+        // Test invalid response
+        resultsListenerTest.resetCountDownLatch();
+        backEndResponseHandler.handle(null, resultsListenerTest, false);
+        resultsListenerTest.waitForResult();
+        assertThat(resultsListenerTest.getMessage(), is("Response is invalid"));
     }
 
     @Test
