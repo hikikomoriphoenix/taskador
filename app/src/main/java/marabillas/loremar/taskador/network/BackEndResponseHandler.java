@@ -57,13 +57,13 @@ public class BackEndResponseHandler {
         }
     }
 
-    public boolean validateResponse(BackEndResponse response, String url) {
+    public boolean validateResponse(BackEndResponse response, String url) throws RecievedACookieException {
         if (response != null) {
             String contentType = response.getContentType();
             if (contentType != null) {
                 if (!cookieHandledTracker.isCookieHandled() && contentType.contains("text/html")) {
                     handleSharedHostingCookie(url);
-                    return false;
+                    throw new RecievedACookieException();
                 } else return contentType.equals("application/json");
             } else {
                 return false;
@@ -108,5 +108,8 @@ public class BackEndResponseHandler {
         } catch (FailedToGetFieldException ignore) {
         }
         return message;
+    }
+
+    static class RecievedACookieException extends Exception {
     }
 }

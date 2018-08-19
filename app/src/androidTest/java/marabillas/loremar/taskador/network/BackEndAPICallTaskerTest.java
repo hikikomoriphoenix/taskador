@@ -7,9 +7,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import marabillas.loremar.taskador.network.resulthandlers.TestSignup;
+import java.util.concurrent.CountDownLatch;
 
+import static marabillas.loremar.taskador.utils.LogUtils.log;
+import static marabillas.loremar.taskador.utils.LogUtils.logError;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(AndroidJUnit4.class)
@@ -19,21 +22,36 @@ public class BackEndAPICallTaskerTest {
     @Test
     public void signup() {
         final String username = "test2";
-        final String password = "passwords";
-        final TestSignup testSignup = new TestSignup();
-        BackEndAPICallTasker.getInstance().signup(testSignup, username, password);
-        new Thread() {
+        final String password = "password";
+        final CountDownLatch pause = new CountDownLatch(1);
+
+        SignupTask.ResultHandler resultHandler = new SignupTask.ResultHandler() {
             @Override
-            public void run() {
-                TestSignup.Result result = testSignup.getResult();
-                String message = testSignup.getMessage();
-                assertThat(result, is(TestSignup.Result.BACK_END_UNABLE_TO_SAVE_NEW_ACCOUNT));
-                assertThat(message, is("Server Error!"));
-                testSignup.getCountDownLatch().countDown();
+            public void newAccountSaved(String message) {
+                log(message);
+                assertThat(message, is("Back-end process success."));
+                pause.countDown();
             }
-        }.start();
+
+            @Override
+            public void failedToSubmitNewAccount(String message) {
+                logError(message);
+                assertNotNull(message);
+                pause.countDown();
+            }
+
+            @Override
+            public void backEndUnableToSaveNewAccount(String message) {
+                logError(message);
+                assertNotNull(message);
+                pause.countDown();
+            }
+        };
+
+        BackEndAPICallTasker.getInstance().signup(resultHandler, username, password);
+
         try {
-            testSignup.getCountDownLatch().await();
+            pause.await();
         } catch (InterruptedException e) {
             Assert.fail("Await interrupted: " + e.getMessage());
         }

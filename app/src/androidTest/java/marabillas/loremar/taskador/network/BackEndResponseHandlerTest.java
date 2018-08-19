@@ -80,9 +80,10 @@ public class BackEndResponseHandlerTest {
         BackEndResponse response = new BackEndResponse();
         response.setContentType("text/html");
 
-        boolean valid = responseHandler.validateResponse(response, url);
-
-        assertThat(valid, is(false));
+        try {
+            responseHandler.validateResponse(response, url);
+        } catch (BackEndResponseHandler.RecievedACookieException ignore) {
+        }
 
         // This thread needs to wait for further results
         try {

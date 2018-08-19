@@ -63,6 +63,7 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
             responseHandler.handle(null, runnableTask, false);
         } catch (ExecutionException e) {
             responseHandler.handle(null, runnableTask, false);
+        } catch (BackEndResponseHandler.RecievedACookieException ignore) {
         }
     }
 
