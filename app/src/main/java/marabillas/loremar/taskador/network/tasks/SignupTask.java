@@ -7,14 +7,13 @@ import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.BackEndResponse;
+import marabillas.loremar.taskador.network.HttpClient;
 
 public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
-    private BackEndAPICallTasker tasker;
     private String username;
     private String password;
 
-    public SignupTask(BackEndAPICallTasker tasker, String username, String password) {
-        this.tasker = tasker;
+    public SignupTask(String username, String password) {
         this.username = username;
         this.password = password;
 
@@ -28,7 +27,10 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         form.put("password", password);
 
         try {
-            BackEndResponse backEndResponse = tasker.getHttpClient().postForm(form, getRequestUrl());
+            BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
+            HttpClient httpClient = tasker.getHttpClient();
+            BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
+
             getResponse().setStatusCode(backEndResponse.getStatusCode());
             getResponse().setContentType(backEndResponse.getContentType());
             getResponse().setData(backEndResponse.getData());
