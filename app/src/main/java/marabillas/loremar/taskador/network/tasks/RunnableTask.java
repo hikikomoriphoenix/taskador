@@ -6,8 +6,8 @@ import marabillas.loremar.taskador.network.BackEndResponse;
 
 public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implements Runnable,
         ResultListener {
-    BackEndResponse response;
-    String url;
+    private BackEndResponse response;
+    private String requestUrl;
     private WeakReference<RH> resultHandlerReference;
 
     public void setResultHandler(RH resultHandler) {
@@ -22,8 +22,16 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
         this.response = response;
     }
 
+    BackEndResponse getResponse() {
+        return response;
+    }
+
+    void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+    }
+
     public String getRequestUrl() {
-        return url;
+        return requestUrl;
     }
 
     interface ResultHandler {

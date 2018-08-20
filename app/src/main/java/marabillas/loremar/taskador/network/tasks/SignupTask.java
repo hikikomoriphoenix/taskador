@@ -18,7 +18,7 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         this.username = username;
         this.password = password;
 
-        url = BuildConfig.backend_url + "signup.php";
+        setRequestUrl(BuildConfig.backend_url + "signup.php");
     }
 
     @Override
@@ -28,10 +28,10 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         form.put("password", password);
 
         try {
-            BackEndResponse backEndResponse = tasker.getHttpClient().postForm(form, url);
-            response.setStatusCode(backEndResponse.getStatusCode());
-            response.setContentType(backEndResponse.getContentType());
-            response.setData(backEndResponse.getData());
+            BackEndResponse backEndResponse = tasker.getHttpClient().postForm(form, getRequestUrl());
+            getResponse().setStatusCode(backEndResponse.getStatusCode());
+            getResponse().setContentType(backEndResponse.getContentType());
+            getResponse().setData(backEndResponse.getData());
         } catch (IOException e) {
             ResultHandler resultHandler = getResultHandler();
             if (resultHandler != null) {
