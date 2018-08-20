@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import java.util.concurrent.FutureTask;
 
+import marabillas.loremar.taskador.network.tasks.RunnableTask;
+
 public class BackEndAPICallTask extends FutureTask<BackEndResponse> {
     private RunnableTask runnableTask;
 

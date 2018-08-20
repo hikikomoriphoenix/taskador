@@ -2,7 +2,7 @@ package marabillas.loremar.taskador.ui.activity;
 
 import android.app.Activity;
 
-import marabillas.loremar.taskador.network.SignupTask;
+import marabillas.loremar.taskador.network.tasks.SignupTask;
 
 /**
  * This is taskador's main launcher activity. It displays a splash screen while taskador is

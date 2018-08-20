@@ -1,6 +1,6 @@
 package marabillas.loremar.taskador.network.resuilthandlers;
 
-import marabillas.loremar.taskador.network.SignupTask;
+import marabillas.loremar.taskador.network.tasks.SignupTask;
 
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;

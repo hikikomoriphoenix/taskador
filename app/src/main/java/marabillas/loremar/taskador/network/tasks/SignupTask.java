@@ -1,17 +1,19 @@
-package marabillas.loremar.taskador.network;
+package marabillas.loremar.taskador.network.tasks;
 
 import java.io.IOException;
 import java.util.HashMap;
 
 import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
+import marabillas.loremar.taskador.network.BackEndAPICallTasker;
+import marabillas.loremar.taskador.network.BackEndResponse;
 
 public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
     private BackEndAPICallTasker tasker;
     private String username;
     private String password;
 
-    SignupTask(BackEndAPICallTasker tasker, String username, String password) {
+    public SignupTask(BackEndAPICallTasker tasker, String username, String password) {
         this.tasker = tasker;
         this.username = username;
         this.password = password;

@@ -4,6 +4,9 @@ import android.support.annotation.NonNull;
 
 import java.util.concurrent.ExecutionException;
 
+import marabillas.loremar.taskador.network.tasks.RunnableTask;
+import marabillas.loremar.taskador.network.tasks.SignupTask;
+
 public class BackEndAPICallTasker implements CookieHandledTracker {
     private static BackEndAPICallTasker instance;
     private BackEndAPICallTask task;

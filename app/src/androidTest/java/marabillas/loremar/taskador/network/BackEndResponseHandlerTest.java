@@ -13,6 +13,7 @@ import java.util.concurrent.CountDownLatch;
 
 import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
+import marabillas.loremar.taskador.network.tasks.ResultListener;
 
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 import static org.hamcrest.CoreMatchers.is;

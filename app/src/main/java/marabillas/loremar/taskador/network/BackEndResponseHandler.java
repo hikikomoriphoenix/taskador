@@ -13,6 +13,7 @@ import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.FailedToParseException;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSONParser;
+import marabillas.loremar.taskador.network.tasks.ResultListener;
 
 public class BackEndResponseHandler {
     private CookieHandledTracker cookieHandledTracker;

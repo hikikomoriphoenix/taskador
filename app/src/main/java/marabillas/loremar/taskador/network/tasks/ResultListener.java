@@ -1,8 +1,8 @@
-package marabillas.loremar.taskador.network;
+package marabillas.loremar.taskador.network.tasks;
 
 import marabillas.loremar.taskador.json.JSON;
 
-interface ResultListener {
+public interface ResultListener {
     void onStatusOK(String message, JSON data);
 
     void onClientError(String message);
