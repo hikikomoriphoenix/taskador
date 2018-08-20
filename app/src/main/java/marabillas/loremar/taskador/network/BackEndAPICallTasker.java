@@ -34,12 +34,12 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
     public void signup(@NonNull SignupTask.ResultHandler resultHandler, final String username, final String
             password) {
         SignupTask signupTask = new SignupTask(this, username, password);
-        performTask(resultHandler, signupTask);
+        signupTask.setResultHandler(resultHandler);
+        performTask(signupTask);
     }
 
-    private void performTask(@NonNull RunnableTask.ResultHandler resultHandler, RunnableTask runnableTask) {
+    private void performTask(RunnableTask runnableTask) {
         resetCookieHandledTracking();
-        runnableTask.setResultHandler(resultHandler);
         if (task != null) {
             task.cancel(true);
         }

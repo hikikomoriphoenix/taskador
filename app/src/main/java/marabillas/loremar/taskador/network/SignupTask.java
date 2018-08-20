@@ -1,17 +1,15 @@
 package marabillas.loremar.taskador.network;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 
 import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
 
-public class SignupTask extends RunnableTask {
+public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
     private BackEndAPICallTasker tasker;
     private String username;
     private String password;
-    private WeakReference<ResultHandler> resultHandlerReference;
 
     SignupTask(BackEndAPICallTasker tasker, String username, String password) {
         this.tasker = tasker;
@@ -33,7 +31,7 @@ public class SignupTask extends RunnableTask {
             response.setContentType(backEndResponse.getContentType());
             response.setData(backEndResponse.getData());
         } catch (IOException e) {
-            ResultHandler resultHandler = resultHandlerReference.get();
+            ResultHandler resultHandler = getResultHandler();
             if (resultHandler != null) {
                 resultHandler.failedToSubmitNewAccount(e.getMessage());
             }
@@ -42,7 +40,7 @@ public class SignupTask extends RunnableTask {
 
     @Override
     public void onStatusOK(String message, JSON data) {
-        ResultHandler resultHandler = resultHandlerReference.get();
+        ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.newAccountSaved(message);
         }
@@ -50,7 +48,7 @@ public class SignupTask extends RunnableTask {
 
     @Override
     public void onClientError(String message) {
-        ResultHandler resultHandler = resultHandlerReference.get();
+        ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backEndUnableToSaveNewAccount(message);
         }
@@ -58,15 +56,10 @@ public class SignupTask extends RunnableTask {
 
     @Override
     public void onServerError(String message) {
-        ResultHandler resultHandler = resultHandlerReference.get();
+        ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backEndUnableToSaveNewAccount(message);
         }
-    }
-
-    @Override
-    public void setResultHandler(RunnableTask.ResultHandler resultHandler) {
-        this.resultHandlerReference = new WeakReference<>((ResultHandler) resultHandler);
     }
 
     public interface ResultHandler extends RunnableTask.ResultHandler {

@@ -1,10 +1,19 @@
 package marabillas.loremar.taskador.network;
 
-abstract class RunnableTask implements Runnable, ResultListener {
+import java.lang.ref.WeakReference;
+
+abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implements Runnable, ResultListener {
     BackEndResponse response;
     String url;
+    private WeakReference<RH> resultHandlerReference;
 
-    abstract void setResultHandler(ResultHandler resultHandler);
+    void setResultHandler(RH resultHandler) {
+        resultHandlerReference = new WeakReference<>(resultHandler);
+    }
+
+    RH getResultHandler() {
+        return resultHandlerReference.get();
+    }
 
     public void trackForResult(BackEndResponse response) {
         this.response = response;
