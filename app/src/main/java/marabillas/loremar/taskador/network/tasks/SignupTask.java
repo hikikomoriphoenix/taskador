@@ -35,10 +35,7 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
             BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
             HttpClient httpClient = tasker.getHttpClient();
             BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
-
-            getResponse().setStatusCode(backEndResponse.getStatusCode());
-            getResponse().setContentType(backEndResponse.getContentType());
-            getResponse().setData(backEndResponse.getData());
+            saveResult(backEndResponse);
         } catch (IOException e) {
             ResultHandler resultHandler = getResultHandler();
             if (resultHandler != null) {

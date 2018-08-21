@@ -22,8 +22,10 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
         this.response = response;
     }
 
-    BackEndResponse getResponse() {
-        return response;
+    void saveResult(BackEndResponse response) {
+        this.response.setStatusCode(response.getStatusCode());
+        this.response.setContentType(response.getContentType());
+        this.response.setData(response.getData());
     }
 
     void setRequestUrl(String requestUrl) {
