@@ -57,9 +57,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
         // If no auth token, log in to receive a new auth token.
         if (authToken == null) {
-            // TODO Put code here for directly logging in to the server using the password stored
-            // in the AccountManager. If login is successful, a new auth token should be stored
-            // and the account authentication process is repeated.
+            DirectLogin login = new DirectLogin();
+            authToken = login.loginForToken(am, account, authTokenType);
         }
 
         // If an auth token is retrieved, return the required bundle containing the auth token.
