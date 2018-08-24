@@ -54,7 +54,14 @@ public class BackEndResponseHandler {
                     break;
             }
         } else {
-            resultListener.onServerError("Response is invalid");
+            String details;
+            if (response == null) {
+                details = "Response = null";
+            } else {
+                String contentType = response.getContentType();
+                details = "Content-Type = " + contentType;
+            }
+            resultListener.onServerError("Response is invalid: " + details);
         }
     }
 
