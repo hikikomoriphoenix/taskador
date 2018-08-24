@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import android.webkit.CookieManager;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -92,14 +93,25 @@ public class BackEndResponseHandler {
                 WebSettings settings = view.getSettings();
                 settings.setJavaScriptEnabled(true);
                 view.setWebViewClient(new WebViewClient() {
+                    private boolean redirected;
+
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                        redirected = true;
+                        return super.shouldOverrideUrlLoading(view, request);
+                    }
+
                     @Override
                     public void onPageFinished(WebView view, String url) {
-                        String cookie = CookieManager.getInstance().getCookie(url);
-                        App.getInstance().getSharedPreferences("config", 0)
-                                .edit()
-                                .putString("shared_hosting_cookie", cookie)
-                                .apply();
-                        cookieHandledTracker.finalizeCookieHandling();
+                        if (!redirected) {
+                            String cookie = CookieManager.getInstance().getCookie(url);
+                            App.getInstance().getSharedPreferences("config", 0)
+                                    .edit()
+                                    .putString("shared_hosting_cookie", cookie)
+                                    .apply();
+                            cookieHandledTracker.finalizeCookieHandling();
+                        }
+                        redirected = true;
                     }
                 });
                 view.loadUrl(url);
