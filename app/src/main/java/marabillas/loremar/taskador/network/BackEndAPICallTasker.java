@@ -91,6 +91,8 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
     @Override
     public void finalizeCookieHandling() {
         cookieHandled = true;
+        httpClient = new HttpClient();
+        task = new BackEndAPICallTask(task.getRunnableTask(), new BackEndResponse());
         task.run();
         obtainAndProcessResult(task.getRunnableTask());
     }
