@@ -7,9 +7,6 @@ import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.JSON;
-import marabillas.loremar.taskador.network.BackEndAPICallTasker;
-import marabillas.loremar.taskador.network.BackEndResponse;
-import marabillas.loremar.taskador.network.HttpClient;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.createAccount;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
@@ -32,10 +29,7 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         form.put("password", password);
 
         try {
-            BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
-            HttpClient httpClient = tasker.getHttpClient();
-            BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
-            saveResult(backEndResponse);
+            postForm(form);
         } catch (IOException e) {
             ResultHandler resultHandler = getResultHandler();
             if (resultHandler != null) {
