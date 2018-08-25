@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
+import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 
 public class BackEndAPICallTasker implements CookieHandledTracker {
     private static BackEndAPICallTasker instance;
@@ -47,6 +48,13 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         LoginTask loginTask = new LoginTask(username, password);
         loginTask.setResultHandler(resultHandler);
         performTask(loginTask);
+    }
+
+    public void verifyToken(@NonNull VerifyTokenTask.ResultHandler resultHandler, String
+            username, String token) {
+        VerifyTokenTask verifyTokenTask = new VerifyTokenTask(username, token);
+        verifyTokenTask.setResultHandler(resultHandler);
+        performTask(verifyTokenTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
