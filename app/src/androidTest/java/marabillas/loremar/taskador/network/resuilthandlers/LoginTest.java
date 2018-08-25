@@ -13,20 +13,20 @@ public class LoginTest extends ResultHandlerTest implements LoginTask.ResultHand
     public void loggedInSuccessfuly(String message) {
         log(message);
         assertThat(message, is("Back-end process success."));
-        pause.countDown();
+        getResultWaiter().countDown();
     }
 
     @Override
     public void failedToSubmitLogin(String message) {
         logError(message);
         assertNotNull(message);
-        pause.countDown();
+        getResultWaiter().countDown();
     }
 
     @Override
     public void loginDenied(String message) {
         logError(message);
         assertNotNull(message);
-        pause.countDown();
+        getResultWaiter().countDown();
     }
 }

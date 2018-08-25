@@ -13,20 +13,20 @@ public class SignupTest extends ResultHandlerTest implements SignupTask.ResultHa
     public void newAccountSaved(String message) {
         log(message);
         assertThat(message, is("Back-end process success."));
-        pause.countDown();
+        getResultWaiter().countDown();
     }
 
     @Override
     public void failedToSubmitNewAccount(String message) {
         logError(message);
         assertNotNull(message);
-        pause.countDown();
+        getResultWaiter().countDown();
     }
 
     @Override
     public void backEndUnableToSaveNewAccount(String message) {
         logError(message);
         assertNotNull(message);
-        pause.countDown();
+        getResultWaiter().countDown();
     }
 }

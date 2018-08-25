@@ -9,20 +9,24 @@ import java.util.concurrent.CountDownLatch;
  */
 public abstract class ResultHandlerTest {
     /**
-     * CountdownLatch used to wait for results. countDown function must be called as soon as
+     * CountdownLatch is used to wait for results. countDown function must be called as soon as
      * results are received.
      */
-    CountDownLatch pause;
+    private CountDownLatch resultWaiter;
 
     ResultHandlerTest() {
-        pause = new CountDownLatch(1);
+        resultWaiter = new CountDownLatch(1);
     }
 
     public void waitForResults() {
         try {
-            pause.await();
+            resultWaiter.await();
         } catch (InterruptedException e) {
             Assert.fail(e.getMessage());
         }
+    }
+
+    CountDownLatch getResultWaiter() {
+        return resultWaiter;
     }
 }
