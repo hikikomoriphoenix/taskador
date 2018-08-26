@@ -54,7 +54,7 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
     public void onServerError(String message) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.BackEndFailedToVerifyToken(message);
+            resultHandler.backEndFailedToVerifyToken(message);
         }
     }
 
@@ -65,6 +65,6 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
 
         void tokenVerifiedNotCorrect(String message);
 
-        void BackEndFailedToVerifyToken(String message);
+        void backEndFailedToVerifyToken(String message);
     }
 }

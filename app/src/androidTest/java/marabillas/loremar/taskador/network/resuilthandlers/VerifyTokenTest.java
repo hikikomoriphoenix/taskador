@@ -19,7 +19,7 @@ public class VerifyTokenTest extends ResultHandlerTest implements VerifyTokenTas
     }
 
     @Override
-    public void BackEndFailedToVerifyToken(String message) {
+    public void backEndFailedToVerifyToken(String message) {
         handleFailure(message);
     }
 }
