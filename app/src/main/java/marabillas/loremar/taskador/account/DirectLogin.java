@@ -11,6 +11,9 @@ import marabillas.loremar.taskador.network.tasks.LoginTask;
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
+/**
+ * This class is used for automatically logging in to the back end server.
+ */
 public class DirectLogin implements LoginTask.ResultHandler {
     private CountDownLatch latch;
 
@@ -38,6 +41,12 @@ public class DirectLogin implements LoginTask.ResultHandler {
         latch.countDown();
     }
 
+    /**
+     * Login to the back-end server. This will use the password stored in the device
+     * corresponding to the given account. This is a blocking operation.
+     *
+     * @return a valid auth token sent by the back-end server upon successful login.
+     */
     public String loginForToken(AccountManager accountManager, Account account, String
             authTokenType) {
         String password = accountManager.getPassword(account);
