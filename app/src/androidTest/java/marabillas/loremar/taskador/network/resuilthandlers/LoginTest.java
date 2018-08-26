@@ -17,4 +17,9 @@ public class LoginTest extends ResultHandlerTest implements LoginTask.ResultHand
     public void loginDenied(String message) {
         handleFailure(message);
     }
+
+    @Override
+    public void loginTaskIncomplete(String message) {
+        handleFailure(message);
+    }
 }

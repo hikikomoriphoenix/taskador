@@ -17,4 +17,9 @@ public class SignupTest extends ResultHandlerTest implements SignupTask.ResultHa
     public void backEndUnableToSaveNewAccount(String message) {
         handleFailure(message);
     }
+
+    @Override
+    public void signupTaskIncomplete(String message) {
+        handleFailure(message);
+    }
 }

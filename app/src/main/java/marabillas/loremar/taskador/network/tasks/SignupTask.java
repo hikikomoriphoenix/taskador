@@ -69,11 +69,21 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         }
     }
 
+    @Override
+    public void taskIncomplete(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.signupTaskIncomplete(message);
+        }
+    }
+
     public interface ResultHandler extends RunnableTask.ResultHandler {
         void newAccountSaved(String message);
 
         void failedToSubmitNewAccount(String message);
 
         void backEndUnableToSaveNewAccount(String message);
+
+        void signupTaskIncomplete(String message);
     }
 }

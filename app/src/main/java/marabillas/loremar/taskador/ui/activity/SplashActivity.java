@@ -15,6 +15,11 @@ public class SplashActivity extends Activity implements SignupTask.ResultHandler
     }
 
     @Override
+    public void signupTaskIncomplete(String message) {
+
+    }
+
+    @Override
     public void failedToSubmitNewAccount(String message) {
 
     }

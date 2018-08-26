@@ -32,6 +32,12 @@ public class DirectLogin implements LoginTask.ResultHandler {
         latch.countDown();
     }
 
+    @Override
+    public void loginTaskIncomplete(String message) {
+        logError(message);
+        latch.countDown();
+    }
+
     public String loginForToken(AccountManager accountManager, Account account, String
             authTokenType) {
         String password = accountManager.getPassword(account);

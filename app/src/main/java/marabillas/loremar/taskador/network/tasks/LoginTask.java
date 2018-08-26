@@ -69,11 +69,21 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         }
     }
 
+    @Override
+    public void taskIncomplete(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.loginTaskIncomplete(message);
+        }
+    }
+
     public interface ResultHandler extends RunnableTask.ResultHandler {
         void loggedInSuccessfuly(String message);
 
         void failedToSubmitLogin(String message);
 
         void loginDenied(String message);
+
+        void loginTaskIncomplete(String message);
     }
 }

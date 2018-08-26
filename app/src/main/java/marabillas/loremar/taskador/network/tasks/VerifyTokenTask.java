@@ -58,6 +58,14 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
         }
     }
 
+    @Override
+    public void taskIncomplete(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.tokenVerificationIncomplete(message);
+        }
+    }
+
     public interface ResultHandler extends RunnableTask.ResultHandler {
         void tokenVerifiedCorrect(String message);
 
@@ -66,5 +74,7 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
         void tokenVerifiedNotCorrect(String message);
 
         void backEndFailedToVerifyToken(String message);
+
+        void tokenVerificationIncomplete(String message);
     }
 }

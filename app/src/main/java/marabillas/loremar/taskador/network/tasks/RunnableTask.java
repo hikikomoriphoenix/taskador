@@ -14,6 +14,8 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     private String requestUrl;
     private WeakReference<RH> resultHandlerReference;
 
+    public abstract void taskIncomplete(String message);
+
     public void setResultHandler(RH resultHandler) {
         resultHandlerReference = new WeakReference<>(resultHandler);
     }
