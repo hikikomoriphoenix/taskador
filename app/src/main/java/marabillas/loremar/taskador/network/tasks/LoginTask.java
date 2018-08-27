@@ -11,10 +11,21 @@ import marabillas.loremar.taskador.json.JSON;
 import static marabillas.loremar.taskador.utils.AccountUtils.createAccount;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
+/**
+ * A RunnableTask specifically used for login. As a Runnable, it executes the POST request for
+ * logging in to the server. This can be set as a listener to login status results and receive
+ * auth token as well. Set a LoginTask.ResultHandler to handle these results.
+ */
 public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
     private String username;
     private String password;
 
+    /**
+     * Creates a LoginTask object with account credentials.
+     *
+     * @param username account username
+     * @param password account password
+     */
     public LoginTask(String username, String password) {
         this.username = username;
         this.password = password;
@@ -40,6 +51,8 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
 
     @Override
     public void onStatusOK(String message, JSON data) {
+        // Get the token sent from the back end server and save it in the device paired with its
+        // corresponding account.
         try {
             String token = data.getString("token");
             createAccount(App.getInstance().getApplicationContext(), username, password, token);
@@ -77,13 +90,32 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         }
     }
 
+    /**
+     * Callback interface for login results. Set a class to implement this interface for handling
+     * of these results and call setResultHandler method to set its instance as the LoginTask
+     * object's ResultHandler.
+     */
     public interface ResultHandler extends RunnableTask.ResultHandler {
+        /**
+         * Callback method when login is successful
+         */
         void loggedInSuccessfuly(String message);
 
+        /**
+         * Callback method when IOException occur while sending POST request to the back end
+         * server.
+         */
         void failedToSubmitLogin(String message);
 
+        /**
+         * Callback method when back end couldn't complete the login process either because the
+         * submitted credentials are unacceptable or back end process encountered an error.
+         */
         void loginDenied(String message);
 
+        /**
+         * Callback method when InterruptedException or ExecutionException is encountered.
+         */
         void loginTaskIncomplete(String message);
     }
 }
