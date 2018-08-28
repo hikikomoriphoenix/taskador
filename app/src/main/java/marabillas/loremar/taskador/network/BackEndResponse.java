@@ -1,5 +1,8 @@
 package marabillas.loremar.taskador.network;
 
+/**
+ * Holds contents of the response from the back-end server.
+ */
 public class BackEndResponse {
     private int statusCode;
     private String contentType;
