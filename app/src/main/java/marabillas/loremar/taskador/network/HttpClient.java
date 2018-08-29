@@ -13,6 +13,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+/**
+ * Http client responsible for sending requests to the back-end server.
+ */
 public class HttpClient {
     private OkHttpClient client;
 
@@ -20,6 +23,15 @@ public class HttpClient {
         client = new OkHttpClient();
     }
 
+    /**
+     * Send a POST request with a form.
+     *
+     * @param formData a Map of data for the form
+     * @param url      endpoint for the request
+     * @return a BackEndResponse object containing the status code, content type, and body of the
+     * response
+     * @throws IOException when request has failed during the process
+     */
     public BackEndResponse postForm(final Map<String, String> formData, final String url) throws
             IOException {
         FormBody.Builder fb = new FormBody.Builder();
@@ -36,6 +48,10 @@ public class HttpClient {
 
     private Request createPostRequest(String url, RequestBody requestBody) {
         SharedPreferences prefs = App.getInstance().getSharedPreferences("config", 0);
+
+        // Get the cookie received from previous attempt and include it in the headers. Once the
+        // host finds the cookie in the headers, it will allow the request to get through to its
+        // endpoint.
         String cookie = prefs.getString("shared_hosting_cookie", null);
 
         Request.Builder rb = new Request.Builder()
