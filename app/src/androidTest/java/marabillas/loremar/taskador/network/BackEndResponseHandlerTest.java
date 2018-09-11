@@ -125,7 +125,7 @@ public class BackEndResponseHandlerTest {
 
     @Test
     public void validateResponse() {
-        final String url = BuildConfig.backend_url + "signup.php";
+        final String url = BuildConfig.backend_url + "account/signup.php";
         final CountDownLatch pause = new CountDownLatch(1);
 
         // Track the handling of shared-hosting site's cookie. When handled, try to check if the

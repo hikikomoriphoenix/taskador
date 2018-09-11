@@ -30,7 +30,7 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         this.username = username;
         this.password = password;
 
-        setRequestUrl(BuildConfig.backend_url + "login.php");
+        setRequestUrl(BuildConfig.backend_url + "account/login.php");
     }
 
     @Override
