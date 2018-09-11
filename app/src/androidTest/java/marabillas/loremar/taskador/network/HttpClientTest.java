@@ -23,7 +23,7 @@ public class HttpClientTest {
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("password", password);
-        String url = BuildConfig.backend_url + "signup.php";
+        String url = BuildConfig.backend_url + "account/signup.php";
         try {
             BackEndResponse response = client.postForm(form, url);
             assertThat(response.getStatusCode(), is(200));

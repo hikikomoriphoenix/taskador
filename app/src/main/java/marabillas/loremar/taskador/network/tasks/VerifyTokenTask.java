@@ -33,7 +33,7 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
         this.username = username;
         this.token = token;
 
-        setRequestUrl(BuildConfig.backend_url + "verify-token.php");
+        setRequestUrl(BuildConfig.backend_url + "account/verify-token.php");
     }
 
     @Override

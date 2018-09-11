@@ -30,7 +30,7 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         this.username = username;
         this.password = password;
 
-        setRequestUrl(BuildConfig.backend_url + "signup.php");
+        setRequestUrl(BuildConfig.backend_url + "account/signup.php");
     }
 
     @Override
