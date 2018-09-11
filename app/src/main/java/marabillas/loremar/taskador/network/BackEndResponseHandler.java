@@ -56,6 +56,7 @@ public class BackEndResponseHandler {
                     break;
                 case 400:
                 case 422:
+                case 405:
                     message = getMessage(data);
                     if (message == null) {
                         message = "Client Error!";
