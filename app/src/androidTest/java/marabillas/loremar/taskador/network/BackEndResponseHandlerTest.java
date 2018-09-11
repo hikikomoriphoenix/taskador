@@ -158,9 +158,9 @@ public class BackEndResponseHandlerTest {
                         form.put("password", "password");
                         try {
                             BackEndResponse response = client.postForm(form, url);
-                            assertThat(response.getContentType(), is("application/json"));
                             log("status: " + response.getStatusCode());
                             log("data: " + response.getData());
+                            assertThat(response.getContentType(), is("application/json"));
                         } catch (IOException e) {
                             Assert.fail(e.getMessage());
                         } finally {
