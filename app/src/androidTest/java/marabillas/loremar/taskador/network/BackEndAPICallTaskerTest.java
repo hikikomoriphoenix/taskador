@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 
 import marabillas.loremar.taskador.App;
+import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
 import marabillas.loremar.taskador.network.resuilthandlers.VerifyTokenTest;
@@ -72,5 +73,33 @@ public class BackEndAPICallTaskerTest {
         BackEndAPICallTasker.getInstance().verifyToken(verifyTokenTest, username, token);
 
         verifyTokenTest.waitForResults();
+    }
+
+    @Test
+    public void addTasks() {
+        String username = "test1";
+        Context context = App.getInstance().getApplicationContext();
+
+        AccountManager am = AccountManager.get(context);
+        Account account = new Account(username, context.getPackageName());
+
+        String token = null;
+        try {
+            token = am.blockingGetAuthToken(account, "full_access", true);
+        } catch (OperationCanceledException e) {
+            Assert.fail(e.getMessage());
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
+        } catch (AuthenticatorException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        String[] tasks = {"task1", "task2", "task3"};
+
+        AddTasksTaskTest addTasksTaskTest = new AddTasksTaskTest();
+
+        BackEndAPICallTasker.getInstance().addTasks(addTasksTaskTest, username, token, tasks);
+
+        addTasksTaskTest.waitForResults();
     }
 }
