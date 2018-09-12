@@ -81,6 +81,19 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     }
 
     /**
+     * Execute a POST request with JSON data
+     *
+     * @param json string representing a JSON data
+     * @throws IOException when request fails
+     */
+    void postJSON(String json) throws IOException {
+        BackEndAPICallTasker taskser = BackEndAPICallTasker.getInstance();
+        HttpClient httpClient = taskser.getHttpClient();
+        BackEndResponse backEndResponse = httpClient.postJSON(json, getRequestUrl());
+        saveResult(backEndResponse);
+    }
+
+    /**
      * A callback interface to handle this task's results.
      */
     interface ResultHandler {
