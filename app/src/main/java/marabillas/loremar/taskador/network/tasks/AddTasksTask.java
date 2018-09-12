@@ -2,6 +2,7 @@ package marabillas.loremar.taskador.network.tasks;
 
 import java.io.IOException;
 
+import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSONTree;
 import marabillas.loremar.taskador.json.JSONTreeException;
@@ -24,6 +25,8 @@ public class AddTasksTask extends RunnableTask<AddTasksTask.ResultHandler> {
         this.username = username;
         this.token = token;
         this.tasks = tasks;
+
+        setRequestUrl(BuildConfig.backend_url + "tasks/add-tasks.php");
     }
 
     @Override
