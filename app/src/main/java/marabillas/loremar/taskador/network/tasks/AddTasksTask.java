@@ -1,6 +1,10 @@
 package marabillas.loremar.taskador.network.tasks;
 
+import java.io.IOException;
+
 import marabillas.loremar.taskador.json.JSON;
+import marabillas.loremar.taskador.json.JSONTree;
+import marabillas.loremar.taskador.json.JSONTreeException;
 
 /**
  * RunnableTask that sends POST request for adding new tasks to account. Call run to execute this
@@ -24,9 +28,27 @@ public class AddTasksTask extends RunnableTask<AddTasksTask.ResultHandler> {
 
     @Override
     public void run() {
-        // TODO Convert fields to JSON to be sent for request
+        try {
+            // Convert fields to JSON to be sent for request
+            String json = new JSONTree()
+                    .put("username", username)
+                    .put("token", token)
+                    .put("tasks", tasks)
+                    .toString();
 
-        // TODO Send request
+            // Send request
+            postJSON(json);
+        } catch (JSONTreeException e) {
+            ResultHandler resultHandler = getResultHandler();
+            if (resultHandler != null) {
+                resultHandler.addTasksTaskFailedToPrepareJSONData(e.getMessage());
+            }
+        } catch (IOException e) {
+            ResultHandler resultHandler = getResultHandler();
+            if (resultHandler != null) {
+                resultHandler.failedAddTasksRequest(e.getMessage());
+            }
+        }
     }
 
     @Override
@@ -69,6 +91,11 @@ public class AddTasksTask extends RunnableTask<AddTasksTask.ResultHandler> {
          * Callback when new tasks are successfully added to account
          */
         void newTasksSavedSuccessfully(String message);
+
+        /**
+         * Callback when unable to construct JSON data
+         */
+        void addTasksTaskFailedToPrepareJSONData(String message);
 
         /**
          * Callback method when IOException occur while sending POST request to the back-end server.
