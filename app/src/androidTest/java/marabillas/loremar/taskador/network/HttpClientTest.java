@@ -32,4 +32,18 @@ public class HttpClientTest {
             Assert.fail(e.getMessage());
         }
     }
+
+    @Test
+    public void postJSON() {
+        String json = "{}";
+        HttpClient client = new HttpClient();
+        String url = BuildConfig.backend_url + "words/get-top-words.php";
+        try {
+            BackEndResponse response = client.postJSON(json, url);
+            assertThat(response.getStatusCode(), is(200));
+            assertThat(response.getContentType(), containsString("text/html"));
+        } catch (IOException e) {
+            Assert.fail(e.getMessage());
+        }
+    }
 }

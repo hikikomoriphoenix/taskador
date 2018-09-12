@@ -7,6 +7,7 @@ import java.util.Map;
 
 import marabillas.loremar.taskador.App;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -41,6 +42,25 @@ public class HttpClient {
         }
 
         RequestBody requestBody = fb.build();
+        Request request = createPostRequest(url, requestBody);
+
+        return executeRequest(request);
+    }
+
+    /**
+     * Send a POST request containing JSON data
+     *
+     * @param json string representing a JSON data
+     * @param url  endpoint of the request
+     * @return a BackEndResponse object containing the status code, content type, and body of the
+     * response
+     * @throws IOException when request has failed during the process
+     */
+    public BackEndResponse postJSON(String json, String url) throws IOException {
+        MediaType JSON = MediaType.parse("application/json");
+
+        RequestBody requestBody = RequestBody.create(JSON, json);
+
         Request request = createPostRequest(url, requestBody);
 
         return executeRequest(request);
