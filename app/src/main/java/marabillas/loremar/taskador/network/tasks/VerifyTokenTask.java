@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
+import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
  * A RunnableTask used when taskador is launched to verify from the back-end server that the auth
@@ -19,7 +20,7 @@ import marabillas.loremar.taskador.json.JSON;
  * Pass this as an argument to BackEndResponseHandler's handle function to get results from
  * BackEndResponse handling and set a VerifyTokenTask.ResultHandler to handle these results.
  */
-public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler> {
+public class VerifyTokenTask extends ReauthenticatingTask<VerifyTokenTask.ResultHandler> {
     private String username;
     private String token;
 
@@ -30,6 +31,7 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
      * @param token auth token
      */
     public VerifyTokenTask(String username, String token) {
+        super(username);
         this.username = username;
         this.token = token;
 
@@ -83,6 +85,12 @@ public class VerifyTokenTask extends RunnableTask<VerifyTokenTask.ResultHandler>
         if (resultHandler != null) {
             resultHandler.tokenVerificationIncomplete(message);
         }
+    }
+
+    @Override
+    public void onReauthenticationComplete(String newToken) {
+        BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
+        tasker.verifyToken(getResultHandler(), username, newToken);
     }
 
     /**
