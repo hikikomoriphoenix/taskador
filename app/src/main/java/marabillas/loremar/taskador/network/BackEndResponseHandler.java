@@ -54,6 +54,9 @@ public class BackEndResponseHandler {
                     }
                     resultListener.onStatusOK("Back-end process success.", json);
                     break;
+                case 401:
+                    resultListener.onUnauthorized();
+                    break;
                 case 400:
                 case 422:
                 case 405:

@@ -22,4 +22,9 @@ public interface ResultListener {
      * Callback method for response with 500 INTERNAL SERVER ERROR status
      */
     void onServerError(String message);
+
+    /**
+     * Callback method for response with 401 Unauthorized status
+     */
+    void onUnauthorized();
 }
