@@ -66,6 +66,11 @@ public class BackEndResponseHandlerTest {
                 pause.countDown();
             }
 
+            @Override
+            public void onUnauthorized() {
+                pause.countDown();
+            }
+
             private String getMessage() {
                 return message;
             }

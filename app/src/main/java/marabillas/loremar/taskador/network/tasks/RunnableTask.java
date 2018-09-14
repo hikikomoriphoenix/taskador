@@ -67,6 +67,13 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
         return requestUrl;
     }
 
+    @Override
+    public void onUnauthorized() {
+        if (this instanceof ReauthenticatingTask) {
+            ((ReauthenticatingTask) this).reauthenticate();
+        }
+    }
+
     /**
      * Execute a basic POST request
      *

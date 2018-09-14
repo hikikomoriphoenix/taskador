@@ -6,12 +6,13 @@ import marabillas.loremar.taskador.BuildConfig;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSONTree;
 import marabillas.loremar.taskador.json.JSONTreeException;
+import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
  * RunnableTask that sends POST request for adding new tasks to account. Call run to execute this
  * task.
  */
-public class AddTasksTask extends RunnableTask<AddTasksTask.ResultHandler> {
+public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandler> {
     private String username;
     private String token;
     private String[] tasks;
@@ -22,6 +23,7 @@ public class AddTasksTask extends RunnableTask<AddTasksTask.ResultHandler> {
      * @param tasks    an array of new tasks to be added to account
      */
     public AddTasksTask(String username, String token, String[] tasks) {
+        super(username);
         this.username = username;
         this.token = token;
         this.tasks = tasks;
@@ -84,6 +86,12 @@ public class AddTasksTask extends RunnableTask<AddTasksTask.ResultHandler> {
         if (resultHandler != null) {
             resultHandler.addTasksTaskIncomplete(message);
         }
+    }
+
+    @Override
+    public void onReauthenticationComplete(String newToken) {
+        BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
+        tasker.addTasks(getResultHandler(), username, newToken, tasks);
     }
 
     /**
