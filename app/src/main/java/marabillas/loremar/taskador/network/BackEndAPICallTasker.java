@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
@@ -150,6 +151,20 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         FinishTasksTask finishTasksTask = new FinishTasksTask(username, token, idTaskEntries);
         finishTasksTask.setResultHandler(resultHandler);
         performTask(finishTasksTask);
+    }
+
+    /**
+     * Get all tasks finished during the current week,
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void getFinishedTasks(@NonNull GetFinishedTasksTask.ResultHandler resultHandler,
+                                 String username, String token) {
+        GetFinishedTasksTask getFinishedTasksTask = new GetFinishedTasksTask(username, token);
+        getFinishedTasksTask.setResultHandler(resultHandler);
+        performTask(getFinishedTasksTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
