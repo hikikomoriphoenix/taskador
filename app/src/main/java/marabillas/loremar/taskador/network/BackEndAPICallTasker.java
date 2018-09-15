@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 
 import java.util.concurrent.ExecutionException;
 
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
+import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
@@ -133,6 +135,21 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         AddTasksTask addTasksTask = new AddTasksTask(username, token, tasks);
         addTasksTask.setResultHandler(resultHandler);
         performTask(addTasksTask);
+    }
+
+    /**
+     * Set some tasks as finished and save to account.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param idTaskEntries an array of entries containing tasks and their corresponding ids.
+     */
+    public void finishTasks(@NonNull FinishTasksTask.ResultHandler resultHandler, String
+            username, String token, IdTaskPair[] idTaskEntries) {
+        FinishTasksTask finishTasksTask = new FinishTasksTask(username, token, idTaskEntries);
+        finishTasksTask.setResultHandler(resultHandler);
+        performTask(finishTasksTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
