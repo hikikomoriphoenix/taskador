@@ -8,6 +8,7 @@ import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
@@ -136,6 +137,20 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         AddTasksTask addTasksTask = new AddTasksTask(username, token, tasks);
         addTasksTask.setResultHandler(resultHandler);
         performTask(addTasksTask);
+    }
+
+    /**
+     * Get all to-do tasks from account.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void getTasks(@NonNull GetTasksTask.ResultHandler resultHandler, String username,
+                         String token) {
+        GetTasksTask getTasksTask = new GetTasksTask(username, token);
+        getTasksTask.setResultHandler(resultHandler);
+        performTask(getTasksTask);
     }
 
     /**
