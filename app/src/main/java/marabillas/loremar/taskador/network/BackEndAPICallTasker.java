@@ -12,6 +12,7 @@ import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
+import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 
 /**
@@ -180,6 +181,22 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         GetFinishedTasksTask getFinishedTasksTask = new GetFinishedTasksTask(username, token);
         getFinishedTasksTask.setResultHandler(resultHandler);
         performTask(getFinishedTasksTask);
+    }
+
+    /**
+     * Update the account's list of words used in tasks. New words will be added and existing
+     * ones will be updated for their count. A words's count represents how many times a word is
+     * used in tasks.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void updateTaskWords(@NonNull UpdateTaskWordsTask.ResultHandler resultHandler, String
+            username, String token) {
+        UpdateTaskWordsTask updateTaskWordsTask = new UpdateTaskWordsTask(username, token);
+        updateTaskWordsTask.setResultHandler(resultHandler);
+        performTask(updateTaskWordsTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
