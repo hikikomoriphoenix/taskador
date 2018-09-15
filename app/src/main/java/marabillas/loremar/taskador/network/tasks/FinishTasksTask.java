@@ -29,7 +29,7 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
         this.token = token;
         this.idTaskEntries = idTaskEntries;
 
-        setRequestUrl(BuildConfig.backend_url + "tasks/finished-tasks.php");
+        setRequestUrl(BuildConfig.backend_url + "tasks/finish-tasks.php");
     }
 
     @Override
@@ -38,7 +38,7 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
             // Create JSONTree array for idTaskEntries
             JSONTree[] idTasksJson = new JSONTree[idTaskEntries.length];
             for (int i = 0; i < idTaskEntries.length; ++i) {
-                idTasksJson[i]
+                idTasksJson[i] = new JSONTree()
                         .put("task", idTaskEntries[i].task)
                         .put("id", idTaskEntries[i].id);
             }
@@ -120,7 +120,7 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
         /**
          * Callback method when IOException occur while sending POST request to the back-end server.
          */
-        void failedFinishTasksRequest(String messge);
+        void failedFinishTasksRequest(String message);
 
         /**
          * Callback method when client or server error occured while finishing tasks. If it was

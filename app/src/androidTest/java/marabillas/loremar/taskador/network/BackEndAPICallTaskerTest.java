@@ -8,7 +8,9 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTaskTest;
+import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
 import marabillas.loremar.taskador.network.resuilthandlers.VerifyTokenTest;
@@ -76,5 +78,39 @@ public class BackEndAPICallTaskerTest {
         BackEndAPICallTasker.getInstance().addTasks(addTasksTaskTest, username, token, tasks);
 
         addTasksTaskTest.waitForResults();
+    }
+
+    @Test
+    public void finishTasks() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        IdTaskPair[] entries = new IdTaskPair[3];
+        IdTaskPair entry = new IdTaskPair();
+        entry.id = 1;
+        entry.task = "task1";
+        entries[0] = entry;
+
+        entry = new IdTaskPair();
+        entry.id = 2;
+        entry.task = "task2";
+        entries[1] = entry;
+
+        entry = new IdTaskPair();
+        entry.id = 3;
+        entry.task = "task3";
+        entries[2] = entry;
+
+        FinishTasksTaskTest finishTasksTaskTest = new FinishTasksTaskTest();
+
+        BackEndAPICallTasker.getInstance().finishTasks(finishTasksTaskTest, username, token,
+                entries);
+
+        finishTasksTaskTest.waitForResults();
     }
 }
