@@ -9,6 +9,7 @@ import marabillas.loremar.taskador.network.tasks.AddTasksTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
@@ -197,6 +198,21 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         UpdateTaskWordsTask updateTaskWordsTask = new UpdateTaskWordsTask(username, token);
         updateTaskWordsTask.setResultHandler(resultHandler);
         performTask(updateTaskWordsTask);
+    }
+
+    /**
+     * Get the most frequently used words in tasks.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param numResults    number of top words to get
+     */
+    public void getTopWords(@NonNull GetTopWordsTask.ResultHandler resultHandler, String
+            username, String token, int numResults) {
+        GetTopWordsTask getTopWordsTask = new GetTopWordsTask(username, token, numResults);
+        getTopWordsTask.setResultHandler(resultHandler);
+        performTask(getTopWordsTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
