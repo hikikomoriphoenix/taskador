@@ -12,6 +12,7 @@ import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
+import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
 import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
@@ -213,6 +214,23 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         GetTopWordsTask getTopWordsTask = new GetTopWordsTask(username, token, numResults);
         getTopWordsTask.setResultHandler(resultHandler);
         performTask(getTopWordsTask);
+    }
+
+    /**
+     * Set a selected word as excluded or not excluded from top words
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param word          selected word
+     * @param excluded      Set to 1 if word is to be excluded, and 0 if word is to be set as not
+     *                      excluded.
+     */
+    public void setExcluded(@NonNull SetExcludedTask.ResultHandler resultHandler, String
+            username, String token, String word, int excluded) {
+        SetExcludedTask setExcludedTask = new SetExcludedTask(username, token, word, excluded);
+        setExcludedTask.setResultHandler(resultHandler);
+        performTask(setExcludedTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
