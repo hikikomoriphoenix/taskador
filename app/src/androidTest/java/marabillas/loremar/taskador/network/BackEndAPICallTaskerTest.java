@@ -15,6 +15,7 @@ import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTaskT
 import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
+import marabillas.loremar.taskador.network.resuilthandlers.UpdateTaskWordsTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.VerifyTokenTest;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
@@ -149,5 +150,23 @@ public class BackEndAPICallTaskerTest {
                 token);
 
         getFinishedTasksTaskTest.waitForResults();
+    }
+
+    @Test
+    public void updateTaskWords() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        UpdateTaskWordsTaskTest updateTaskWordsTaskTest = new UpdateTaskWordsTaskTest();
+
+        BackEndAPICallTasker.getInstance().updateTaskWords(updateTaskWordsTaskTest, username,
+                token);
+
+        updateTaskWordsTaskTest.waitForResults();
     }
 }
