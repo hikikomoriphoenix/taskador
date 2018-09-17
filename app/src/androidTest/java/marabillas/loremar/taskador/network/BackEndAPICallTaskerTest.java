@@ -1,10 +1,5 @@
 package marabillas.loremar.taskador.network;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
-import android.content.Context;
 import android.support.test.filters.LargeTest;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -13,13 +8,21 @@ import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-
-import marabillas.loremar.taskador.App;
-import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTaskTest;
+import marabillas.loremar.taskador.entries.IdTaskPair;
+import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetExcludedWordsTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetTopWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
+import marabillas.loremar.taskador.network.resuilthandlers.SetExcludedTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
+import marabillas.loremar.taskador.network.resuilthandlers.UpdateTaskWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.VerifyTokenTest;
+import marabillas.loremar.taskador.utils.AccountUtils;
+
+import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
@@ -49,22 +52,11 @@ public class BackEndAPICallTaskerTest {
 
     @Test
     public void verifyToken() {
-        Context context = App.getInstance().getApplicationContext();
-
         String username = "test1";
-        String type = context.getPackageName();
-
-        AccountManager am = AccountManager.get(context);
-        Account account = new Account(username, type);
-
         String token = null;
         try {
-            token = am.blockingGetAuthToken(account, "full_access", true);
-        } catch (OperationCanceledException e) {
-            Assert.fail(e.getMessage());
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        } catch (AuthenticatorException e) {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
             Assert.fail(e.getMessage());
         }
 
@@ -78,28 +70,162 @@ public class BackEndAPICallTaskerTest {
     @Test
     public void addTasks() {
         String username = "test1";
-        Context context = App.getInstance().getApplicationContext();
-
-        AccountManager am = AccountManager.get(context);
-        Account account = new Account(username, context.getPackageName());
-
         String token = null;
         try {
-            token = am.blockingGetAuthToken(account, "full_access", true);
-        } catch (OperationCanceledException e) {
-            Assert.fail(e.getMessage());
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        } catch (AuthenticatorException e) {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
             Assert.fail(e.getMessage());
         }
 
         String[] tasks = {"task1", "task2", "task3"};
 
-        AddTasksTaskTest addTasksTaskTest = new AddTasksTaskTest();
+        AddTasksTest addTasksTest = new AddTasksTest();
 
-        BackEndAPICallTasker.getInstance().addTasks(addTasksTaskTest, username, token, tasks);
+        BackEndAPICallTasker.getInstance().addTasks(addTasksTest, username, token, tasks);
 
-        addTasksTaskTest.waitForResults();
+        addTasksTest.waitForResults();
+    }
+
+    @Test
+    public void getTasks() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        GetTasksTest getTasksTest = new GetTasksTest();
+
+        BackEndAPICallTasker.getInstance().getTasks(getTasksTest, username, token);
+
+        getTasksTest.waitForResults();
+    }
+
+    @Test
+    public void finishTasks() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        IdTaskPair[] entries = new IdTaskPair[3];
+        IdTaskPair entry = new IdTaskPair();
+        entry.id = 1;
+        entry.task = "task1";
+        entries[0] = entry;
+
+        entry = new IdTaskPair();
+        entry.id = 2;
+        entry.task = "task2";
+        entries[1] = entry;
+
+        entry = new IdTaskPair();
+        entry.id = 3;
+        entry.task = "task3";
+        entries[2] = entry;
+
+        FinishTasksTest finishTasksTest = new FinishTasksTest();
+
+        BackEndAPICallTasker.getInstance().finishTasks(finishTasksTest, username, token,
+                entries);
+
+        finishTasksTest.waitForResults();
+    }
+
+    @Test
+    public void getFinishedTasks() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        GetFinishedTasksTest getFinishedTasksTest = new GetFinishedTasksTest();
+
+        BackEndAPICallTasker.getInstance().getFinishedTasks(getFinishedTasksTest, username,
+                token);
+
+        getFinishedTasksTest.waitForResults();
+    }
+
+    @Test
+    public void updateTaskWords() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        UpdateTaskWordsTest updateTaskWordsTest = new UpdateTaskWordsTest();
+
+        BackEndAPICallTasker.getInstance().updateTaskWords(updateTaskWordsTest, username,
+                token);
+
+        updateTaskWordsTest.waitForResults();
+    }
+
+    @Test
+    public void getTopWords() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        GetTopWordsTest getTopWordsTest = new GetTopWordsTest();
+
+        BackEndAPICallTasker.getInstance().getTopWords(getTopWordsTest, username, token, 10);
+
+        getTopWordsTest.waitForResults();
+    }
+
+    @Test
+    public void setExcluded() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        String word = "a";
+        //int excluded = 0;
+        int excluded = 1;
+
+        SetExcludedTest setExcludedTest = new SetExcludedTest();
+
+        BackEndAPICallTasker.getInstance().setExcluded(setExcludedTest, username, token, word,
+                excluded);
+
+        setExcludedTest.waitForResults();
+    }
+
+    @Test
+    public void getExcludedWords() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        GetExcludedWordsTest getExcludedWordsTest = new GetExcludedWordsTest();
+
+        BackEndAPICallTasker.getInstance().getExcludedWords(getExcludedWordsTest, username, token);
+
+        getExcludedWordsTest.waitForResults();
     }
 }

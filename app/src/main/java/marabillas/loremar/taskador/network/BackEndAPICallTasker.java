@@ -4,10 +4,18 @@ import android.support.annotation.NonNull;
 
 import java.util.concurrent.ExecutionException;
 
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
+import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetExcludedWordsTask;
+import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.RunnableTask;
+import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
+import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 
 /**
@@ -133,6 +141,111 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         AddTasksTask addTasksTask = new AddTasksTask(username, token, tasks);
         addTasksTask.setResultHandler(resultHandler);
         performTask(addTasksTask);
+    }
+
+    /**
+     * Get all to-do tasks from account.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void getTasks(@NonNull GetTasksTask.ResultHandler resultHandler, String username,
+                         String token) {
+        GetTasksTask getTasksTask = new GetTasksTask(username, token);
+        getTasksTask.setResultHandler(resultHandler);
+        performTask(getTasksTask);
+    }
+
+    /**
+     * Set some tasks as finished and save to account.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param idTaskEntries an array of entries containing tasks and their corresponding ids.
+     */
+    public void finishTasks(@NonNull FinishTasksTask.ResultHandler resultHandler, String
+            username, String token, IdTaskPair[] idTaskEntries) {
+        FinishTasksTask finishTasksTask = new FinishTasksTask(username, token, idTaskEntries);
+        finishTasksTask.setResultHandler(resultHandler);
+        performTask(finishTasksTask);
+    }
+
+    /**
+     * Get all tasks finished during the current week,
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void getFinishedTasks(@NonNull GetFinishedTasksTask.ResultHandler resultHandler,
+                                 String username, String token) {
+        GetFinishedTasksTask getFinishedTasksTask = new GetFinishedTasksTask(username, token);
+        getFinishedTasksTask.setResultHandler(resultHandler);
+        performTask(getFinishedTasksTask);
+    }
+
+    /**
+     * Update the account's list of words used in tasks. New words will be added and existing
+     * ones will be updated for their count. A words's count represents how many times a word is
+     * used in tasks.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void updateTaskWords(@NonNull UpdateTaskWordsTask.ResultHandler resultHandler, String
+            username, String token) {
+        UpdateTaskWordsTask updateTaskWordsTask = new UpdateTaskWordsTask(username, token);
+        updateTaskWordsTask.setResultHandler(resultHandler);
+        performTask(updateTaskWordsTask);
+    }
+
+    /**
+     * Get the most frequently used words in tasks.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param numResults    number of top words to get
+     */
+    public void getTopWords(@NonNull GetTopWordsTask.ResultHandler resultHandler, String
+            username, String token, int numResults) {
+        GetTopWordsTask getTopWordsTask = new GetTopWordsTask(username, token, numResults);
+        getTopWordsTask.setResultHandler(resultHandler);
+        performTask(getTopWordsTask);
+    }
+
+    /**
+     * Set a selected word as excluded or not excluded from top words
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param word          selected word
+     * @param excluded      Set to 1 if word is to be excluded, and 0 if word is to be set as not
+     *                      excluded.
+     */
+    public void setExcluded(@NonNull SetExcludedTask.ResultHandler resultHandler, String
+            username, String token, String word, int excluded) {
+        SetExcludedTask setExcludedTask = new SetExcludedTask(username, token, word, excluded);
+        setExcludedTask.setResultHandler(resultHandler);
+        performTask(setExcludedTask);
+    }
+
+    /**
+     * Get all words from account that are set as excluded from top words
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     */
+    public void getExcludedWords(@NonNull GetExcludedWordsTask.ResultHandler resultHandler,
+                                 String username, String token) {
+        GetExcludedWordsTask getExcludedWordsTask = new GetExcludedWordsTask(username, token);
+        getExcludedWordsTask.setResultHandler(resultHandler);
+        performTask(getExcludedWordsTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
