@@ -23,7 +23,7 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
         this.username = username;
         this.token = token;
 
-        setRequestUrl(BuildConfig.backend_url + "words/get-exluded-words.php");
+        setRequestUrl(BuildConfig.backend_url + "words/get-excluded-words.php");
     }
 
     @Override
