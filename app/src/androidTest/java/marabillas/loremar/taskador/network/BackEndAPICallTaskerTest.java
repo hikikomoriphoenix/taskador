@@ -15,6 +15,7 @@ import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetTopWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
+import marabillas.loremar.taskador.network.resuilthandlers.SetExcludedTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
 import marabillas.loremar.taskador.network.resuilthandlers.UpdateTaskWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.VerifyTokenTest;
@@ -186,5 +187,27 @@ public class BackEndAPICallTaskerTest {
         BackEndAPICallTasker.getInstance().getTopWords(getTopWordsTest, username, token, 10);
 
         getTopWordsTest.waitForResults();
+    }
+
+    @Test
+    public void setExcluded() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        String word = "a";
+        //int excluded = 0;
+        int excluded = 1;
+
+        SetExcludedTest setExcludedTest = new SetExcludedTest();
+
+        BackEndAPICallTasker.getInstance().setExcluded(setExcludedTest, username, token, word,
+                excluded);
+
+        setExcludedTest.waitForResults();
     }
 }
