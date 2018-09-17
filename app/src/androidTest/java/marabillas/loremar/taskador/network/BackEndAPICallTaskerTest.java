@@ -13,6 +13,7 @@ import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetTopWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
 import marabillas.loremar.taskador.network.resuilthandlers.UpdateTaskWordsTest;
@@ -168,5 +169,22 @@ public class BackEndAPICallTaskerTest {
                 token);
 
         updateTaskWordsTest.waitForResults();
+    }
+
+    @Test
+    public void getTopWords() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        GetTopWordsTest getTopWordsTest = new GetTopWordsTest();
+
+        BackEndAPICallTasker.getInstance().getTopWords(getTopWordsTest, username, token, 10);
+
+        getTopWordsTest.waitForResults();
     }
 }
