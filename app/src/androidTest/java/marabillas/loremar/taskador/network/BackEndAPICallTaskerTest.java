@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTaskTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
@@ -130,5 +131,23 @@ public class BackEndAPICallTaskerTest {
                 entries);
 
         finishTasksTaskTest.waitForResults();
+    }
+
+    @Test
+    public void getFinishedTasks() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        GetFinishedTasksTaskTest getFinishedTasksTaskTest = new GetFinishedTasksTaskTest();
+
+        BackEndAPICallTasker.getInstance().getFinishedTasks(getFinishedTasksTaskTest, username,
+                token);
+
+        getFinishedTasksTaskTest.waitForResults();
     }
 }
