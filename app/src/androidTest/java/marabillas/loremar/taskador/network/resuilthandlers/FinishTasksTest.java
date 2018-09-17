@@ -2,7 +2,7 @@ package marabillas.loremar.taskador.network.resuilthandlers;
 
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 
-public class FinishTasksTaskTest extends ResultHandlerTest implements FinishTasksTask
+public class FinishTasksTest extends ResultHandlerTest implements FinishTasksTask
         .ResultHandler {
     @Override
     public void finishedTasksSavedSuccessfully(String message) {

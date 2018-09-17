@@ -9,13 +9,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
-import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTaskTest;
-import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTaskTest;
-import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTaskTest;
-import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTaskTest;
+import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.GetTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.LoginTest;
 import marabillas.loremar.taskador.network.resuilthandlers.SignupTest;
-import marabillas.loremar.taskador.network.resuilthandlers.UpdateTaskWordsTaskTest;
+import marabillas.loremar.taskador.network.resuilthandlers.UpdateTaskWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.VerifyTokenTest;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
@@ -76,11 +76,11 @@ public class BackEndAPICallTaskerTest {
 
         String[] tasks = {"task1", "task2", "task3"};
 
-        AddTasksTaskTest addTasksTaskTest = new AddTasksTaskTest();
+        AddTasksTest addTasksTest = new AddTasksTest();
 
-        BackEndAPICallTasker.getInstance().addTasks(addTasksTaskTest, username, token, tasks);
+        BackEndAPICallTasker.getInstance().addTasks(addTasksTest, username, token, tasks);
 
-        addTasksTaskTest.waitForResults();
+        addTasksTest.waitForResults();
     }
 
     @Test
@@ -93,11 +93,11 @@ public class BackEndAPICallTaskerTest {
             Assert.fail(e.getMessage());
         }
 
-        GetTasksTaskTest getTasksTaskTest = new GetTasksTaskTest();
+        GetTasksTest getTasksTest = new GetTasksTest();
 
-        BackEndAPICallTasker.getInstance().getTasks(getTasksTaskTest, username, token);
+        BackEndAPICallTasker.getInstance().getTasks(getTasksTest, username, token);
 
-        getTasksTaskTest.waitForResults();
+        getTasksTest.waitForResults();
     }
 
     @Test
@@ -126,12 +126,12 @@ public class BackEndAPICallTaskerTest {
         entry.task = "task3";
         entries[2] = entry;
 
-        FinishTasksTaskTest finishTasksTaskTest = new FinishTasksTaskTest();
+        FinishTasksTest finishTasksTest = new FinishTasksTest();
 
-        BackEndAPICallTasker.getInstance().finishTasks(finishTasksTaskTest, username, token,
+        BackEndAPICallTasker.getInstance().finishTasks(finishTasksTest, username, token,
                 entries);
 
-        finishTasksTaskTest.waitForResults();
+        finishTasksTest.waitForResults();
     }
 
     @Test
@@ -144,12 +144,12 @@ public class BackEndAPICallTaskerTest {
             Assert.fail(e.getMessage());
         }
 
-        GetFinishedTasksTaskTest getFinishedTasksTaskTest = new GetFinishedTasksTaskTest();
+        GetFinishedTasksTest getFinishedTasksTest = new GetFinishedTasksTest();
 
-        BackEndAPICallTasker.getInstance().getFinishedTasks(getFinishedTasksTaskTest, username,
+        BackEndAPICallTasker.getInstance().getFinishedTasks(getFinishedTasksTest, username,
                 token);
 
-        getFinishedTasksTaskTest.waitForResults();
+        getFinishedTasksTest.waitForResults();
     }
 
     @Test
@@ -162,11 +162,11 @@ public class BackEndAPICallTaskerTest {
             Assert.fail(e.getMessage());
         }
 
-        UpdateTaskWordsTaskTest updateTaskWordsTaskTest = new UpdateTaskWordsTaskTest();
+        UpdateTaskWordsTest updateTaskWordsTest = new UpdateTaskWordsTest();
 
-        BackEndAPICallTasker.getInstance().updateTaskWords(updateTaskWordsTaskTest, username,
+        BackEndAPICallTasker.getInstance().updateTaskWords(updateTaskWordsTest, username,
                 token);
 
-        updateTaskWordsTaskTest.waitForResults();
+        updateTaskWordsTest.waitForResults();
     }
 }

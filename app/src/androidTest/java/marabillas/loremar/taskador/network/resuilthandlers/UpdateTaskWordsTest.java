@@ -2,7 +2,7 @@ package marabillas.loremar.taskador.network.resuilthandlers;
 
 import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 
-public class UpdateTaskWordsTaskTest extends ResultHandlerTest implements UpdateTaskWordsTask.ResultHandler {
+public class UpdateTaskWordsTest extends ResultHandlerTest implements UpdateTaskWordsTask.ResultHandler {
     @Override
     public void wordsUpdateSuccessfully(String message) {
         handleSuccess(message);
