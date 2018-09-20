@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="activity_splash_logo_width">200dp</dimen>
+    <dimen name="activity_splash_dots_width">40dp</dimen>
+    <dimen name="activity_splash_dots_height">30dp</dimen>
+    <dimen name="activity_splash_dot_size">8dp</dimen>
 </resources>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/activity_splash_dots_width"
+    android:layout_height="@dimen/activity_splash_dots_height">
+
+    <marabillas.loremar.taskador.ui.view.BouncingDotView
+        android:id="@+id/dot1"
+        android:layout_width="@dimen/activity_splash_dot_size"
+        android:layout_height="@dimen/activity_splash_dot_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <marabillas.loremar.taskador.ui.view.BouncingDotView
+        android:id="@+id/dot2"
+        android:layout_width="@dimen/activity_splash_dot_size"
+        android:layout_height="@dimen/activity_splash_dot_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dot3"
+        app:layout_constraintStart_toEndOf="@id/dot1" />
+
+    <marabillas.loremar.taskador.ui.view.BouncingDotView
+        android:id="@+id/dot3"
+        android:layout_width="@dimen/activity_splash_dot_size"
+        android:layout_height="@dimen/activity_splash_dot_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/dot4"
+        app:layout_constraintStart_toEndOf="@id/dot2" />
+
+    <marabillas.loremar.taskador.ui.view.BouncingDotView
+        android:id="@+id/dot4"
+        android:layout_width="@dimen/activity_splash_dot_size"
+        android:layout_height="@dimen/activity_splash_dot_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</android.support.constraint.ConstraintLayout>
