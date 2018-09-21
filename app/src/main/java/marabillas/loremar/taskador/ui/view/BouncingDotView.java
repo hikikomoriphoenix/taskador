@@ -15,6 +15,9 @@ import marabillas.loremar.taskador.R;
 
 import static android.graphics.Color.BLACK;
 
+/**
+ * A dot that can bounce once or indefinitely.
+ */
 public class BouncingDotView extends View {
     private ViewPropertyAnimator animator;
     private Handler handler;
@@ -76,6 +79,12 @@ public class BouncingDotView extends View {
         bouncingLoop.run();
     }
 
+    /**
+     * Bounce once. A bounce is made by moving up and then moving down back to original position.
+     *
+     * @param bounceHeight    amount to move up or down
+     * @param bounceEndAction a runnable to execute after a full bounce is made
+     */
     public void bounce(float bounceHeight, Runnable bounceEndAction) {
         mBounceHeight = bounceHeight;
         animator = animate();
@@ -93,9 +102,13 @@ public class BouncingDotView extends View {
 
         @Override
         public void run() {
+            // Bounce up on first run and bounce down on the next.
             mBounceHeight *= -1;
             animator.translationYBy(mBounceHeight);
             animator.setDuration(bounceInterval);
+
+            // Set down to true if bouncing down. If bouncing down, then bounceEndAction is set
+            // to run afterwards.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 if (!down) {
                     down = true;
@@ -115,7 +128,7 @@ public class BouncingDotView extends View {
     }
 
     /**
-     * Stop the bouncing loop animation
+     * Stop any bouncing animation
      */
     public void stop() {
         handler.removeCallbacks(bouncingLoop);

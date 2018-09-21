@@ -10,6 +10,11 @@ import android.widget.FrameLayout;
 
 import marabillas.loremar.taskador.R;
 
+/**
+ * Dots that bounce in wave-like motion. There are two options for animation. One is dots bounce
+ * continuously. The other is dots bounce once per wave motion that is dots wait in place until
+ * the last dot completes its bounce.
+ */
 public class WaitingDotsView extends FrameLayout {
     private BouncingDotView[] dots;
     private Handler handler;
@@ -44,30 +49,50 @@ public class WaitingDotsView extends FrameLayout {
         startInterval = getResources().getInteger(R.integer.activity_splash_dot_start_interval);
     }
 
-    public void startAnimation() {
+    /**
+     * Dots continuously bounce in wavelike motion.
+     */
+    public void animateContinuousWavesOfDots() {
+        // Dots start bouncing one after another for every specified time interval.
         for (int i = 0; i < numDots; ++i) {
             runnables[i] = new DotLoopRunnable(dots[i]);
             handler.postDelayed(runnables[i], (i + 1) * startInterval);
         }
     }
 
-    public void makeAWaveAnimation() {
+    /**
+     * Dots bounce in wavelike motion. Each dot bounces once until the end of a wave animation,
+     * and then another wave is made.
+     */
+    public void animateSingleWavesofDots() {
+        makeAWaveAnimation();
+    }
+
+    private void makeAWaveAnimation() {
         waveEndAction = new WaveEndAction();
+
+        // Dots bounce one after another for every specified time interval.
         for (int i = 0; i < numDots; ++i) {
             runnables[i] = new DotBounceRunnable(dots[i]);
             handler.postDelayed(runnables[i], i * startInterval);
         }
     }
 
+    /**
+     * Completely stop animation.
+     */
     public void stopAnimation() {
         handler.removeCallbacks(waveEndAction);
 
         for (int i = 0; i < numDots; ++i) {
-            dots[i].stop();
             handler.removeCallbacks(runnables[i]);
+            dots[i].stop();
         }
     }
 
+    /**
+     * Runnable for dot to bounce in a loop
+     */
     private class DotLoopRunnable implements Runnable {
         private BouncingDotView dot;
 
@@ -84,6 +109,10 @@ public class WaitingDotsView extends FrameLayout {
         }
     }
 
+    /**
+     * Runnable for dot to bounce once. If dot is last then set it to run
+     * {@link marabillas.loremar.taskador.ui.view.WaitingDotsView.WaveEndAction} after its bounce.
+     */
     private class DotBounceRunnable implements Runnable {
         private BouncingDotView dot;
 
@@ -104,6 +133,9 @@ public class WaitingDotsView extends FrameLayout {
         }
     }
 
+    /**
+     * Calls {@link WaitingDotsView#makeAWaveAnimation()} to make another wave
+     */
     private class WaveEndAction implements Runnable {
         @Override
         public void run() {

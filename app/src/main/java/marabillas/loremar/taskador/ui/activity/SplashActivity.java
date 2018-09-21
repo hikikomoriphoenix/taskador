@@ -25,8 +25,8 @@ public class SplashActivity extends Activity implements SignupTask.ResultHandler
         super.onResume();
 
         WaitingDotsView dots = findViewById(R.id.waitingDotsView);
-        // dots.startAnimation();
-        dots.makeAWaveAnimation();
+        // dots.animateContinuousWavesOfDots();
+        dots.animateSingleWavesofDots();
     }
 
     @Override
