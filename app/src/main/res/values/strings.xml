@@ -1,6 +1,19 @@
 <resources>
     <string name="app_name">taskador</string>
+
     <string name="activity_splash_status_none">Nothing here. Try restarting app.</string>
     <string name="activity_splash_status_connecting">Connecting online.</string>
     <string name="activity_splash_status_updating">Updating online service.</string>
+
+    <string name="activity_signup_header">Create New Account</string>
+    <string name="activity_signup_username_label">Username</string>
+    <string name="activity_signup_username_rules">Must contain at most 16 alphanumeric
+        characters</string>
+    <string name="activity_signup_username_box_hint">Enter username</string>
+    <string name="activity_signup_password_label">Password</string>
+    <string name="activity_signup_password_rules">Must contain 6-16 non-whitespace
+        characters</string>
+    <string name="activity_signup_password_box_hint">Enter password</string>
+    <string name="activity_signup_confirm_password_label">Confirm Password</string>
+    <string name="activity_signup_submit_button_label">Submit</string>
 </resources>

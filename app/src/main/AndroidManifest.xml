@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.LoginActivity" />
+        <activity
+            android:name=".ui.activity.SignupActivity"
+            android:theme="@style/SignupTheme" />
 
         <service
             android:name=".account.AuthenticatorService"

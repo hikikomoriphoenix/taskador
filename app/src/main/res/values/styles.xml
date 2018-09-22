@@ -6,8 +6,50 @@
     </style>
 
     <!-- Theme for splash screen -->
-    <style name="SplashTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+    <style name="SplashTheme" parent="@style/MainScreenTheme">
 
+    </style>
+
+    <!-- Theme for signup screen-->
+    <style name="SignupTheme" parent="@style/MainScreenTheme">
+
+    </style>
+
+    <style name="SignupHeaderTextAppearance" parent="MainScreenHeaderTextAppearance">
+
+    </style>
+
+    <style name="SignupLabelTextAppearance" parent="MainScreenLabelTextAppearance">
+
+    </style>
+
+    <style name="SignupRulesTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/dark_green</item>
+        <item name="android:textSize">@dimen/main_screen_normal_text_size</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="MainScreenTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
+        <item name="android:editTextStyle">@style/MainScreenEditText</item>
+    </style>
+
+    <style name="MainScreenEditText" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:background">@drawable/main_screen_edittext_background</item>
+        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:padding">@dimen/main_screen_edit_text_padding</item>
+    </style>
+
+    <style name="MainScreenHeaderTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/dark_green</item>
+        <item name="android:textSize">@dimen/main_screen_header_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MainScreenLabelTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/main_screen_label_text_size</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>
