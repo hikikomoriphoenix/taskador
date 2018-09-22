@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_signup_background">
+
+    <LinearLayout
+        android:layout_width="@dimen/activity_signup_form_width"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/activity_signup_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/activity_signup_header"
+            android:textAppearance="@style/SignupHeaderTextAppearance" />
+
+        <TextView
+            android:id="@+id/activity_signup_username_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_signup_fields_spacing"
+            android:text="@string/activity_signup_username_label"
+            android:textAppearance="@style/SignupLabelTextAppearance" />
+
+        <TextView
+            android:id="@+id/activity_signup_username_rules"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_signup_username_rules"
+            android:textAppearance="@style/SignupRulesTextAppearance" />
+
+        <EditText
+            android:id="@+id/activity_signup_username_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/activity_signup_username_box_hint"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/activity_signup_password_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_signup_fields_spacing"
+            android:text="@string/activity_signup_password_label"
+            android:textAppearance="@style/SignupLabelTextAppearance" />
+
+        <TextView
+            android:id="@+id/activity_signup_password_rules"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_signup_password_rules"
+            android:textAppearance="@style/SignupRulesTextAppearance" />
+
+        <EditText
+            android:id="@+id/activity_signup_password_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/activity_signup_password_box_hint"
+            android:inputType="text|textPassword" />
+
+        <TextView
+            android:id="@+id/activity_signup_confirm_password_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_signup_fields_spacing"
+            android:text="@string/activity_signup_confirm_password_label"
+            android:textAppearance="@style/SignupLabelTextAppearance" />
+
+        <EditText
+            android:id="@+id/activity_signup_confirm_password_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_signup_fields_spacing"
+            android:ems="10"
+            android:hint="@string/activity_signup_password_box_hint"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/activity_signup_submit_button"
+            android:layout_width="@dimen/activity_signup_submit_button_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/activity_signup_fields_spacing"
+            android:text="@string/activity_signup_submit_button_label" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

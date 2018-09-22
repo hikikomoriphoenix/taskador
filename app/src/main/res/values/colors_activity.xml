@@ -4,4 +4,6 @@
     <!--<color name="activity_splash_title_border">@color/green</color>-->
     <color name="activity_splash_background">@color/bright_green</color>
     <color name="activity_splash_status">@android:color/white</color>
+
+    <color name="activity_signup_background">@color/bright_green</color>
 </resources>

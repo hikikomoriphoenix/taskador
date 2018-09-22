@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="main_screen_header_text_size">24sp</dimen>
+    <dimen name="main_screen_label_text_size">16sp</dimen>
+    <dimen name="main_screen_normal_text_size">12sp</dimen>
+    <dimen name="main_screen_edit_text_padding">8dp</dimen>
+
     <dimen name="activity_splash_logo_width">200dp</dimen>
     <dimen name="activity_splash_dots_width">40dp</dimen>
     <dimen name="activity_splash_dots_height">30dp</dimen>
     <dimen name="activity_splash_dot_size">8dp</dimen>
+
+    <dimen name="activity_signup_form_width">300dp</dimen>
+    <dimen name="activity_signup_fields_spacing">12dp</dimen>
+    <dimen name="activity_signup_submit_button_width">120dp</dimen>
 </resources>
