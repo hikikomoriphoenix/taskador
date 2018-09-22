@@ -134,5 +134,6 @@ public class BouncingDotView extends View {
         handler.removeCallbacks(bouncingLoop);
         handler.removeCallbacks(bounceRunnable);
         animator.cancel();
+        setTranslationY(0);
     }
 }
