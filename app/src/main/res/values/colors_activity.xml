@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="main_screen_edit_text_focused_border">@color/yellow_orange</color>
+
     <color name="activity_splash_title">@color/purple</color>
     <!--<color name="activity_splash_title_border">@color/green</color>-->
     <color name="activity_splash_background">@color/bright_green</color>

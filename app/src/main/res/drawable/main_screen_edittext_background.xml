@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_enabled="true">
+    <item android:state_focused="false" android:state_enabled="true">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/white" />
             <corners android:radius="10dp" />
         </shape>
     </item>
-    <item android:state_focused="true">
+    <item android:state_focused="true" android:state_enabled="true">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/white" />
             <corners android:radius="10dp" />
-            <stroke android:color="@android:color/black" android:width="2dp" />
+            <stroke android:color="@color/main_screen_edit_text_focused_border" android:width="2dp" />
         </shape>
     </item>
-    <item>
+    <item android:state_enabled="false">
         <shape android:shape="rectangle">
             <solid android:color="@android:color/darker_gray" />
             <corners android:radius="10dp" />
