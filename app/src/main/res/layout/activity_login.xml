@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/activity_login_background">
+
+    <LinearLayout
+        android:layout_width="@dimen/activity_login_form_width"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/activity_login_logo"
+            android:layout_width="@dimen/activity_login_logo_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/activity_login_fields_spacing"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_logo" />
+
+        <TextView
+            android:id="@+id/activity_login_username_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_login_fields_spacing"
+            android:gravity="center_horizontal"
+            android:text="@string/activity_login_username_label"
+            android:textAppearance="@style/LoginLabelTextAppearance" />
+
+        <EditText
+            android:id="@+id/activity_login_username_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/activity_login_username_box_hint"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/activity_login_password_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_login_fields_spacing"
+            android:gravity="center_horizontal"
+            android:text="@string/activity_login_password_label"
+            android:textAppearance="@style/LoginLabelTextAppearance" />
+
+        <EditText
+            android:id="@+id/activity_login_password_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/activity_login_fields_spacing"
+            android:ems="10"
+            android:hint="@string/activity_login_password_box_hint"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/activity_login_login_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_login_fields_spacing"
+            android:text="@string/activity_login_login_button" />
+
+        <TextView
+            android:id="@+id/activity_login_signup_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_login_signup_link_space"
+            android:gravity="center_horizontal"
+            android:text="@string/activity_login_signup_link" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
