@@ -23,6 +23,12 @@
 
     </style>
 
+    <style name="SignupRulesTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/activity_signup_rules</item>
+        <item name="android:textSize">@dimen/main_screen_normal_text_size</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
     <style name="LoginTheme" parent="MainScreenTheme">
 
     </style>
@@ -31,10 +37,9 @@
 
     </style>
 
-    <style name="SignupRulesTextAppearance" parent="@android:style/TextAppearance">
-        <item name="android:textColor">@color/activity_signup_rules</item>
-        <item name="android:textSize">@dimen/main_screen_normal_text_size</item>
-        <item name="android:textStyle">italic</item>
+    <style name="LoginSignupLinkTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/activity_login_signup_link</item>
+        <item name="android:textSize">@dimen/activity_login_signup_link_text_size</item>
     </style>
 
     <style name="MainScreenTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">

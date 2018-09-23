@@ -16,4 +16,5 @@
     <color name="activity_signup_rules">@color/dark_green</color>
 
     <color name="activity_login_background">@color/bright_green</color>
+    <color name="activity_login_signup_link">@color/purple</color>
 </resources>

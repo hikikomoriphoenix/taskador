@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:gravity="center"
             android:hint="@string/activity_login_username_box_hint"
             android:inputType="text" />
 
@@ -56,13 +57,15 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/activity_login_fields_spacing"
             android:ems="10"
+            android:gravity="center"
             android:hint="@string/activity_login_password_box_hint"
             android:inputType="textPassword" />
 
         <Button
             android:id="@+id/activity_login_login_button"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/activity_login_login_button_width"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/activity_login_fields_spacing"
             android:text="@string/activity_login_login_button" />
 
@@ -72,6 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_login_signup_link_space"
             android:gravity="center_horizontal"
-            android:text="@string/activity_login_signup_link" />
+            android:text="@string/activity_login_signup_link"
+            android:textAppearance="@style/LoginSignupLinkTextAppearance" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

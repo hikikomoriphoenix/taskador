@@ -17,5 +17,7 @@
     <dimen name="activity_login_form_width">300dp</dimen>
     <dimen name="activity_login_logo_width">200dp</dimen>
     <dimen name="activity_login_fields_spacing">12dp</dimen>
+    <dimen name="activity_login_login_button_width">120dp</dimen>
     <dimen name="activity_login_signup_link_space">48dp</dimen>
+    <dimen name="activity_login_signup_link_text_size">16sp</dimen>
 </resources>
