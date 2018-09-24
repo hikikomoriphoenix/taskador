@@ -29,6 +29,19 @@
         <item name="android:textStyle">italic</item>
     </style>
 
+    <style name="LoginTheme" parent="MainScreenTheme">
+
+    </style>
+
+    <style name="LoginLabelTextAppearance" parent="MainScreenLabelTextAppearance">
+
+    </style>
+
+    <style name="LoginSignupLinkTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/activity_login_signup_link</item>
+        <item name="android:textSize">@dimen/activity_login_signup_link_text_size</item>
+    </style>
+
     <style name="MainScreenTheme" parent="@android:style/Theme.DeviceDefault.NoActionBar">
         <item name="android:editTextStyle">@style/MainScreenEditText</item>
     </style>

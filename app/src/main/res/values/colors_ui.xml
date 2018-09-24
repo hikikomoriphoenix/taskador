@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="logo_color">@color/purple</color>
+    <!--<color name="logo_border">@color/green</color>-->
+
     <color name="main_screen_header_text_color">@color/dark_green</color>
     <color name="main_screen_edit_text_focused_border">@color/yellow_orange</color>
     <color name="main_screen_edit_text_text_color">@android:color/black</color>
     <color name="main_screen_edit_text_hint_color">@android:color/darker_gray</color>
     <color name="main_screen_label_text_color">@android:color/black</color>
 
-    <color name="activity_splash_title">@color/purple</color>
-    <!--<color name="activity_splash_title_border">@color/green</color>-->
     <color name="activity_splash_background">@color/bright_green</color>
     <color name="activity_splash_status">@android:color/white</color>
 
     <color name="activity_signup_background">@color/bright_green</color>
     <color name="activity_signup_rules">@color/dark_green</color>
+
+    <color name="activity_login_background">@color/bright_green</color>
+    <color name="activity_login_signup_link">@color/purple</color>
 </resources>
