@@ -65,4 +65,8 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="MainInAppTheme" parent="AppTheme">
+
+    </style>
+
 </resources>
