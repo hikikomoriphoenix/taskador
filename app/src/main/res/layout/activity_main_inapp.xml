@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/activity_maininapp_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/activity_maininapp_toolbar_background"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/toolbarStyle">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/activity_maininapp_logo"
+                android:layout_width="@dimen/activity_maininapp_logo_width"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/activity_maininapp_helptool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/activity_maininapp_helptool_rightmargin"
+                android:layout_marginRight="@dimen/activity_maininapp_helptool_rightmargin"
+                android:drawableLeft="@drawable/ic_help_outline_24dp"
+                android:drawablePadding="@dimen/activity_maininapp_helpicon_padding"
+                android:drawableStart="@drawable/ic_help_outline_24dp"
+                android:gravity="center"
+                android:text="@string/activity_maininapp_helptool"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
+
 
 </android.support.constraint.ConstraintLayout>

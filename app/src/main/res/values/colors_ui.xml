@@ -17,4 +17,6 @@
 
     <color name="activity_login_background">@color/bright_green</color>
     <color name="activity_login_signup_link">@color/purple</color>
+
+    <color name="activity_maininapp_toolbar_background">@color/greenish_blue</color>
 </resources>

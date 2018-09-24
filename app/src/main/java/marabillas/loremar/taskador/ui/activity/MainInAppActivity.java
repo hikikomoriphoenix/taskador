@@ -1,12 +1,12 @@
 package marabillas.loremar.taskador.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import marabillas.loremar.taskador.R;
 
-public class MainInAppActivity extends Activity {
+public class MainInAppActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
