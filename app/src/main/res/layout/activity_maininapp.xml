@@ -44,5 +44,14 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/activity_maininapp_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activity_maininapp_toolbar" />
+
 
 </android.support.constraint.ConstraintLayout>

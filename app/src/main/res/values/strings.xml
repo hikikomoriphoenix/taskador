@@ -25,4 +25,7 @@
     <string name="activity_login_signup_link"><u>Create New Account?</u></string>
 
     <string name="activity_maininapp_helptool"><u>Help</u></string>
+    <string name="fragment_todotasks_header">To-Do Tasks</string>
+    <string name="fragment_finishedtasks_header">Finished Tasks</string>
+    <string name="fragment_topwords_header">Top Words</string>
 </resources>

@@ -24,4 +24,6 @@
     <dimen name="activity_maininapp_logo_width">160dp</dimen>
     <dimen name="activity_maininapp_helpicon_padding">2dp</dimen>
     <dimen name="activity_maininapp_helptool_rightmargin">16dp</dimen>
+    <dimen name="activity_maininapp_header_textsize">16sp</dimen>
+    <dimen name="activity_maininapp_topdivider_height">1dp</dimen>
 </resources>
