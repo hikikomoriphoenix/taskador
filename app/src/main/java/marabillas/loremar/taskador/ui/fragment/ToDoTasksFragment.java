@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 
 import marabillas.loremar.taskador.R;
 
+/**
+ * Fragment representing the window for to-do tasks. It allows the user to add tasks that the
+ * user needs to finish.
+ */
 public class ToDoTasksFragment extends Fragment {
     @Nullable
     @Override

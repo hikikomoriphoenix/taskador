@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 
 import marabillas.loremar.taskador.R;
 
+/**
+ * Fragment representing the window for finished tasks. It displays a list of tasks set by the user
+ * as finished during the current week, along with each corresponding date the task was finished.
+ */
 public class FinishedTasksFragment extends Fragment {
     @Nullable
     @Override

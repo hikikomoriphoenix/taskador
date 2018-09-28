@@ -8,6 +8,10 @@ import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 
+/**
+ * Adapter for putting fragments into the ViewPager in in-app screen. Each fragment represents a
+ * window for displaying each feature for the in-app screen.
+ */
 public class MainInappViewPagerAdapter extends FragmentStatePagerAdapter {
     private Fragment todoTasksFragment;
     private Fragment finishedTasksFragment;

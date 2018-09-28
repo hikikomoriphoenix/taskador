@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 
 import marabillas.loremar.taskador.R;
 
+/**
+ * Fragment representing the window for top words. It displays the most frequently used words for
+ * tasks ordered starting from the most frequently used, along with each count value which
+ * pertains to the number of times the word is used in tasks.
+ */
 public class TopWordsFragment extends Fragment {
     @Nullable
     @Override
