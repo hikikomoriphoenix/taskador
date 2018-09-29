@@ -27,6 +27,9 @@
         <activity
             android:name=".ui.activity.SignupActivity"
             android:theme="@style/SignupTheme" />
+        <activity
+            android:name=".ui.activity.MainInAppActivity"
+            android:theme="@style/MainInAppTheme" />
 
         <service
             android:name=".account.AuthenticatorService"

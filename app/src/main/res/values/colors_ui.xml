@@ -17,4 +17,9 @@
 
     <color name="activity_login_background">@color/bright_green</color>
     <color name="activity_login_signup_link">@color/purple</color>
+
+    <color name="activity_maininapp_toolbar_background">@color/greenish_blue</color>
+    <color name="activity_maininapp_header_background">@android:color/white</color>
+    <color name="activity_maininapp_header_textcolor">@android:color/black</color>
+    <color name="activity_maininapp_divider">@android:color/darker_gray</color>
 </resources>

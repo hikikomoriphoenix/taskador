@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault">
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
 
     </style>
 
@@ -65,4 +65,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="MainInAppTheme" parent="AppTheme">
+
+    </style>
+
+    <style name="MainInAppHeaderTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/activity_maininapp_header_textcolor</item>
+        <item name="android:textSize">@dimen/activity_maininapp_header_textsize</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
