@@ -23,5 +23,5 @@
         android:background="@color/activity_maininapp_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_header" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_todotasks_header" />
 </android.support.constraint.ConstraintLayout>
