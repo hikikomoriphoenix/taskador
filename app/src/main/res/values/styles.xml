@@ -82,4 +82,9 @@
         <item name="android:textSize">@dimen/fragment_todotasks_addtask_textsize</item>
         <item name="android:padding">@dimen/fragment_todotasks_addtask_box_padding</item>
     </style>
+
+    <style name="TodoTasksListItemTextViewTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_todotasks_listitem_textview_textcolor</item>
+        <item name="android:textSize">@dimen/fragment_todotasks_listitem_textview_textsize</item>
+    </style>
 </resources>
