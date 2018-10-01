@@ -31,6 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/fragment_todotasks_addtask_section_background"
+        android:focusableInTouchMode="true"
         android:paddingTop="@dimen/fragment_todotasks_addtask_section_padding"
         android:paddingBottom="@dimen/fragment_todotasks_addtask_section_padding"
         app:layout_constraintEnd_toEndOf="parent"
