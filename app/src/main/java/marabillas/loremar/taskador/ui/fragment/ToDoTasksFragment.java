@@ -6,13 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import java.util.List;
 
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.adapter.TodoTasksRecyclerViewAdapter;
 
 /**
@@ -21,6 +26,15 @@ import marabillas.loremar.taskador.ui.adapter.TodoTasksRecyclerViewAdapter;
  */
 public class ToDoTasksFragment extends Fragment {
     private TodoTasksRecyclerViewAdapter adapter;
+    private EditText addTaskBox;
+    private ImageButton addTaskButton;
+    private MainInAppActivity mainInAppActivity;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mainInAppActivity = (MainInAppActivity) getActivity();
+    }
 
     @Nullable
     @Override
@@ -29,21 +43,82 @@ public class ToDoTasksFragment extends Fragment {
 
         // Setup RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.fragment_todotasks_recyclerview);
-        adapter = new TodoTasksRecyclerViewAdapter(getActivity());
+        adapter = new TodoTasksRecyclerViewAdapter(mainInAppActivity);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
+
+        addTaskBox = view.findViewById(R.id.fragment_todotasks_addtask_box);
+        addTaskButton = view.findViewById(R.id.fragment_todotasks_addtask_button);
 
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        addTaskBox.setOnEditorActionListener(mainInAppActivity);
+        addTaskBox.addTextChangedListener(new AddTaskBoxTextWatcher());
+
+        addTaskButton.setOnClickListener(mainInAppActivity);
+    }
+
     public void updateList(final List<String> tasks) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    adapter.update(tasks);
-                }
-            });
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.update(tasks);
+            }
+        });
+    }
+
+    public void showAddTaskButton() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                addTaskButton.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void hideAddTaskButton() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                addTaskButton.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public void clearAddTaskBox() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                addTaskBox.setText("");
+            }
+        });
+    }
+
+    public String getAddTaskBoxTextInput() {
+        return String.valueOf(addTaskBox.getText());
+    }
+
+    class AddTaskBoxTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length() > 0) {
+                showAddTaskButton();
+            } else {
+                hideAddTaskButton();
+            }
         }
     }
 }

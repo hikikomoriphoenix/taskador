@@ -2,13 +2,18 @@ package marabillas.loremar.taskador.ui.activity;
 
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.components.MainInAppEventHandler;
@@ -23,7 +28,8 @@ import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
  * features are contained in a ViewPager allowing the user to swipe between them.
  */
 public class MainInAppActivity extends AppCompatActivity implements ViewPager
-        .OnPageChangeListener, ViewTreeObserver.OnGlobalLayoutListener {
+        .OnPageChangeListener, ViewTreeObserver.OnGlobalLayoutListener, TextView
+        .OnEditorActionListener, View.OnClickListener {
     private ToDoTasksFragment toDoTasksFragment;
     private FinishedTasksFragment finishedTasksFragment;
     private TopWordsFragment topWordsFragment;
@@ -94,6 +100,47 @@ public class MainInAppActivity extends AppCompatActivity implements ViewPager
             if (getCurrentFocus() != null) {
                 getCurrentFocus().clearFocus();
             }
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            toDoTasksFragment.clearAddTaskBox();
+
+            triggerOnAddNewTaskEventIfUserInputtedNewTask();
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        // Handle add-task button clicked
+        if (v.getId() == R.id.fragment_todotasks_addtask_button) {
+            // Close soft keyboard
+            if (getCurrentFocus() != null) {
+                IBinder token = getCurrentFocus().getWindowToken();
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService
+                        (INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    inputMethodManager.hideSoftInputFromWindow(token, 0);
+                }
+            }
+
+            // Clear add-task box's text and hide add-task button
+            toDoTasksFragment.clearAddTaskBox();
+
+            triggerOnAddNewTaskEventIfUserInputtedNewTask();
+        }
+    }
+
+    private void triggerOnAddNewTaskEventIfUserInputtedNewTask() {
+        // If user inputted a task, trigger the onAddNewTask for handling, passing the string
+        // of the new task to add.
+        String task = toDoTasksFragment.getAddTaskBoxTextInput();
+        if (task != null && task.length() > 0) {
+            mainInAppEventHandler.onAddNewTask(task);
         }
     }
 }

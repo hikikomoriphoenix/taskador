@@ -16,6 +16,11 @@ public class MainInAppManager implements MainInAppEventHandler {
         setupTodoTasksWindow();
     }
 
+    @Override
+    public void onAddNewTask(String task) {
+        // TODO handle onAddNewTask event
+    }
+
     private void setupTodoTasksWindow() {
         // TODO implement setupTodoTasksWindow
     }

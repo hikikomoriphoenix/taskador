@@ -6,4 +6,6 @@ public interface MainInAppEventHandler {
     void onMainInAppIsReady(MainInAppActivity mainInAppActivity);
 
     void onTodoTasksWindowSelected();
+
+    void onAddNewTask(String task);
 }

@@ -67,6 +67,11 @@ public class MainInAppActivityTest {
                 setupTodoTasksWindow();
             }
 
+            @Override
+            public void onAddNewTask(String task) {
+
+            }
+
             private void setupTodoTasksWindow() {
                 mainInAppActivity.getToDoTasksFragment().updateList(tasks);
             }
