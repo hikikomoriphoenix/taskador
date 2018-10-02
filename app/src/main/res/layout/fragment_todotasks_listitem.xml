@@ -8,17 +8,15 @@
     <ImageView
         android:id="@+id/fragment_todotasks_listitem_check"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/fragment_todotasks_listitem_check_size"
+        android:layout_marginStart="@dimen/fragment_todotasks_listitem_check_leftmargin"
         android:layout_marginLeft="@dimen/fragment_todotasks_listitem_check_leftmargin"
         android:layout_marginTop="@dimen/fragment_todotasks_listitem_check_verticalmargin"
-        android:layout_marginBottom="@dimen/fragment_todotasks_listitem_check_verticalmargin"
         android:adjustViewBounds="true"
         android:contentDescription="@string/fragment_todotasks_listitem_notchecked_contentdescription"
         android:src="@drawable/ic_notchecked"
-        app:layout_constraintBottom_toBottomOf="@+id/fragment_todotasks_listitem_textview"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragment_todotasks_listitem_textview"
-        android:layout_marginStart="@dimen/fragment_todotasks_listitem_check_leftmargin" />
+        app:layout_constraintTop_toTopOf="@+id/fragment_todotasks_listitem_textview" />
 
     <TextView
         android:id="@+id/fragment_todotasks_listitem_textview"
