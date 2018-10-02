@@ -26,12 +26,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_todotasks_header" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/fragment_todotasks_addtask_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/fragment_todotasks_addtask_section_background"
         android:focusableInTouchMode="true"
+        android:orientation="vertical"
         android:paddingTop="@dimen/fragment_todotasks_addtask_section_padding"
         android:paddingBottom="@dimen/fragment_todotasks_addtask_section_padding"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,8 +48,22 @@
             android:ems="10"
             android:gravity="center_horizontal"
             android:hint="@string/fragment_todotasks_addtask_hint"
+            android:imeActionLabel="@string/fragment_todotasks_edittext_actionlabel"
+            android:imeOptions="actionDone"
             android:inputType="text" />
-    </FrameLayout>
+
+        <ImageButton
+            android:id="@+id/fragment_todotasks_addtask_button"
+            android:layout_width="@dimen/fragment_todotasks_addtask_button_size"
+            android:layout_height="@dimen/fragment_todotasks_addtask_button_size"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/fragment_todotasks_addtaskbutton_contentdescription"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_add_circle_24dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/fragment_todotasks_topdivider2"

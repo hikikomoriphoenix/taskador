@@ -30,6 +30,8 @@
     <string name="fragment_topwords_header">Top Words</string>
 
     <string name="fragment_todotasks_addtask_hint">Add New Task</string>
+    <string name="fragment_todotasks_edittext_actionlabel">ADD</string>
+    <string name="fragment_todotasks_addtaskbutton_contentdescription">Add new task</string>
     <string name="fragment_todotasks_listitem_notchecked_contentdescription">Not checked</string>
     <string name="fragment_todotasks_listitem_textview_defaulttext">Unknown task</string>
 </resources>

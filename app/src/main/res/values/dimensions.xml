@@ -30,6 +30,7 @@
     <dimen name="fragment_todotasks_addtask_section_padding">8dp</dimen>
     <dimen name="fragment_todotasks_addtask_box_padding">4dp</dimen>
     <dimen name="fragment_todotasks_addtask_textsize">16sp</dimen>
+    <dimen name="fragment_todotasks_addtask_button_size">48dp</dimen>
     <dimen name="fragment_todotasks_listitem_check_verticalmargin">12dp</dimen>
     <dimen name="fragment_todotasks_listitem_check_leftmargin">12dp</dimen>
     <dimen name="fragment_todotasks_listitem_textview_verticalpadding">12dp</dimen>
