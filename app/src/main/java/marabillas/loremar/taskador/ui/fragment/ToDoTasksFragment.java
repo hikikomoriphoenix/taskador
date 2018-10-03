@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,10 +53,10 @@ public class ToDoTasksFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        addTaskBox.setOnEditorActionListener(mainInAppActivity);
-        addTaskBox.addTextChangedListener(new AddTaskBoxTextWatcher());
+        addTaskBox.setOnEditorActionListener(mainInAppActivity.getAddTaskOnEditorActionListener());
+        addTaskBox.addTextChangedListener(mainInAppActivity.getAddTaskBoxTextWatcher());
 
-        addTaskButton.setOnClickListener(mainInAppActivity);
+        addTaskButton.setOnClickListener(mainInAppActivity.getOnClickListener());
     }
 
     public void updateList(final List<String> tasks) {
@@ -99,26 +97,5 @@ public class ToDoTasksFragment extends Fragment {
 
     public String getAddTaskBoxTextInput() {
         return String.valueOf(addTaskBox.getText());
-    }
-
-    class AddTaskBoxTextWatcher implements TextWatcher {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            if (s.length() > 0) {
-                showAddTaskButton();
-            } else {
-                hideAddTaskButton();
-            }
-        }
     }
 }
