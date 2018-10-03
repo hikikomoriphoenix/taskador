@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -16,7 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.components.MainInAppEventHandler;
+import marabillas.loremar.taskador.background.ActivityBinder;
+import marabillas.loremar.taskador.background.BackgroundTaskManager;
+import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.ui.adapter.MainInappViewPagerAdapter;
 import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment;
@@ -31,14 +32,14 @@ import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeLi
  * finished tasks and also features listing of most frequently used words for tasks. These
  * features are contained in a ViewPager allowing the user to swipe between them.
  */
-public class MainInAppActivity extends AppCompatActivity implements ViewTreeObserver
+public class MainInAppActivity extends BaseAppCompatActivity implements ViewTreeObserver
         .OnGlobalLayoutListener {
     private ToDoTasksFragment toDoTasksFragment;
     private FinishedTasksFragment finishedTasksFragment;
     private TopWordsFragment topWordsFragment;
     private ViewPager pager;
-    private MainInAppEventHandler mainInAppEventHandler;
     private View contentView;
+    private MainInAppBackgroundTasker mainInAppBackgroundTasker;
 
     // Listeners
     private View.OnClickListener onClickListener;
@@ -71,9 +72,18 @@ public class MainInAppActivity extends AppCompatActivity implements ViewTreeObse
         addTaskBoxTextWatcher = new AddTaskBoxTextWatcher(this);
     }
 
-    public void setMainInAppEventHandler(MainInAppEventHandler mainInAppEventHandler) {
-        this.mainInAppEventHandler = mainInAppEventHandler;
-        this.mainInAppEventHandler.onMainInAppIsReady(this);
+    @Override
+    public void setBackgroundTasker(ActivityBinder activityBinder) {
+        mainInAppBackgroundTasker = (MainInAppBackgroundTasker) activityBinder;
+        mainInAppBackgroundTasker.bindActivity(this);
+        mainInAppBackgroundTasker.retrieveToDoTasksList();
+    }
+
+    @Override
+    public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
+        mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTaskManager;
+        mainInAppBackgroundTasker.bindActivity(this);
+        mainInAppBackgroundTasker.retrieveToDoTasksList();
     }
 
     public ToDoTasksFragment getToDoTasksFragment() {
@@ -109,7 +119,7 @@ public class MainInAppActivity extends AppCompatActivity implements ViewTreeObse
     }
 
     public void onTodoTasksWindowSelected() {
-        mainInAppEventHandler.onTodoTasksWindowSelected();
+        mainInAppBackgroundTasker.retrieveToDoTasksList();
     }
 
     public void onAddTaskBoxTextChanged(Editable s) {
@@ -145,7 +155,7 @@ public class MainInAppActivity extends AppCompatActivity implements ViewTreeObse
         // of the new task to add.
         String task = toDoTasksFragment.getAddTaskBoxTextInput();
         if (task != null && task.length() > 0) {
-            mainInAppEventHandler.onAddNewTask(task);
+            mainInAppBackgroundTasker.submitNewTask(task);
         }
     }
 }

@@ -1,6 +1,7 @@
 package marabillas.loremar.taskador.ui.activity;
 
 import android.support.test.rule.ActivityTestRule;
+import android.support.test.rule.ServiceTestRule;
 
 import junit.framework.Assert;
 
@@ -13,12 +14,15 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import marabillas.loremar.taskador.components.MainInAppEventHandler;
+import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 
 public class MainInAppActivityTest {
     @Rule
     public ActivityTestRule<MainInAppActivity> activityTestRule = new ActivityTestRule<>
             (MainInAppActivity.class);
+
+    @Rule
+    public ServiceTestRule serviceTestRule = new ServiceTestRule();
 
     @Test
     public void test() {
@@ -56,27 +60,39 @@ public class MainInAppActivityTest {
         };
         Collections.addAll(tasks, tasksArray);
 
-        MainInAppEventHandler mainInAppEventHandler = new MainInAppEventHandler() {
-            @Override
-            public void onMainInAppIsReady(MainInAppActivity mainInAppActivity) {
-                setupTodoTasksWindow();
-            }
+        class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
+            private MainInAppActivity activity;
 
             @Override
-            public void onTodoTasksWindowSelected() {
-                setupTodoTasksWindow();
+            public void retrieveToDoTasksList() {
+                activity.getToDoTasksFragment().updateList(tasks);
             }
 
             @Override
-            public void onAddNewTask(String task) {
+            public void submitNewTask(String task) {
 
             }
 
-            private void setupTodoTasksWindow() {
-                mainInAppActivity.getToDoTasksFragment().updateList(tasks);
+            @Override
+            public void bindActivity(MainInAppActivity activity) {
+                this.activity = activity;
             }
-        };
-        mainInAppActivity.setMainInAppEventHandler(mainInAppEventHandler);
+
+            @Override
+            public MainInAppActivity getActivity() {
+                return activity;
+            }
+        }
+
+        mainInAppActivity.setBackgroundTasker(new MainInAppBackgroundTaskerTest());
+
+/*        BackgroundServiceConnection conn = new BackgroundServiceConnection(mainInAppActivity);
+        Intent intent = new Intent(mainInAppActivity, MainInAppManager.class);
+        try {
+            serviceTestRule.bindService(intent, conn, Context.BIND_AUTO_CREATE);
+        } catch (TimeoutException e) {
+            Assert.fail(e.getMessage());
+        }*/
 
         CountDownLatch latch = new CountDownLatch(1);
         try {

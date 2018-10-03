@@ -42,5 +42,6 @@
                 android:name="android.accounts.AccountAuthenticator"
                 android:resource="@xml/authenticator" />
         </service>
+        <service android:name=".background.MainInAppManager" />
     </application>
 </manifest>
