@@ -1,5 +1,6 @@
 package marabillas.loremar.taskador.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
@@ -25,7 +27,10 @@ import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.ui.listeners.AddTaskBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.AddTaskOnEditorActionListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppOnClickListener;
+import marabillas.loremar.taskador.ui.listeners.MainInAppOnTouchListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeListener;
+import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
+import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
@@ -40,12 +45,17 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private ViewPager pager;
     private View contentView;
     private MainInAppBackgroundTasker mainInAppBackgroundTasker;
+    private ListItemSwipeHandler listItemSwipeHandler;
 
     // Listeners
     private View.OnClickListener onClickListener;
     private TextView.OnEditorActionListener addTaskOnEditorActionListener;
     private TextWatcher addTaskBoxTextWatcher;
 
+    private View selectedItemView;
+    private int selectedItemPosition;
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +72,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         MainInappViewPagerAdapter adapter = new MainInappViewPagerAdapter(fm, fragments);
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new MainInAppViewPagerOnPageChangeListener(this));
+        pager.setOnTouchListener(new MainInAppOnTouchListener(this));
 
         contentView = findViewById(android.R.id.content);
         contentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -70,20 +81,23 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         onClickListener = new MainInAppOnClickListener(this);
         addTaskOnEditorActionListener = new AddTaskOnEditorActionListener(this);
         addTaskBoxTextWatcher = new AddTaskBoxTextWatcher(this);
+
+        selectedItemView = null;
+        selectedItemPosition = -1;
     }
 
     @Override
     public void setBackgroundTasker(ActivityBinder activityBinder) {
         mainInAppBackgroundTasker = (MainInAppBackgroundTasker) activityBinder;
         mainInAppBackgroundTasker.bindActivity(this);
-        mainInAppBackgroundTasker.retrieveToDoTasksList();
+        onTodoTasksWindowSelected();
     }
 
     @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
         mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTaskManager;
         mainInAppBackgroundTasker.bindActivity(this);
-        mainInAppBackgroundTasker.retrieveToDoTasksList();
+        onTodoTasksWindowSelected();
     }
 
     public ToDoTasksFragment getToDoTasksFragment() {
@@ -120,6 +134,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     public void onTodoTasksWindowSelected() {
         mainInAppBackgroundTasker.retrieveToDoTasksList();
+        setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
     }
 
     public void onAddTaskBoxTextChanged(Editable s) {
@@ -157,5 +172,33 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         if (task != null && task.length() > 0) {
             mainInAppBackgroundTasker.submitNewTask(task);
         }
+    }
+
+    public void setListItemSwipeHandler(ListItemSwipeHandler listItemSwipeHandler) {
+        this.listItemSwipeHandler = listItemSwipeHandler;
+    }
+
+    public ListItemSwipeHandler getListItemSwipeHandler() {
+        return listItemSwipeHandler;
+    }
+
+    public void onListItemTouch(View v, MotionEvent event, int position) {
+        selectedItemView = v;
+        selectedItemPosition = position;
+
+        listItemSwipeHandler.handleMotionEvent(v, event);
+    }
+
+    public void onListItemRelease() {
+        selectedItemPosition = -1;
+        selectedItemView = null;
+    }
+
+    public View getSelectedItemView() {
+        return selectedItemView;
+    }
+
+    public int getSelectedItemPosition() {
+        return selectedItemPosition;
     }
 }

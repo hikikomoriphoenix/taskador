@@ -27,6 +27,5 @@ public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageC
 
     @Override
     public void onPageScrollStateChanged(int state) {
-
     }
 }
