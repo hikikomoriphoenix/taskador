@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,5 +24,64 @@
         android:background="@color/activity_maininapp_divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_header" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_todotasks_header" />
+
+    <LinearLayout
+        android:id="@+id/fragment_todotasks_addtask_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fragment_todotasks_addtask_section_background"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/fragment_todotasks_addtask_section_padding"
+        android:paddingBottom="@dimen/fragment_todotasks_addtask_section_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_topdivider">
+
+        <EditText
+            android:id="@+id/fragment_todotasks_addtask_box"
+            style="@style/TodoTAsksAddTaskEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:ems="10"
+            android:gravity="center_horizontal"
+            android:hint="@string/fragment_todotasks_addtask_hint"
+            android:imeActionLabel="@string/fragment_todotasks_edittext_actionlabel"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
+
+        <ImageButton
+            android:id="@+id/fragment_todotasks_addtask_button"
+            android:layout_width="@dimen/fragment_todotasks_addtask_button_size"
+            android:layout_height="@dimen/fragment_todotasks_addtask_button_size"
+            android:layout_gravity="center_horizontal"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/fragment_todotasks_addtaskbutton_contentdescription"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_add_circle_24dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/fragment_todotasks_topdivider2"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/activity_maininapp_topdivider_height"
+        android:background="@color/activity_maininapp_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_addtask_section" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_todotasks_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_topdivider2"
+        tools:listitem="@layout/fragment_todotasks_listitem" />
+
 </android.support.constraint.ConstraintLayout>

@@ -14,6 +14,9 @@ public abstract class BackgroundTaskManager extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        if (binder == null) {
+            binder = new LocalBinder(this);
+        }
         return binder;
     }
 

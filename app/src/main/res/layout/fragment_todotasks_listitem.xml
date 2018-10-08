@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/fragment_todotasks_listitem_check"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fragment_todotasks_listitem_check_size"
+        android:layout_marginStart="@dimen/fragment_todotasks_listitem_check_leftmargin"
+        android:layout_marginLeft="@dimen/fragment_todotasks_listitem_check_leftmargin"
+        android:layout_marginTop="@dimen/fragment_todotasks_listitem_check_verticalmargin"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/fragment_todotasks_listitem_notchecked_contentdescription"
+        android:src="@drawable/ic_notchecked"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_todotasks_listitem_textview" />
+
+    <TextView
+        android:id="@+id/fragment_todotasks_listitem_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/fragment_todotasks_listitem_textview_horizontalpadding"
+        android:paddingLeft="@dimen/fragment_todotasks_listitem_textview_horizontalpadding"
+        android:paddingTop="@dimen/fragment_todotasks_listitem_textview_verticalpadding"
+        android:paddingRight="@dimen/fragment_todotasks_listitem_textview_horizontalpadding"
+        android:paddingBottom="@dimen/fragment_todotasks_listitem_textview_verticalpadding"
+        android:text="@string/fragment_todotasks_listitem_textview_defaulttext"
+        android:textAppearance="@style/TodoTasksListItemTextViewTextAppearance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fragment_todotasks_listitem_check"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/fragment_todotasks_listitem_divider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/fragment_todotasks_listitem_divider_height"
+        android:background="@color/activity_maininapp_divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_listitem_textview" />
+</android.support.constraint.ConstraintLayout>

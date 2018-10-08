@@ -22,4 +22,9 @@
     <color name="activity_maininapp_header_background">@android:color/white</color>
     <color name="activity_maininapp_header_textcolor">@android:color/black</color>
     <color name="activity_maininapp_divider">@android:color/darker_gray</color>
+
+    <color name="fragment_todotasks_addtask_section_background">@android:color/white</color>
+    <color name="fragment_todotasks_addtask_textcolor">@android:color/black</color>
+    <color name="fragment_todotasks_addtask_textcolorhint">@android:color/darker_gray</color>
+    <color name="fragment_todotasks_listitem_textview_textcolor">@android:color/black</color>
 </resources>

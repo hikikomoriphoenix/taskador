@@ -22,7 +22,7 @@ public class BackgroundServiceConnection implements ServiceConnection {
 
     }
 
-    interface OnServiceConnectedListener {
+    public interface OnServiceConnectedListener {
         void onServiceConnected(BackgroundTaskManager backgroundTaskManager);
     }
 }
