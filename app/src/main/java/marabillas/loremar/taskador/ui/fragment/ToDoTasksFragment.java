@@ -27,6 +27,7 @@ public class ToDoTasksFragment extends Fragment {
     private EditText addTaskBox;
     private ImageButton addTaskButton;
     private MainInAppActivity mainInAppActivity;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,7 +41,7 @@ public class ToDoTasksFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_todotasks, container, false);
 
         // Setup RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.fragment_todotasks_recyclerview);
+        recyclerView = view.findViewById(R.id.fragment_todotasks_recyclerview);
         adapter = new TodoTasksRecyclerViewAdapter(mainInAppActivity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
@@ -97,5 +98,9 @@ public class ToDoTasksFragment extends Fragment {
 
     public String getAddTaskBoxTextInput() {
         return String.valueOf(addTaskBox.getText());
+    }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
     }
 }

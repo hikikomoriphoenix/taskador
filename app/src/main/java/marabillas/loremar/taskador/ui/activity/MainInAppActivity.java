@@ -201,4 +201,9 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     public int getSelectedItemPosition() {
         return selectedItemPosition;
     }
+
+    public void onMarkTaskChecked() {
+        // TODO Update item in the data. Mark it as checked. Notify recyclerview adapter to update
+        // its view.
+    }
 }
