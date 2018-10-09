@@ -88,4 +88,17 @@
         <item name="android:textColor">@color/fragment_todotasks_listitem_textview_textcolor</item>
         <item name="android:textSize">@dimen/fragment_todotasks_listitem_textview_textsize</item>
     </style>
+
+    <style name="FinishedTasksListItemTextViewTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_finishedtasks_listitem_textview_textcolor
+        </item>
+        <item name="android:textSize">@dimen/fragment_finishedtasks_listitem_textview_textsize
+        </item>
+    </style>
+
+    <style name="FinishedTasksListItemDateFinishedTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">
+            @color/fragment_finishedtasks_listitem_datefinished_textcolor
+        </item>
+    </style>
 </resources>

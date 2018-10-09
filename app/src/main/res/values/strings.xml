@@ -34,4 +34,10 @@
     <string name="fragment_todotasks_addtaskbutton_contentdescription">Add new task</string>
     <string name="fragment_todotasks_listitem_notchecked_contentdescription">Not checked</string>
     <string name="fragment_todotasks_listitem_textview_defaulttext">Unknown task</string>
+
+    <string name="fragment_finishedtasks_listitem_checked_contentdescription">Checked</string>
+    <string name="fragment_finishedtasks_listitem_textview_defaulttext">Unknown task</string>
+    <string name="fragment_finisgedtasks_listitem_datefinished_defaulttext"><b>Date Finished:</b>
+        Unknown
+    </string>
 </resources>

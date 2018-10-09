@@ -38,4 +38,12 @@
     <dimen name="fragment_todotasks_listitem_textview_horizontalpadding">8dp</dimen>
     <dimen name="fragment_todotasks_listitem_textview_textsize">16sp</dimen>
     <dimen name="fragment_todotasks_listitem_divider_height">1dp</dimen>
+
+    <dimen name="fragment_finishedtasks_listitem_check_size">20dp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_textview_textsize">16sp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_check_verticalmargin">16dp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_check_leftmargin">12dp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_textview_verticalpadding">16dp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_textview_horizontalpadding">8dp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_divider_height">1dp</dimen>
 </resources>
