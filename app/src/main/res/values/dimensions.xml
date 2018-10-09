@@ -45,5 +45,6 @@
     <dimen name="fragment_finishedtasks_listitem_check_leftmargin">12dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_textview_verticalpadding">16dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_textview_horizontalpadding">8dp</dimen>
+    <dimen name="fragment_finishedtasks_listitem_datefinished_rightmargin">8dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_divider_height">1dp</dimen>
 </resources>

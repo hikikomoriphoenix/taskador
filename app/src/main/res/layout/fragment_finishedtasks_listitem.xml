@@ -36,10 +36,12 @@
         android:id="@+id/fragment_finishedtasks_listitem_datefinished"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/fragment_finishedtasks_listitem_datefinished_rightmargin"
         android:text="@string/fragment_finisgedtasks_listitem_datefinished_defaulttext"
         android:textAppearance="@style/FinishedTasksListItemDateFinishedTextAppearance"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_finishedtasks_textview" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_finishedtasks_textview"
+        android:layout_marginEnd="@dimen/fragment_finishedtasks_listitem_datefinished_rightmargin" />
 
     <View
         android:id="@+id/fragment_finishedtasks_lisitem_divider"
