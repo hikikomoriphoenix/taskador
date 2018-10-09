@@ -17,12 +17,17 @@ public class MainInAppManager extends BackgroundTaskManager implements
     }
 
     @Override
-    public void retrieveToDoTasksList() {
+    public void fetchToDoTasksList() {
         // TODO implement
     }
 
     @Override
     public void submitNewTask(String task) {
+        // TODO implement
+    }
+
+    @Override
+    public void fetchFinishedTasksList() {
         // TODO implement
     }
 }

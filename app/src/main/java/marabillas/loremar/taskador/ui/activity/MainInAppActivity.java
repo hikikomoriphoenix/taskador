@@ -104,6 +104,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         return toDoTasksFragment;
     }
 
+    public FinishedTasksFragment getFinishedTasksFragment() {
+        return finishedTasksFragment;
+    }
+
     public View.OnClickListener getOnClickListener() {
         return onClickListener;
     }
@@ -133,8 +137,12 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     }
 
     public void onTodoTasksWindowSelected() {
-        mainInAppBackgroundTasker.retrieveToDoTasksList();
+        mainInAppBackgroundTasker.fetchToDoTasksList();
         setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
+    }
+
+    public void onFinishedTasksWindowSelected() {
+        mainInAppBackgroundTasker.fetchFinishedTasksList();
     }
 
     public void onAddTaskBoxTextChanged(Editable s) {
