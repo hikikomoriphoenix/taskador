@@ -1,7 +1,11 @@
 package marabillas.loremar.taskador.ui.adapter;
 
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +44,13 @@ public class FinishedTasksRecyclerViewAdapter extends RecyclerView.Adapter {
 
         TaskDatePair entry = tasks.get(position);
         finishedTaskView.setText(entry.finishedTask);
-        dateFinishedView.setText(entry.dateFinished);
+
+        String label = "Date Finished: ";
+        String text = label + entry.dateFinished;
+        SpannableString spannableString = new SpannableString(text);
+        StyleSpan bold = new StyleSpan(Typeface.BOLD);
+        spannableString.setSpan(bold, 0, label.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        dateFinishedView.setText(spannableString);
     }
 
     @Override
