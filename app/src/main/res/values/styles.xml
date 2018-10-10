@@ -66,7 +66,7 @@
     </style>
 
     <style name="MainInAppTheme" parent="AppTheme">
-
+        <item name="android:dropDownSpinnerStyle">@android:style/Widget.Spinner.DropDown</item>
     </style>
 
     <style name="MainInAppHeaderTextAppearance" parent="@android:style/TextAppearance">
@@ -100,5 +100,17 @@
         <item name="android:textColor">
             @color/fragment_finishedtasks_listitem_datefinished_textcolor
         </item>
+    </style>
+
+    <style name="TopWordsNumResultsLabelTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_topwords_numresults_label_textcolor</item>
+    </style>
+
+    <style name="TopWordsNumResultsSpinner" parent="@android:style/Widget.Holo.Light.Spinner">
+
+    </style>
+
+    <style name="TopWordsColumnLabelTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_topwords_columnlabel_textcolor</item>
     </style>
 </resources>
