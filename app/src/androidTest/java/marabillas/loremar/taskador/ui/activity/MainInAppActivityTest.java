@@ -15,6 +15,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
+import marabillas.loremar.taskador.entries.TaskDatePair;
 
 public class MainInAppActivityTest {
     @Rule
@@ -26,20 +27,10 @@ public class MainInAppActivityTest {
 
     @Test
     public void test() {
-        CountDownLatch latch = new CountDownLatch(1);
-        try {
-            latch.await(1, TimeUnit.MINUTES);
-        } catch (InterruptedException e) {
-            Assert.fail(e.getMessage());
-        }
-    }
-
-    @Test
-    public void testTodoTasks() {
         final MainInAppActivity mainInAppActivity = activityTestRule.getActivity();
 
         // Prepare the list of tasks
-        final List<String> tasks = new ArrayList<>();
+        final List<String> todoTasks = new ArrayList<>();
         String[] tasksArray = {
                 "A task",
                 "A loooooooooooooonnngggggggggggggg task",
@@ -58,19 +49,30 @@ public class MainInAppActivityTest {
                 "Another task",
                 "Another task"
         };
-        Collections.addAll(tasks, tasksArray);
+        Collections.addAll(todoTasks, tasksArray);
+
+        final List<TaskDatePair> finishedTasks = new ArrayList<>();
+
+        for (int i = 0; i < 30; ++i) {
+            finishedTasks.add(new TaskDatePair("A finished task", "OCT 1, 2018"));
+        }
 
         class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
             private MainInAppActivity activity;
 
             @Override
-            public void retrieveToDoTasksList() {
-                activity.getToDoTasksFragment().updateList(tasks);
+            public void fetchToDoTasksList() {
+                activity.getToDoTasksFragment().updateList(todoTasks);
             }
 
             @Override
             public void submitNewTask(String task) {
 
+            }
+
+            @Override
+            public void fetchFinishedTasksList() {
+                activity.getFinishedTasksFragment().updateList(finishedTasks);
             }
 
             @Override
