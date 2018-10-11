@@ -44,4 +44,6 @@
     <string name="fragment_topwords_numresults_label">Number of Results</string>
     <string name="fragment_topwords_columnlabel_word">WORD</string>
     <string name="fragment_topwords_columnlabel_count">COUNT</string>
+    <string name="fragment_topwords_viewexcluded_buttonlabel">VIEW EXCLUDED &gt;&gt;</string>
+    <string name="fragment_topwords_viewtop_buttonlabel">&lt;&lt; VIEW TOP</string>
 </resources>

@@ -37,4 +37,5 @@
     <color name="fragment_topwords_columnlabel_section_background">@android:color/white</color>
     <color name="fragment_topwords_columnlabel_divider">@android:color/darker_gray</color>
     <color name="fragment_topwords_columnlabel_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_footer_background">@android:color/white</color>
 </resources>

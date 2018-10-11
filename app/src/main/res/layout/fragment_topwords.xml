@@ -122,4 +122,33 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_columnlabel_section" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_topwords_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_topwords_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_topdivider3">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <FrameLayout
+        android:id="@+id/fragment_topwords_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fragment_topwords_footer_background"
+        android:padding="@dimen/fragment_topwords_footer_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/fragment_topwords_viewbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/fragment_topwords_viewexcluded_buttonlabel" />
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>
