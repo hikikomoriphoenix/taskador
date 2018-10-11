@@ -46,4 +46,6 @@
     <string name="fragment_topwords_columnlabel_count">COUNT</string>
     <string name="fragment_topwords_viewexcluded_buttonlabel">VIEW EXCLUDED &gt;&gt;</string>
     <string name="fragment_topwords_viewtop_buttonlabel">&lt;&lt; VIEW TOP</string>
+    <string name="fragment_topwords_listitem_word_defaulttext">\u0020\u0020\u0020-</string>
+    <string name="fragment_topwords_listitem_count_defaulttext">0</string>
 </resources>

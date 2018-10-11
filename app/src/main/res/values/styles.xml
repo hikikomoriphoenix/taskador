@@ -113,4 +113,12 @@
     <style name="TopWordsColumnLabelTextAppearance" parent="Base.TextAppearance.AppCompat">
         <item name="android:textColor">@color/fragment_topwords_columnlabel_textcolor</item>
     </style>
+
+    <style name="TopWordsListItemWordTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_topwords_listitem_word_textcolor</item>
+    </style>
+
+    <style name="TopWordsListItemCountTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_topwords_listitem_count_textcolor</item>
+    </style>
 </resources>

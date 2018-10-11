@@ -53,4 +53,8 @@
     <dimen name="fragment_topwords_numresults_spinner_bottommargin">8dp</dimen>
     <dimen name="fragment_topwords_columnlabel_divider_width">1dp</dimen>
     <dimen name="fragment_topwords_footer_padding">4dp</dimen>
+    <dimen name="fragment_topwords_listitem_verticaldivider_width">1dp</dimen>
+    <dimen name="fragment_topwords_listitem_verticalmargin">12dp</dimen>
+    <dimen name="fragment_topwords_listitem_horizontalmargin">8dp</dimen>
+    <dimen name="fragment_topwords_listitem_horizontaldivider_height">1dp</dimen>
 </resources>
