@@ -136,6 +136,15 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <View
+        android:id="@+id/fragment_topwords_footerdivider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/fragment_topwords_footer_divider_height"
+        android:background="@color/fragment_topwords_footer_divider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_topwords_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <FrameLayout
         android:id="@+id/fragment_topwords_footer"
         android:layout_width="match_parent"
