@@ -52,6 +52,9 @@
     <dimen name="fragment_topwords_numresults_spinner_leftmargin">8dp</dimen>
     <dimen name="fragment_topwords_numresults_spinner_bottommargin">8dp</dimen>
     <dimen name="fragment_topwords_numresults_spinner_topmargin">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_listitem_width">60dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_listitem_padding">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_listitem_borderthick">1dp</dimen>
     <dimen name="fragment_topwords_columnlabel_divider_width">1dp</dimen>
     <dimen name="fragment_topwords_footer_padding">4dp</dimen>
     <dimen name="fragment_topwords_footer_divider_height">1dp</dimen>

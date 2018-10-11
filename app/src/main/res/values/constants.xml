@@ -5,9 +5,4 @@
     <!-- Time interval in milliseconds when before the next dot in splash screen starts to bounce-->
     <integer name="activity_splash_dot_start_interval">200</integer>
     <item name="activity_splash_bounce_height" type="integer" format="float">16.0</item>
-
-    <integer-array name="activity_main_topwords_numresults_selection_">
-        <item>10</item>
-        <item>20</item>
-    </integer-array>
 </resources>

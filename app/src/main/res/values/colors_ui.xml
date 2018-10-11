@@ -34,6 +34,13 @@
 
     <color name="fragment_topwords_numresults_section_background">@android:color/white</color>
     <color name="fragment_topwords_numresults_label_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_numresultsspinner_listitem_background">@android:color/white
+    </color>
+    <color name="fragment_topwords_numresultsspinner_listitem_textcolor">@android:color/black
+    </color>
+    <color name="fragment_topwords_numresultsspinner_listitem_bordercolor">
+        @android:color/darker_gray
+    </color>
     <color name="fragment_topwords_columnlabel_section_background">@android:color/white</color>
     <color name="fragment_topwords_columnlabel_divider">@android:color/darker_gray</color>
     <color name="fragment_topwords_columnlabel_textcolor">@android:color/black</color>
