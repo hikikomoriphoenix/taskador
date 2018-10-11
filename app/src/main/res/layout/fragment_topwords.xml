@@ -31,9 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/fragment_topwords_numresults_section_background"
-        android:paddingLeft="@dimen/fragment_topwords_numresults_section_padding"
-        android:paddingTop="@dimen/fragment_topwords_numresults_section_padding"
-        android:paddingRight="@dimen/fragment_topwords_numresults_section_padding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_topdivider">
@@ -42,10 +39,12 @@
             android:id="@+id/fragment_topwords_numresults_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fragment_topwords_numresults_label_leftmargin"
             android:text="@string/fragment_topwords_numresults_label"
             android:textAppearance="@style/TopWordsNumResultsLabelTextAppearance"
             app:layout_constraintBottom_toBottomOf="@id/fragment_topwords_numresults_spinner"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="@dimen/fragment_topwords_numresults_label_leftmargin" />
 
         <Spinner
             android:id="@+id/fragment_topwords_numresults_spinner"
@@ -54,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/fragment_topwords_numresults_spinner_leftmargin"
             android:layout_marginLeft="@dimen/fragment_topwords_numresults_spinner_leftmargin"
+            android:layout_marginTop="@dimen/fragment_topwords_numresults_spinner_topmargin"
             android:layout_marginBottom="@dimen/fragment_topwords_numresults_spinner_bottommargin"
             android:entries="@array/activity_main_topwords_numresults_selection_"
             app:layout_constraintBottom_toBottomOf="parent"

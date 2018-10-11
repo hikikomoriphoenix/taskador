@@ -48,9 +48,10 @@
     <dimen name="fragment_finishedtasks_listitem_datefinished_rightmargin">8dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_divider_height">1dp</dimen>
 
-    <dimen name="fragment_topwords_numresults_section_padding">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_label_leftmargin">8dp</dimen>
     <dimen name="fragment_topwords_numresults_spinner_leftmargin">8dp</dimen>
     <dimen name="fragment_topwords_numresults_spinner_bottommargin">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_topmargin">8dp</dimen>
     <dimen name="fragment_topwords_columnlabel_divider_width">1dp</dimen>
     <dimen name="fragment_topwords_footer_padding">4dp</dimen>
     <dimen name="fragment_topwords_listitem_verticaldivider_width">1dp</dimen>
