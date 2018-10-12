@@ -69,4 +69,8 @@ public class TopWordsFragment extends Fragment {
     public void setRecyclerViewAdapter(WordsRecyclerViewAdapter adapter) {
         recyclerView.setAdapter(adapter);
     }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
 }

@@ -1,12 +1,12 @@
 package marabillas.loremar.taskador.ui.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import marabillas.loremar.taskador.R;
@@ -18,7 +18,9 @@ public class TopWordsRecyclerViewAdapter extends WordsRecyclerViewAdapter<TopWor
     private List<WordCountPair> topWords;
 
     public TopWordsRecyclerViewAdapter(MainInAppActivity mainInAppActivity) {
+        super(mainInAppActivity);
         this.mainInAppActivity = mainInAppActivity;
+        topWords = new ArrayList<>();
     }
 
     @NonNull
@@ -35,7 +37,7 @@ public class TopWordsRecyclerViewAdapter extends WordsRecyclerViewAdapter<TopWor
         TextView countView = holder.itemView.findViewById(R.id.fragment_topwords_listitem_count);
 
         WordCountPair topWord = this.topWords.get(position);
-        String wordViewtext = (position + 1) + "." + topWord.word;
+        String wordViewtext = (position + 1) + ". " + topWord.word;
 
         wordView.setText(wordViewtext);
         countView.setText(topWord.count);
@@ -52,7 +54,7 @@ public class TopWordsRecyclerViewAdapter extends WordsRecyclerViewAdapter<TopWor
         notifyDataSetChanged();
     }
 
-    class TopWordsViewHolder extends RecyclerView.ViewHolder {
+    class TopWordsViewHolder extends WordsRecyclerViewAdapter.WordsViewHolder {
         TopWordsViewHolder(View itemView) {
             super(itemView);
         }

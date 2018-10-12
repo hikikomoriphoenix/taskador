@@ -8,4 +8,6 @@ public interface MainInAppBackgroundTasker extends ActivityBinder<MainInAppActiv
     void submitNewTask(String task);
 
     void fetchFinishedTasksList();
+
+    void fetchTopWordsList(int numResults);
 }

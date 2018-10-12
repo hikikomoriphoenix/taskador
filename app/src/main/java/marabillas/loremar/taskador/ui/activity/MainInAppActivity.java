@@ -33,6 +33,7 @@ import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeLi
 import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSelectedListener;
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
+import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
@@ -113,6 +114,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         return finishedTasksFragment;
     }
 
+    public TopWordsFragment getTopWordsFragment() {
+        return topWordsFragment;
+    }
+
     public View.OnClickListener getOnClickListener() {
         return onClickListener;
     }
@@ -152,6 +157,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     public void onFinishedTasksWindowSelected() {
         mainInAppBackgroundTasker.fetchFinishedTasksList();
+    }
+
+    public void onTopWordsWindowSelected() {
+        mainInAppBackgroundTasker.fetchTopWordsList(10);
+        setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
     }
 
     public void onAddTaskBoxTextChanged(Editable s) {
@@ -224,7 +234,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         // its view.
     }
 
+    public void onWordSwipedToMark() {
+        // TODO implement
+    }
+
     public void onChangeTopWordsNumResults(int numResults) {
-        // TODO Allow background tasker to handle this
+        mainInAppBackgroundTasker.fetchTopWordsList(numResults);
     }
 }

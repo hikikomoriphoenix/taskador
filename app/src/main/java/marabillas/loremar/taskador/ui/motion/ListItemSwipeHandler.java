@@ -55,13 +55,7 @@ public abstract class ListItemSwipeHandler {
 
                 v.setTranslationX(targetItemViewTranslation);
 
-                // Check if item is swiped to enough distance to mark it as checked
-                float totalWidth = mainInAppActivity.getToDoTasksFragment().getRecyclerView()
-                        .getWidth();
-                if (Math.abs(targetItemViewTranslation) > 0.50 * totalWidth) {
-                    mainInAppActivity.onMarkTaskChecked();
-                }
-
+                checkIfSwipedToMark(mainInAppActivity, targetItemViewTranslation);
                 break;
             case MotionEvent.ACTION_UP:
                 finishSwipe(v);
@@ -110,4 +104,6 @@ public abstract class ListItemSwipeHandler {
             finishSwipe(selectedItemView);
         }
     }
+
+    abstract void checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation);
 }
