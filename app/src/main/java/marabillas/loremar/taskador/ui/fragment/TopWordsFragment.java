@@ -10,13 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.List;
 
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.entries.WordCountPair;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.adapter.ExcludedWordsRecyclerViewAdapter;
 import marabillas.loremar.taskador.ui.adapter.TopWordsRecyclerViewAdapter;
 import marabillas.loremar.taskador.ui.adapter.WordsRecyclerViewAdapter;
 
@@ -29,12 +32,16 @@ public class TopWordsFragment extends Fragment {
     private MainInAppActivity mainInAppActivity;
     private RecyclerView recyclerView;
     private WordsRecyclerViewAdapter adapter;
+    private ViewState currentViewState;
+
+    public enum ViewState {TOP, EXCLUDED}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainInAppActivity = (MainInAppActivity) getActivity();
         adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
+        currentViewState = ViewState.TOP;
     }
 
     @Nullable
@@ -59,18 +66,83 @@ public class TopWordsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
 
+        Button viewButton = view.findViewById(R.id.fragment_topwords_viewbutton);
+        viewButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+
         return view;
     }
 
-    public void updateList(List<WordCountPair> words) {
-        adapter.update(words);
+    public void updateTopWordsList(List<WordCountPair> topWords) {
+        if (adapter instanceof TopWordsRecyclerViewAdapter) {
+            ((TopWordsRecyclerViewAdapter) adapter).update(topWords);
+        }
     }
 
-    public void setRecyclerViewAdapter(WordsRecyclerViewAdapter adapter) {
-        recyclerView.setAdapter(adapter);
+    public void updateExcludedWordsList(List<String> excludedWords) {
+        if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
+            ((ExcludedWordsRecyclerViewAdapter) adapter).update(excludedWords);
+        }
     }
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
+    }
+
+    public ViewState switchViewState() {
+        TextView header = null;
+        View numResultsSection = null;
+        View columnLabelSection = null;
+        Button viewButton = null;
+
+        if (getView() != null) {
+            header = getView().findViewById(R.id.fragment_topwords_header);
+            numResultsSection = getView().findViewById(R.id.fragment_topwords_numresults_section);
+            columnLabelSection = getView().findViewById(R.id.fragment_topwords_columnlabel_section);
+            viewButton = getView().findViewById(R.id.fragment_topwords_viewbutton);
+        }
+
+        switch (currentViewState) {
+            case TOP:
+                currentViewState = ViewState.EXCLUDED;
+
+                if (header != null) {
+                    header.setText(R.string.fragment_topwords_excludedwords_header);
+                }
+                if (numResultsSection != null) {
+                    numResultsSection.setVisibility(View.GONE);
+                }
+                if (columnLabelSection != null) {
+                    columnLabelSection.setVisibility(View.GONE);
+                }
+                if (viewButton != null) {
+                    viewButton.setText(R.string.fragment_topwords_viewtop_buttonlabel);
+                }
+
+                adapter = new ExcludedWordsRecyclerViewAdapter(mainInAppActivity);
+                recyclerView.setAdapter(adapter);
+                break;
+
+            case EXCLUDED:
+                currentViewState = ViewState.TOP;
+
+                if (header != null) {
+                    header.setText(R.string.fragment_topwords_header);
+                }
+                if (numResultsSection != null) {
+                    numResultsSection.setVisibility(View.VISIBLE);
+                }
+                if (columnLabelSection != null) {
+                    columnLabelSection.setVisibility(View.VISIBLE);
+                }
+                if (viewButton != null) {
+                    viewButton.setText(R.string.fragment_topwords_viewexcluded_buttonlabel);
+                }
+
+                adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
+                recyclerView.setAdapter(adapter);
+                break;
+        }
+
+        return currentViewState;
     }
 }

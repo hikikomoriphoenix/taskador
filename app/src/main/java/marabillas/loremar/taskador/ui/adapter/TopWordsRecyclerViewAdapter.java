@@ -13,7 +13,8 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.entries.WordCountPair;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
-public class TopWordsRecyclerViewAdapter extends WordsRecyclerViewAdapter<TopWordsRecyclerViewAdapter.TopWordsViewHolder> {
+public class TopWordsRecyclerViewAdapter extends
+        WordsRecyclerViewAdapter<TopWordsRecyclerViewAdapter.TopWordsViewHolder> {
     private MainInAppActivity mainInAppActivity;
     private List<WordCountPair> topWords;
 
@@ -48,7 +49,6 @@ public class TopWordsRecyclerViewAdapter extends WordsRecyclerViewAdapter<TopWor
         return topWords.size();
     }
 
-    @Override
     public void update(List<WordCountPair> words) {
         topWords = words;
         notifyDataSetChanged();

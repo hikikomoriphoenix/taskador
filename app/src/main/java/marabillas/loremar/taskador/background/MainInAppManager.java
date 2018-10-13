@@ -35,4 +35,9 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void fetchTopWordsList(int numResults) {
         // TODO implement
     }
+
+    @Override
+    public void fetchExcludedWordsList() {
+        // TODO implement
+    }
 }

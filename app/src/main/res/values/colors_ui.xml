@@ -51,4 +51,8 @@
     <color name="fragment_topwords_listitem_word_textcolor">@android:color/black</color>
     <color name="fragment_topwords_listitem_count_textcolor">@android:color/black</color>
     <color name="fragment_topwords_listitem_horizontaldivider">@android:color/darker_gray</color>
+    <color name="fragment_topwords_excludedwords_listitem_background">@android:color/white</color>
+    <color name="fragment_topwords_excludedwords_listitem_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_excludedwords_listitem_divider">@android:color/darker_gray
+    </color>
 </resources>

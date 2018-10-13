@@ -241,4 +241,18 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     public void onChangeTopWordsNumResults(int numResults) {
         mainInAppBackgroundTasker.fetchTopWordsList(numResults);
     }
+
+    public void onTopWordsViewButtonClicked() {
+        TopWordsFragment.ViewState viewState = topWordsFragment.switchViewState();
+
+        switch (viewState) {
+            case TOP:
+                mainInAppBackgroundTasker.fetchTopWordsList(10);
+                break;
+
+            case EXCLUDED:
+                mainInAppBackgroundTasker.fetchExcludedWordsList();
+                break;
+        }
+    }
 }

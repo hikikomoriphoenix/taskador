@@ -127,4 +127,9 @@
             @color/fragment_topwords_numresultsspinner_listitem_textcolor
         </item>
     </style>
+
+    <style name="ExcludedWordsTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/fragment_topwords_excludedwords_listitem_textcolor
+        </item>
+    </style>
 </resources>

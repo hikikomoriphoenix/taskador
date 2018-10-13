@@ -64,6 +64,12 @@ public class MainInAppActivityTest {
             topWords.add(new WordCountPair("word" + i, String.valueOf(100 - i * 2)));
         }
 
+        // Prepare excluded words
+        final List<String> excludedWords = new ArrayList<>();
+        for (int i = 0; i < 20; ++i) {
+            excludedWords.add("excludedWord" + i);
+        }
+
         class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
             private MainInAppActivity activity;
 
@@ -87,11 +93,16 @@ public class MainInAppActivityTest {
                 switch (numResults) {
                     case 10:
                         List<WordCountPair> top10 = topWords.subList(0, 10);
-                        activity.getTopWordsFragment().updateList(top10);
+                        activity.getTopWordsFragment().updateTopWordsList(top10);
                         break;
                     case 20:
-                        activity.getTopWordsFragment().updateList(topWords);
+                        activity.getTopWordsFragment().updateTopWordsList(topWords);
                 }
+            }
+
+            @Override
+            public void fetchExcludedWordsList() {
+                activity.getTopWordsFragment().updateExcludedWordsList(excludedWords);
             }
 
             @Override

@@ -10,4 +10,6 @@ public interface MainInAppBackgroundTasker extends ActivityBinder<MainInAppActiv
     void fetchFinishedTasksList();
 
     void fetchTopWordsList(int numResults);
+
+    void fetchExcludedWordsList();
 }

@@ -62,4 +62,7 @@
     <dimen name="fragment_topwords_listitem_verticalmargin">16dp</dimen>
     <dimen name="fragment_topwords_listitem_horizontalmargin">8dp</dimen>
     <dimen name="fragment_topwords_listitem_horizontaldivider_height">1dp</dimen>
+    <dimen name="fragment_topwords_excludedwords_listitem_verticalmargin">16dp</dimen>
+    <dimen name="fragment_topwords_excludedwords_listitem_horizontalmargin">8dp</dimen>
+    <dimen name="fragment_topwords_excludedwords_listitem_divider_height">1dp</dimen>
 </resources>

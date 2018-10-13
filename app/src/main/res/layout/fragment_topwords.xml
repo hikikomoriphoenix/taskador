@@ -87,7 +87,7 @@
             android:gravity="center"
             android:text="@string/fragment_topwords_columnlabel_word"
             android:textAppearance="@style/TopWordsColumnLabelTextAppearance"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_topdivider3"
             app:layout_constraintEnd_toStartOf="@id/fragment_topwords_columnlabel_divider"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +97,7 @@
             android:layout_width="@dimen/fragment_topwords_columnlabel_divider_width"
             android:layout_height="0dp"
             android:background="@color/fragment_topwords_columnlabel_divider"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_topdivider3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
@@ -110,20 +110,20 @@
             android:gravity="center"
             android:text="@string/fragment_topwords_columnlabel_count"
             android:textAppearance="@style/TopWordsColumnLabelTextAppearance"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_topdivider3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/fragment_topwords_columnlabel_divider"
             app:layout_constraintTop_toTopOf="parent" />
-    </android.support.constraint.ConstraintLayout>
 
-    <View
-        android:id="@+id/fragment_topwords_topdivider3"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/activity_maininapp_topdivider_height"
-        android:background="@color/activity_maininapp_divider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_columnlabel_section" />
+        <View
+            android:id="@+id/fragment_topwords_topdivider3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_maininapp_topdivider_height"
+            android:background="@color/activity_maininapp_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_topwords_recyclerview"
@@ -132,7 +132,7 @@
         app:layout_constraintBottom_toTopOf="@+id/fragment_topwords_footer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_topdivider3"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_columnlabel_section"
         tools:listitem="@layout/fragment_topwords_listitem">
 
     </android.support.v7.widget.RecyclerView>
