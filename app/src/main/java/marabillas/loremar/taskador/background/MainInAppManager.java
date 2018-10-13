@@ -2,6 +2,10 @@ package marabillas.loremar.taskador.background;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * The service used to perform background tasks for the in-app screen. MainInAppActivity has to
+ * bind this service to call its methods.
+ */
 public class MainInAppManager extends BackgroundTaskManager implements
         MainInAppBackgroundTasker {
     private MainInAppActivity mainInAppActivity;
