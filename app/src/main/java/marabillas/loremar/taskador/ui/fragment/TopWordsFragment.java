@@ -72,15 +72,25 @@ public class TopWordsFragment extends Fragment {
         return view;
     }
 
-    public void updateTopWordsList(List<WordCountPair> topWords) {
+    public void updateTopWordsList(final List<WordCountPair> topWords) {
         if (adapter instanceof TopWordsRecyclerViewAdapter) {
-            ((TopWordsRecyclerViewAdapter) adapter).update(topWords);
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((TopWordsRecyclerViewAdapter) adapter).update(topWords);
+                }
+            });
         }
     }
 
-    public void updateExcludedWordsList(List<String> excludedWords) {
+    public void updateExcludedWordsList(final List<String> excludedWords) {
         if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
-            ((ExcludedWordsRecyclerViewAdapter) adapter).update(excludedWords);
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((ExcludedWordsRecyclerViewAdapter) adapter).update(excludedWords);
+                }
+            });
         }
     }
 
@@ -89,60 +99,68 @@ public class TopWordsFragment extends Fragment {
     }
 
     public ViewState switchViewState() {
-        TextView header = null;
-        View numResultsSection = null;
-        View columnLabelSection = null;
-        Button viewButton = null;
 
-        if (getView() != null) {
-            header = getView().findViewById(R.id.fragment_topwords_header);
-            numResultsSection = getView().findViewById(R.id.fragment_topwords_numresults_section);
-            columnLabelSection = getView().findViewById(R.id.fragment_topwords_columnlabel_section);
-            viewButton = getView().findViewById(R.id.fragment_topwords_viewbutton);
-        }
-
-        switch (currentViewState) {
-            case TOP:
-                currentViewState = ViewState.EXCLUDED;
-
-                if (header != null) {
-                    header.setText(R.string.fragment_topwords_excludedwords_header);
-                }
-                if (numResultsSection != null) {
-                    numResultsSection.setVisibility(View.GONE);
-                }
-                if (columnLabelSection != null) {
-                    columnLabelSection.setVisibility(View.GONE);
-                }
-                if (viewButton != null) {
-                    viewButton.setText(R.string.fragment_topwords_viewtop_buttonlabel);
-                }
-
-                adapter = new ExcludedWordsRecyclerViewAdapter(mainInAppActivity);
-                recyclerView.setAdapter(adapter);
-                break;
-
-            case EXCLUDED:
-                currentViewState = ViewState.TOP;
-
-                if (header != null) {
-                    header.setText(R.string.fragment_topwords_header);
-                }
-                if (numResultsSection != null) {
-                    numResultsSection.setVisibility(View.VISIBLE);
-                }
-                if (columnLabelSection != null) {
-                    columnLabelSection.setVisibility(View.VISIBLE);
-                }
-                if (viewButton != null) {
-                    viewButton.setText(R.string.fragment_topwords_viewexcluded_buttonlabel);
-                }
-
-                adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
-                recyclerView.setAdapter(adapter);
-                break;
-        }
+        mainInAppActivity.runOnUiThread(new SwitchViewStateRunnable());
 
         return currentViewState;
+    }
+
+    private class SwitchViewStateRunnable implements Runnable {
+        @Override
+        public void run() {
+            TextView header = null;
+            View numResultsSection = null;
+            View columnLabelSection = null;
+            Button viewButton = null;
+
+            if (getView() != null) {
+                header = getView().findViewById(R.id.fragment_topwords_header);
+                numResultsSection = getView().findViewById(R.id.fragment_topwords_numresults_section);
+                columnLabelSection = getView().findViewById(R.id.fragment_topwords_columnlabel_section);
+                viewButton = getView().findViewById(R.id.fragment_topwords_viewbutton);
+            }
+
+            switch (currentViewState) {
+                case TOP:
+                    currentViewState = ViewState.EXCLUDED;
+
+                    if (header != null) {
+                        header.setText(R.string.fragment_topwords_excludedwords_header);
+                    }
+                    if (numResultsSection != null) {
+                        numResultsSection.setVisibility(View.GONE);
+                    }
+                    if (columnLabelSection != null) {
+                        columnLabelSection.setVisibility(View.GONE);
+                    }
+                    if (viewButton != null) {
+                        viewButton.setText(R.string.fragment_topwords_viewtop_buttonlabel);
+                    }
+
+                    adapter = new ExcludedWordsRecyclerViewAdapter(mainInAppActivity);
+                    recyclerView.setAdapter(adapter);
+                    break;
+
+                case EXCLUDED:
+                    currentViewState = ViewState.TOP;
+
+                    if (header != null) {
+                        header.setText(R.string.fragment_topwords_header);
+                    }
+                    if (numResultsSection != null) {
+                        numResultsSection.setVisibility(View.VISIBLE);
+                    }
+                    if (columnLabelSection != null) {
+                        columnLabelSection.setVisibility(View.VISIBLE);
+                    }
+                    if (viewButton != null) {
+                        viewButton.setText(R.string.fragment_topwords_viewexcluded_buttonlabel);
+                    }
+
+                    adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
+                    recyclerView.setAdapter(adapter);
+                    break;
+            }
+        }
     }
 }

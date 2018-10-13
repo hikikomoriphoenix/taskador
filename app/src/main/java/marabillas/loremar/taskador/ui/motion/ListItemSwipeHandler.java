@@ -21,52 +21,66 @@ public abstract class ListItemSwipeHandler {
     }
 
     public void handleMotionEvent(View v, MotionEvent motionEvent) {
-        if (noSwipeTimer != null) {
-            noSwipeTimer.cancel();
-            noSwipeTimer.start();
-        } else {
-            noSwipeTimer = new NoSwipeTimer(500, 500, v);
+        mainInAppActivity.runOnUiThread(new HandleMotionEventRunnable(v, motionEvent));
+    }
+
+    private class HandleMotionEventRunnable implements Runnable {
+        private View v;
+        private MotionEvent motionEvent;
+
+        private HandleMotionEventRunnable(View v, MotionEvent motionEvent) {
+            this.v = v;
+            this.motionEvent = motionEvent;
         }
 
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                x0 = motionEvent.getRawX();
-                v.clearAnimation();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                float x1 = motionEvent.getRawX();
-                float d = x1 - x0;
-                x0 = x1;
+        @Override
+        public void run() {
+            if (noSwipeTimer != null) {
+                noSwipeTimer.cancel();
+                noSwipeTimer.start();
+            } else {
+                noSwipeTimer = new NoSwipeTimer(500, 500, v);
+            }
 
-                float itemViewTranslation = v.getTranslationX();
-                float targetItemViewTranslation = itemViewTranslation + d;
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    x0 = motionEvent.getRawX();
+                    v.clearAnimation();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float x1 = motionEvent.getRawX();
+                    float d = x1 - x0;
+                    x0 = x1;
 
-                if (startPosition == StartPosition.LEFT) {
-                    if (targetItemViewTranslation < 0) {
-                        v.setTranslationX(0);
-                        return;
+                    float itemViewTranslation = v.getTranslationX();
+                    float targetItemViewTranslation = itemViewTranslation + d;
+
+                    if (startPosition == StartPosition.LEFT) {
+                        if (targetItemViewTranslation < 0) {
+                            v.setTranslationX(0);
+                            return;
+                        }
+                    } else {
+                        if (targetItemViewTranslation > 0) {
+                            v.setTranslationX(0);
+                            return;
+                        }
                     }
-                } else {
-                    if (targetItemViewTranslation > 0) {
-                        v.setTranslationX(0);
-                        return;
-                    }
-                }
 
-                v.setTranslationX(targetItemViewTranslation);
+                    v.setTranslationX(targetItemViewTranslation);
 
-                checkIfSwipedToMark(mainInAppActivity, targetItemViewTranslation);
-                break;
-            case MotionEvent.ACTION_UP:
-                finishSwipe(v);
-                break;
-
-            default:
-                if (v.getTranslationX() != 0) {
+                    checkIfSwipedToMark(mainInAppActivity, targetItemViewTranslation);
+                    break;
+                case MotionEvent.ACTION_UP:
                     finishSwipe(v);
-                }
-        }
+                    break;
 
+                default:
+                    if (v.getTranslationX() != 0) {
+                        finishSwipe(v);
+                    }
+            }
+        }
     }
 
     private void finishSwipe(View v) {
@@ -101,7 +115,12 @@ public abstract class ListItemSwipeHandler {
 
         @Override
         public void onFinish() {
-            finishSwipe(selectedItemView);
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    finishSwipe(selectedItemView);
+                }
+            });
         }
     }
 

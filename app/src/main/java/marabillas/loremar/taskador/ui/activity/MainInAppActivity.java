@@ -175,11 +175,16 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     public void onAddTaskButtonClicked() {
         // Close soft keyboard
         if (getCurrentFocus() != null) {
-            IBinder token = getCurrentFocus().getWindowToken();
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService
+            final IBinder token = getCurrentFocus().getWindowToken();
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService
                     (INPUT_METHOD_SERVICE);
             if (inputMethodManager != null) {
-                inputMethodManager.hideSoftInputFromWindow(token, 0);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        inputMethodManager.hideSoftInputFromWindow(token, 0);
+                    }
+                });
             }
         }
 
