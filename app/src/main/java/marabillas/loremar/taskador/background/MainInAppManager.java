@@ -7,12 +7,12 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private MainInAppActivity mainInAppActivity;
 
     @Override
-    public void bindActivity(MainInAppActivity activity) {
-        mainInAppActivity = activity;
+    public void bindClient(MainInAppActivity client) {
+        mainInAppActivity = client;
     }
 
     @Override
-    public MainInAppActivity getActivity() {
+    public MainInAppActivity getClient() {
         return mainInAppActivity;
     }
 

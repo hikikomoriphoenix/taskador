@@ -18,8 +18,8 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.background.ActivityBinder;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
+import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.ui.adapter.MainInappViewPagerAdapter;
 import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
@@ -93,16 +93,16 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     }
 
     @Override
-    public void setBackgroundTasker(ActivityBinder activityBinder) {
-        mainInAppBackgroundTasker = (MainInAppBackgroundTasker) activityBinder;
-        mainInAppBackgroundTasker.bindActivity(this);
+    public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
+        mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTasker;
+        mainInAppBackgroundTasker.bindClient(this);
         onTodoTasksWindowSelected();
     }
 
     @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
         mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTaskManager;
-        mainInAppBackgroundTasker.bindActivity(this);
+        mainInAppBackgroundTasker.bindClient(this);
         onTodoTasksWindowSelected();
     }
 
