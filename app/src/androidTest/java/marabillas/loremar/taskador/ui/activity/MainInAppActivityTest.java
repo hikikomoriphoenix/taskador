@@ -106,12 +106,12 @@ public class MainInAppActivityTest {
             }
 
             @Override
-            public void bindActivity(MainInAppActivity activity) {
-                this.activity = activity;
+            public void bindClient(MainInAppActivity client) {
+                this.activity = client;
             }
 
             @Override
-            public MainInAppActivity getActivity() {
+            public MainInAppActivity getClient() {
                 return activity;
             }
         }

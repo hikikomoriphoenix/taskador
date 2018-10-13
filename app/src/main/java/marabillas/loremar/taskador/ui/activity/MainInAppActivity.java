@@ -95,14 +95,14 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     @Override
     public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
         mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTasker;
-        mainInAppBackgroundTasker.bindActivity(this);
+        mainInAppBackgroundTasker.bindClient(this);
         onTodoTasksWindowSelected();
     }
 
     @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
         mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTaskManager;
-        mainInAppBackgroundTasker.bindActivity(this);
+        mainInAppBackgroundTasker.bindClient(this);
         onTodoTasksWindowSelected();
     }
 
