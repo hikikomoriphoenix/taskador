@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/fragment_topwords_listitem_background">
+
+    <TextView
+        android:id="@+id/fragment_topwords_listitem_word"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/fragment_topwords_listitem_horizontalmargin"
+        android:layout_marginTop="@dimen/fragment_topwords_listitem_verticalmargin"
+        android:layout_marginRight="@dimen/fragment_topwords_listitem_horizontalmargin"
+        android:layout_marginBottom="@dimen/fragment_topwords_listitem_verticalmargin"
+        android:gravity="center_vertical"
+        android:text="@string/fragment_topwords_listitem_word_defaulttext"
+        android:textAppearance="@style/TopWordsListItemWordTextAppearance"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_listitem_horizontaldivider"
+        app:layout_constraintEnd_toStartOf="@id/fragment_topwords_listitem_verticaldivider"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/fragment_topwords_listitem_verticaldivider"
+        android:layout_width="@dimen/fragment_topwords_listitem_verticaldivider_width"
+        android:layout_height="0dp"
+        android:background="@color/fragment_topwords_listItem_verticaldivider"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_listitem_horizontaldivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/fragment_topwords_listitem_count"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/fragment_topwords_listitem_horizontalmargin"
+        android:layout_marginTop="@dimen/fragment_topwords_listitem_verticalmargin"
+        android:layout_marginRight="@dimen/fragment_topwords_listitem_horizontalmargin"
+        android:layout_marginBottom="@dimen/fragment_topwords_listitem_verticalmargin"
+        android:gravity="center"
+        android:text="@string/fragment_topwords_listitem_count_defaulttext"
+        android:textAppearance="@style/TopWordsListItemCountTextAppearance"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_listitem_horizontaldivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/fragment_topwords_listitem_verticaldivider"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/fragment_topwords_listitem_horizontaldivider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/fragment_topwords_listitem_horizontaldivider_height"
+        android:background="@color/fragment_topwords_listitem_horizontaldivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

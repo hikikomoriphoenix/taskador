@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.entries.TaskDatePair;
+import marabillas.loremar.taskador.entries.WordCountPair;
 
 public class MainInAppActivityTest {
     @Rule
@@ -57,6 +58,18 @@ public class MainInAppActivityTest {
             finishedTasks.add(new TaskDatePair("A finished task", "OCT 1, 2018"));
         }
 
+        // Prepare top words
+        final List<WordCountPair> topWords = new ArrayList<>();
+        for (int i = 0; i < 20; ++i) {
+            topWords.add(new WordCountPair("word" + i, String.valueOf(100 - i * 2)));
+        }
+
+        // Prepare excluded words
+        final List<String> excludedWords = new ArrayList<>();
+        for (int i = 0; i < 20; ++i) {
+            excludedWords.add("excludedWord" + i);
+        }
+
         class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
             private MainInAppActivity activity;
 
@@ -73,6 +86,23 @@ public class MainInAppActivityTest {
             @Override
             public void fetchFinishedTasksList() {
                 activity.getFinishedTasksFragment().updateList(finishedTasks);
+            }
+
+            @Override
+            public void fetchTopWordsList(int numResults) {
+                switch (numResults) {
+                    case 10:
+                        List<WordCountPair> top10 = topWords.subList(0, 10);
+                        activity.getTopWordsFragment().updateTopWordsList(top10);
+                        break;
+                    case 20:
+                        activity.getTopWordsFragment().updateTopWordsList(topWords);
+                }
+            }
+
+            @Override
+            public void fetchExcludedWordsList() {
+                activity.getTopWordsFragment().updateExcludedWordsList(excludedWords);
             }
 
             @Override

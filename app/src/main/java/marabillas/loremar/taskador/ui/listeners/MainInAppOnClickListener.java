@@ -14,8 +14,13 @@ public class MainInAppOnClickListener implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.fragment_todotasks_addtask_button) {
-            mainInAppActivity.onAddTaskButtonClicked();
+        switch (v.getId()) {
+            case R.id.fragment_todotasks_addtask_button:
+                mainInAppActivity.onAddTaskButtonClicked();
+                break;
+            case R.id.fragment_topwords_viewbutton:
+                mainInAppActivity.onTopWordsViewButtonClicked();
+                break;
         }
     }
 }

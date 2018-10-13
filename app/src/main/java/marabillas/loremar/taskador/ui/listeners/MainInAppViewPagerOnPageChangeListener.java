@@ -25,6 +25,9 @@ public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageC
             case 1:
                 mainInAppActivity.onFinishedTasksWindowSelected();
                 break;
+            case 2:
+                mainInAppActivity.onTopWordsWindowSelected();
+                break;
         }
     }
 

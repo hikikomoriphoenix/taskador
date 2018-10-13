@@ -28,6 +28,7 @@
     <string name="fragment_todotasks_header">To-Do Tasks</string>
     <string name="fragment_finishedtasks_header">Finished Tasks</string>
     <string name="fragment_topwords_header">Top Words</string>
+    <string name="fragment_topwords_excludedwords_header">Excluded Words</string>
 
     <string name="fragment_todotasks_addtask_hint">Add New Task</string>
     <string name="fragment_todotasks_edittext_actionlabel">ADD</string>
@@ -40,4 +41,13 @@
     <string name="fragment_finisgedtasks_listitem_datefinished_defaulttext"><b>Date Finished:</b>
         Unknown
     </string>
+
+    <string name="fragment_topwords_numresults_label">Number of Results</string>
+    <string name="fragment_topwords_columnlabel_word">WORD</string>
+    <string name="fragment_topwords_columnlabel_count">COUNT</string>
+    <string name="fragment_topwords_viewexcluded_buttonlabel">VIEW EXCLUDED &gt;&gt;</string>
+    <string name="fragment_topwords_viewtop_buttonlabel">&lt;&lt; VIEW TOP</string>
+    <string name="fragment_topwords_listitem_word_defaulttext">\u0020\u0020\u0020-</string>
+    <string name="fragment_topwords_listitem_count_defaulttext">0</string>
+    <string name="fragment_topwords_excludedwords_lisitem_defaulttext">-</string>
 </resources>

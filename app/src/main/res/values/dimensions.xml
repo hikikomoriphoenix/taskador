@@ -47,4 +47,22 @@
     <dimen name="fragment_finishedtasks_listitem_textview_horizontalpadding">8dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_datefinished_rightmargin">8dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_divider_height">1dp</dimen>
+
+    <dimen name="fragment_topwords_numresults_label_leftmargin">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_leftmargin">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_bottommargin">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_topmargin">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_listitem_width">60dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_listitem_padding">8dp</dimen>
+    <dimen name="fragment_topwords_numresults_spinner_listitem_borderthick">1dp</dimen>
+    <dimen name="fragment_topwords_columnlabel_divider_width">1dp</dimen>
+    <dimen name="fragment_topwords_footer_padding">4dp</dimen>
+    <dimen name="fragment_topwords_footer_divider_height">1dp</dimen>
+    <dimen name="fragment_topwords_listitem_verticaldivider_width">1dp</dimen>
+    <dimen name="fragment_topwords_listitem_verticalmargin">16dp</dimen>
+    <dimen name="fragment_topwords_listitem_horizontalmargin">8dp</dimen>
+    <dimen name="fragment_topwords_listitem_horizontaldivider_height">1dp</dimen>
+    <dimen name="fragment_topwords_excludedwords_listitem_verticalmargin">16dp</dimen>
+    <dimen name="fragment_topwords_excludedwords_listitem_horizontalmargin">8dp</dimen>
+    <dimen name="fragment_topwords_excludedwords_listitem_divider_height">1dp</dimen>
 </resources>

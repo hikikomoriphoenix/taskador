@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,4 +25,142 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/fragment_topwords_header" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragment_topwords_numresults_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fragment_topwords_numresults_section_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_topdivider">
+
+        <TextView
+            android:id="@+id/fragment_topwords_numresults_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fragment_topwords_numresults_label_leftmargin"
+            android:layout_marginLeft="@dimen/fragment_topwords_numresults_label_leftmargin"
+            android:text="@string/fragment_topwords_numresults_label"
+            android:textAppearance="@style/TopWordsNumResultsLabelTextAppearance"
+            app:layout_constraintBottom_toBottomOf="@id/fragment_topwords_numresults_spinner"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/fragment_topwords_numresults_spinner" />
+
+        <Spinner
+            android:id="@+id/fragment_topwords_numresults_spinner"
+            style="@style/TopWordsNumResultsSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fragment_topwords_numresults_spinner_leftmargin"
+            android:layout_marginLeft="@dimen/fragment_topwords_numresults_spinner_leftmargin"
+            android:layout_marginTop="@dimen/fragment_topwords_numresults_spinner_topmargin"
+            android:layout_marginBottom="@dimen/fragment_topwords_numresults_spinner_bottommargin"
+            android:entries="@array/activity_main_topwords_numresults_selection"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fragment_topwords_numresults_label"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/fragment_topwords_topdivider2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_maininapp_topdivider_height"
+            android:background="@color/activity_maininapp_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/fragment_topwords_columnlabel_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fragment_topwords_columnlabel_section_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_numresults_section">
+
+        <TextView
+            android:id="@+id/fragment_topwords_columnlabel_word"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/fragment_topwords_columnlabel_word"
+            android:textAppearance="@style/TopWordsColumnLabelTextAppearance"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_topdivider3"
+            app:layout_constraintEnd_toStartOf="@id/fragment_topwords_columnlabel_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/fragment_topwords_columnlabel_divider"
+            android:layout_width="@dimen/fragment_topwords_columnlabel_divider_width"
+            android:layout_height="0dp"
+            android:background="@color/fragment_topwords_columnlabel_divider"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_topdivider3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/fragment_topwords_columnlabel_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/fragment_topwords_columnlabel_count"
+            android:textAppearance="@style/TopWordsColumnLabelTextAppearance"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_topwords_topdivider3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fragment_topwords_columnlabel_divider"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/fragment_topwords_topdivider3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/activity_maininapp_topdivider_height"
+            android:background="@color/activity_maininapp_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_topwords_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_topwords_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_columnlabel_section"
+        tools:listitem="@layout/fragment_topwords_listitem">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <View
+        android:id="@+id/fragment_topwords_footerdivider"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/fragment_topwords_footer_divider_height"
+        android:background="@color/fragment_topwords_footer_divider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_topwords_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/fragment_topwords_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fragment_topwords_footer_background"
+        android:padding="@dimen/fragment_topwords_footer_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/fragment_topwords_viewbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/fragment_topwords_viewexcluded_buttonlabel" />
+    </FrameLayout>
 </android.support.constraint.ConstraintLayout>

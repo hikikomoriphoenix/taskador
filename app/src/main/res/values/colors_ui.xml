@@ -31,4 +31,28 @@
     <color name="fragment_finishedtasks_listitem_textview_textcolor">@android:color/black</color>
     <color name="fragment_finishedtasks_listitem_datefinished_textcolor">@android:color/black
     </color>
+
+    <color name="fragment_topwords_numresults_section_background">@android:color/white</color>
+    <color name="fragment_topwords_numresults_label_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_numresultsspinner_listitem_background">@android:color/white
+    </color>
+    <color name="fragment_topwords_numresultsspinner_listitem_textcolor">@android:color/black
+    </color>
+    <color name="fragment_topwords_numresultsspinner_listitem_bordercolor">
+        @android:color/darker_gray
+    </color>
+    <color name="fragment_topwords_columnlabel_section_background">@android:color/white</color>
+    <color name="fragment_topwords_columnlabel_divider">@android:color/darker_gray</color>
+    <color name="fragment_topwords_columnlabel_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_footer_background">@android:color/white</color>
+    <color name="fragment_topwords_footer_divider">@android:color/darker_gray</color>
+    <color name="fragment_topwords_listitem_background">@android:color/white</color>
+    <color name="fragment_topwords_listItem_verticaldivider">@android:color/darker_gray</color>
+    <color name="fragment_topwords_listitem_word_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_listitem_count_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_listitem_horizontaldivider">@android:color/darker_gray</color>
+    <color name="fragment_topwords_excludedwords_listitem_background">@android:color/white</color>
+    <color name="fragment_topwords_excludedwords_listitem_textcolor">@android:color/black</color>
+    <color name="fragment_topwords_excludedwords_listitem_divider">@android:color/darker_gray
+    </color>
 </resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="activity_main_topwords_numresults_selection">
+        <item>10</item>
+        <item>20</item>
+    </string-array>
+</resources>

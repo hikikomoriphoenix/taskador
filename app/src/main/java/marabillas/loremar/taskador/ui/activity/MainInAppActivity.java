@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
@@ -29,8 +30,10 @@ import marabillas.loremar.taskador.ui.listeners.AddTaskOnEditorActionListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppOnClickListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppOnTouchListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeListener;
+import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSelectedListener;
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
+import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
@@ -51,6 +54,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private View.OnClickListener onClickListener;
     private TextView.OnEditorActionListener addTaskOnEditorActionListener;
     private TextWatcher addTaskBoxTextWatcher;
+    private AdapterView.OnItemSelectedListener topWordsNumResultsSpinnerItemSelectedListener;
 
     private View selectedItemView;
     private int selectedItemPosition;
@@ -81,6 +85,8 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         onClickListener = new MainInAppOnClickListener(this);
         addTaskOnEditorActionListener = new AddTaskOnEditorActionListener(this);
         addTaskBoxTextWatcher = new AddTaskBoxTextWatcher(this);
+        topWordsNumResultsSpinnerItemSelectedListener = new
+                TopWordsNumResultsSpinnerItemSelectedListener(this);
 
         selectedItemView = null;
         selectedItemPosition = -1;
@@ -108,6 +114,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         return finishedTasksFragment;
     }
 
+    public TopWordsFragment getTopWordsFragment() {
+        return topWordsFragment;
+    }
+
     public View.OnClickListener getOnClickListener() {
         return onClickListener;
     }
@@ -118,6 +128,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     public TextWatcher getAddTaskBoxTextWatcher() {
         return addTaskBoxTextWatcher;
+    }
+
+    public AdapterView.OnItemSelectedListener getTopWordsNumResultsSpinnerItemSelectedListener() {
+        return topWordsNumResultsSpinnerItemSelectedListener;
     }
 
     @Override
@@ -145,6 +159,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         mainInAppBackgroundTasker.fetchFinishedTasksList();
     }
 
+    public void onTopWordsWindowSelected() {
+        mainInAppBackgroundTasker.fetchTopWordsList(10);
+        setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
+    }
+
     public void onAddTaskBoxTextChanged(Editable s) {
         if (s.length() > 0) {
             toDoTasksFragment.showAddTaskButton();
@@ -156,11 +175,16 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     public void onAddTaskButtonClicked() {
         // Close soft keyboard
         if (getCurrentFocus() != null) {
-            IBinder token = getCurrentFocus().getWindowToken();
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService
+            final IBinder token = getCurrentFocus().getWindowToken();
+            final InputMethodManager inputMethodManager = (InputMethodManager) getSystemService
                     (INPUT_METHOD_SERVICE);
             if (inputMethodManager != null) {
-                inputMethodManager.hideSoftInputFromWindow(token, 0);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        inputMethodManager.hideSoftInputFromWindow(token, 0);
+                    }
+                });
             }
         }
 
@@ -213,5 +237,27 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     public void onMarkTaskChecked() {
         // TODO Update item in the data. Mark it as checked. Notify recyclerview adapter to update
         // its view.
+    }
+
+    public void onWordSwipedToMark() {
+        // TODO implement
+    }
+
+    public void onChangeTopWordsNumResults(int numResults) {
+        mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+    }
+
+    public void onTopWordsViewButtonClicked() {
+        TopWordsFragment.ViewState viewState = topWordsFragment.switchViewState();
+
+        switch (viewState) {
+            case TOP:
+                mainInAppBackgroundTasker.fetchTopWordsList(10);
+                break;
+
+            case EXCLUDED:
+                mainInAppBackgroundTasker.fetchExcludedWordsList();
+                break;
+        }
     }
 }
