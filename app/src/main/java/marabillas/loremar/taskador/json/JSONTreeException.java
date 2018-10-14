@@ -1,7 +1,7 @@
 package marabillas.loremar.taskador.json;
 
 /**
- * This exception is thrown when a JSONTree can't successfully construct a JSON data
+ * This exception is thrown when a {@link JSONTree} can't successfully construct a JSON data
  */
 public class JSONTreeException extends Exception {
     public JSONTreeException() {

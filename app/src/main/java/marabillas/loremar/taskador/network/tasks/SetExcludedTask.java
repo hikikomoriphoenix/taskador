@@ -9,8 +9,8 @@ import marabillas.loremar.taskador.json.JSONTreeException;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * RunnableTask for setting whether a selected word is to be excluded or not to be excluded from
- * top words.
+ * {@link RunnableTask} for setting whether a selected word is to be excluded or not to be
+ * excluded from top words.
  */
 public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.ResultHandler> {
     private String username;
@@ -117,7 +117,7 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
         void setExcludedFailedToPrepareJSONData(String message);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back-end server.
+         * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
         void failedSetExcludedRequest(String message);
 
@@ -128,7 +128,8 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
         void backendUnableUnableToExclude(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void setExcludedTaskIncomplete(String message);
     }

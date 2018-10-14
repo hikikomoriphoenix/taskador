@@ -11,8 +11,8 @@ import android.os.Bundle;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 
 /**
- * This class is used by the Account Manager for operations related to account authentication.
- * This is bound to the AuthenticatorService.
+ * This class is used by the {@link AccountManager} for operations related to account
+ * authentication. This is bound to the {@link AuthenticatorService}.
  */
 public class AccountAuthenticator extends AbstractAccountAuthenticator {
     private Context context;

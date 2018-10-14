@@ -12,7 +12,7 @@ import marabillas.loremar.taskador.network.HttpClient;
  * Base class for all network-related tasks which involves sending request to the back-end server,
  * and receiving response and passing it to another class for handling.
  *
- * @param <RH> a subclass of ResultHandler corresponding to the specific RunnableTask subclass
+ * @param <RH> a subclass of {@link ResultHandler} corresponding to the specific RunnableTask subclass
  */
 public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implements Runnable,
         ResultListener {
@@ -21,7 +21,8 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     private WeakReference<RH> resultHandlerReference;
 
     /**
-     * Called when InterruptedException or ExecutionException is encountered.
+     * Called when {@link InterruptedException} or
+     * {@link java.util.concurrent.ExecutionException} is encountered.
      */
     public abstract void taskIncomplete(String message);
 
@@ -34,10 +35,10 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     }
 
     /**
-     * Set a reference to a BackEndResponse object to store the contents of the response once a
+     * Set a reference to a {@link BackEndResponse} object to store the contents of the response once a
      * response has been received from the back-end server.
      *
-     * @param response an reference to an empty BackEndResponse object
+     * @param response an reference to an empty {@link BackEndResponse} object
      */
     public void trackForResult(BackEndResponse response) {
         this.response = response;
@@ -45,7 +46,7 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
 
     /**
      * Store the contents of the response received from the back-end server into a
-     * BackEndResponse object.
+     * {@link BackEndResponse} object.
      *
      * @param response response sent by the back-end server
      */

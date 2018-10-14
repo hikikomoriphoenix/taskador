@@ -19,10 +19,10 @@ import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 
 /**
- * The BackEndAPICallTasker singleton facilitates communication between taskador and its
- * back-end. Requests are sent using BackEndAPICallTask while responses are handled through
- * BackEndResponseHandler. To get results, a ResultHandler needs to be set for that particular task.
- * No more than one task should be executed at the same time.
+ * The {@link BackEndAPICallTasker} singleton facilitates communication between taskador and its
+ * back-end. Requests are sent using {@link BackEndAPICallTask} while responses are handled through
+ * {@link BackEndResponseHandler}. To get results, a {@link RunnableTask.ResultHandler} needs to
+ * be set for that particular task. No more than one task should be executed at the same time.
  * <p>
  * Example:
  * <pre>{@code
