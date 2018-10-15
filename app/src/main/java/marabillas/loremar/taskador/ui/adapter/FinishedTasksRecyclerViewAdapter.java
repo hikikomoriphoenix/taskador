@@ -18,6 +18,10 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Adapter for {@link marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment}'s
+ * {@link RecyclerView} to display a list of finished tasks.
+ */
 public class FinishedTasksRecyclerViewAdapter extends RecyclerView.Adapter {
     private MainInAppActivity mainInAppActivity;
     private List<TaskDatePair> tasks;
@@ -45,6 +49,7 @@ public class FinishedTasksRecyclerViewAdapter extends RecyclerView.Adapter {
         TaskDatePair entry = tasks.get(position);
         finishedTaskView.setText(entry.finishedTask);
 
+        // Set text for the Date Finished component prefixed with a bolded label
         String label = "Date Finished: ";
         String text = label + entry.dateFinished;
         SpannableString spannableString = new SpannableString(text);

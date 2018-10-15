@@ -12,6 +12,11 @@ import java.util.List;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Adapter for {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s
+ * {@link android.support.v7.widget.RecyclerView} to display the list of words excluded from top
+ * words list.
+ */
 public class ExcludedWordsRecyclerViewAdapter extends
         WordsRecyclerViewAdapter<ExcludedWordsRecyclerViewAdapter.ExcludedWordsViewHolder> {
     private MainInAppActivity mainInAppActivity;

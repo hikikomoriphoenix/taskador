@@ -6,6 +6,12 @@ import android.view.View;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Base class for {@link TopWordsRecyclerViewAdapter} and
+ * {@link ExcludedWordsRecyclerViewAdapter}. It allows touch input from the user.
+ *
+ * @param <VH> a {@link WordsViewHolder} subclass
+ */
 public abstract class WordsRecyclerViewAdapter<VH extends WordsRecyclerViewAdapter.WordsViewHolder> extends
         RecyclerView.Adapter<VH> {
     private MainInAppActivity mainInAppActivity;

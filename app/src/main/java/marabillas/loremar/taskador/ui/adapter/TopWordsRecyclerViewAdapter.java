@@ -13,6 +13,10 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.entries.WordCountPair;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Adapter for {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s
+ * {@link android.support.v7.widget.RecyclerView} to display the list of top words.
+ */
 public class TopWordsRecyclerViewAdapter extends
         WordsRecyclerViewAdapter<TopWordsRecyclerViewAdapter.TopWordsViewHolder> {
     private MainInAppActivity mainInAppActivity;
@@ -37,6 +41,7 @@ public class TopWordsRecyclerViewAdapter extends
         TextView wordView = holder.itemView.findViewById(R.id.fragment_topwords_listitem_word);
         TextView countView = holder.itemView.findViewById(R.id.fragment_topwords_listitem_count);
 
+        // Prefix the text with a number corresponding to the word's position in the list.
         WordCountPair topWord = this.topWords.get(position);
         String wordViewtext = (position + 1) + ". " + topWord.word;
 
