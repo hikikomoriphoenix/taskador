@@ -8,6 +8,10 @@ import marabillas.loremar.taskador.background.BackgroundServiceClient;
 import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 
+/**
+ * Base class for taskador's activities. It allows binding a {@link BackgroundTaskManager}
+ * service to handle background tasks for the particular activity.
+ */
 public abstract class BaseAppCompatActivity extends AppCompatActivity implements BackgroundServiceClient,
         BackgroundServiceConnection.OnServiceConnectedListener {
     @Override
