@@ -46,6 +46,15 @@
             android:inputType="text" />
 
         <TextView
+            android:id="@+id/activity_signup_username_invalid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/activity_signup_username_invalid"
+            android:textAppearance="@style/SignupInvalidTextAppearance"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/activity_signup_password_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

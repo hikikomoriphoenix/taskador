@@ -29,6 +29,11 @@
         <item name="android:textStyle">italic</item>
     </style>
 
+    <style name="SignupInvalidTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/activity_signup_invalid</item>
+        <item name="android:textSize">@dimen/main_screen_normal_text_size</item>
+    </style>
+
     <style name="LoginTheme" parent="MainScreenTheme">
 
     </style>
