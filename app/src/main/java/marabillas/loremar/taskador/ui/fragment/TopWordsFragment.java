@@ -24,8 +24,8 @@ import marabillas.loremar.taskador.ui.adapter.TopWordsRecyclerViewAdapter;
 import marabillas.loremar.taskador.ui.adapter.WordsRecyclerViewAdapter;
 
 /**
- * Fragment representing the window for top words. It displays the most frequently used words for
- * tasks ordered starting from the most frequently used, along with each count value which
+ * {@link Fragment} representing the window for top words. It displays the most frequently used
+ * words for tasks ordered starting from the most frequently used, along with each count value which
  * pertains to the number of times the word is used in tasks.
  */
 public class TopWordsFragment extends Fragment {
@@ -40,6 +40,8 @@ public class TopWordsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainInAppActivity = (MainInAppActivity) getActivity();
+
+        // Set this fragment to display list of top words by default
         adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
         currentViewState = ViewState.TOP;
     }
@@ -98,6 +100,12 @@ public class TopWordsFragment extends Fragment {
         return recyclerView;
     }
 
+    /**
+     * Change the list being displayed from list of top words to list of excluded words or vice
+     * versa.
+     *
+     * @return the {@link ViewState} indicating the new current list being displayed
+     */
     public ViewState switchViewState() {
 
         mainInAppActivity.runOnUiThread(new SwitchViewStateRunnable());
@@ -124,6 +132,8 @@ public class TopWordsFragment extends Fragment {
                 case TOP:
                     currentViewState = ViewState.EXCLUDED;
 
+                    // Change header text to 'Excluded Words', hide number-of-results spinner,
+                    // hide column labels, and change button text to 'VIEW TOP'.
                     if (header != null) {
                         header.setText(R.string.fragment_topwords_excludedwords_header);
                     }
@@ -144,6 +154,8 @@ public class TopWordsFragment extends Fragment {
                 case EXCLUDED:
                     currentViewState = ViewState.TOP;
 
+                    // Change header text to 'Top Words', show number-of-results spinner, show
+                    // column labels, and change button text to 'VIEW EXCLUDED'.
                     if (header != null) {
                         header.setText(R.string.fragment_topwords_header);
                     }

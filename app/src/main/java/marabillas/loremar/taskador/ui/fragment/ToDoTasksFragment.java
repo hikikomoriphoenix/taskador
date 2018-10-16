@@ -19,8 +19,8 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.adapter.TodoTasksRecyclerViewAdapter;
 
 /**
- * Fragment representing the window for to-do tasks. It allows the user to add tasks that the
- * user needs to finish.
+ * {@link Fragment} representing the window for to-do tasks. It allows the user to add tasks that
+ * the user needs to finish.
  */
 public class ToDoTasksFragment extends Fragment {
     private TodoTasksRecyclerViewAdapter adapter;
@@ -87,6 +87,9 @@ public class ToDoTasksFragment extends Fragment {
         });
     }
 
+    /**
+     * Clear the text in {@link ToDoTasksFragment}'s {@link EditText} for adding new tasks.
+     */
     public void clearAddTaskBox() {
         mainInAppActivity.runOnUiThread(new Runnable() {
             @Override
@@ -96,6 +99,11 @@ public class ToDoTasksFragment extends Fragment {
         });
     }
 
+    /**
+     * Get the text in {@link ToDoTasksFragment}'s {@link EditText} for adding new tasks.
+     *
+     * @return a string
+     */
     public String getAddTaskBoxTextInput() {
         return String.valueOf(addTaskBox.getText());
     }
