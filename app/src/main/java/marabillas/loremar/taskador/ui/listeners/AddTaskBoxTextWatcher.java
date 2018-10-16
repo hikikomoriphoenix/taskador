@@ -5,6 +5,10 @@ import android.text.TextWatcher;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Listens to events in {@link marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment}'s
+ * {@link android.widget.EditText} which is for inputting new tasks.
+ */
 public class AddTaskBoxTextWatcher implements TextWatcher {
     private MainInAppActivity mainInAppActivity;
 

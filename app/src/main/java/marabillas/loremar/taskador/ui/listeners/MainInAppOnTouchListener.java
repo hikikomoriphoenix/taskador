@@ -7,6 +7,10 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 
+/**
+ * Listens to touch events in in-app screen. Some components in the screen may have their own
+ * listeners.
+ */
 public class MainInAppOnTouchListener implements View.OnTouchListener {
     private MainInAppActivity mainInAppActivity;
 

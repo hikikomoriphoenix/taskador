@@ -4,6 +4,9 @@ import android.support.v4.view.ViewPager;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Listens to events in in-app screen's {@link ViewPager}.
+ */
 public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageChangeListener {
     private MainInAppActivity mainInAppActivity;
 

@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Listen's for editor action events while user is using the soft keyboard to input new task.
+ */
 public class AddTaskOnEditorActionListener implements TextView.OnEditorActionListener {
     private MainInAppActivity mainInAppActivity;
 

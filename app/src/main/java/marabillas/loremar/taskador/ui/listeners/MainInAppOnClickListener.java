@@ -5,6 +5,10 @@ import android.view.View;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Listens to click events in in-app screen. Some components in the screen may have their own
+ * listeners.
+ */
 public class MainInAppOnClickListener implements View.OnClickListener {
     private MainInAppActivity mainInAppActivity;
 
