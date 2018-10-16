@@ -8,10 +8,12 @@ import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.account.DirectLogin;
 
 /**
- * This type of RunnableTask will attempt to reauthenticate upon back-end returning an http 401
+ * This type of {@link RunnableTask} will attempt to reauthenticate upon back-end returning an http 401
  * Unauthorized status code, by directly logging in to server to get a new auth token.
  *
- * @param <RH> a subclass of ResultHandler corresponding to the specific RunnableTask subclass
+ * @param <RH> a subclass of
+ * {@link marabillas.loremar.taskador.network.tasks.RunnableTask.ResultHandler} corresponding to
+ *            the specific {@link RunnableTask} subclass
  */
 public abstract class ReauthenticatingTask<RH extends RunnableTask.ResultHandler> extends
         RunnableTask<RH> {

@@ -10,7 +10,7 @@ import marabillas.loremar.taskador.json.JSONTreeException;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * RunnableTask for setting some selected tasks as finished which will be saved into account.
+ * {@link RunnableTask} for setting some selected tasks as finished which will be saved into account.
  * Call run to execute task.
  */
 public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.ResultHandler> {
@@ -118,7 +118,7 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
         void finishTasksTaskFailedToPrepareJSONData(String message);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back-end server.
+         * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
         void failedFinishTasksRequest(String message);
 
@@ -129,7 +129,8 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
         void backendUnableToFinishTask(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void finishTasksTaskIncomplete(String message);
     }

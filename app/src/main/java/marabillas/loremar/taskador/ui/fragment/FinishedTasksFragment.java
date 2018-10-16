@@ -18,8 +18,9 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.adapter.FinishedTasksRecyclerViewAdapter;
 
 /**
- * Fragment representing the window for finished tasks. It displays a list of tasks set by the user
- * as finished during the current week, along with each corresponding date the task was finished.
+ * {@link Fragment} representing the window for finished tasks. It displays a list of tasks set by the
+ * user as finished during the current week, along with each corresponding date the task was
+ * finished.
  */
 public class FinishedTasksFragment extends Fragment {
     private MainInAppActivity mainInAppActivity;

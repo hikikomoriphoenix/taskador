@@ -4,6 +4,13 @@ import android.content.ComponentName;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+/**
+ * ServiceConnection used for binding a {@link BackgroundTaskManager} service. Pass an instance
+ * of this class to the {@link android.content.Context#bindService} method when binding a
+ * {@link BackgroundTaskManager}. Reference to the BackgroundTaskManager service is obtained
+ * through {@link OnServiceConnectedListener} passed to this class's constructor, upon successful
+ * binding.
+ */
 public class BackgroundServiceConnection implements ServiceConnection {
     private OnServiceConnectedListener onServiceConnectedListener;
 
@@ -23,6 +30,14 @@ public class BackgroundServiceConnection implements ServiceConnection {
     }
 
     public interface OnServiceConnectedListener {
+        /**
+         * This method is invoked upon successful binding of
+         * {@link marabillas.loremar.taskador.background.BackgroundTaskManager} using the
+         * {@link android.content.Context#bindService} method.
+         *
+         * @param backgroundTaskManager reference to
+         *                              {@link marabillas.loremar.taskador.background.BackgroundTaskManager} service
+         */
         void onServiceConnected(BackgroundTaskManager backgroundTaskManager);
     }
 }

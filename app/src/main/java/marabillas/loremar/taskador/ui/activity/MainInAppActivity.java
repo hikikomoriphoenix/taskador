@@ -35,10 +35,17 @@ import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
 
+import static marabillas.loremar.taskador.utils.LogUtils.log;
+
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
  * finished tasks and also features listing of most frequently used words for tasks. These
- * features are contained in a ViewPager allowing the user to swipe between them.
+ * features are contained in a {@link ViewPager} allowing the user to swipe between them.
+ *
+ * MainInAppActivity takes the following responsibilities:
+ * 1. Directly handles user interactions in the in-app screen
+ * 2. Calls for background tasks to be performed as required
+ * 3. Updates the views of components in the in-app screen
  */
 public class MainInAppActivity extends BaseAppCompatActivity implements ViewTreeObserver
         .OnGlobalLayoutListener {
@@ -150,21 +157,42 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         }
     }
 
+    /**
+     * Invoked when {@link ToDoTasksFragment} becomes the current selected item in the in-app
+     * screen's {@link ViewPager}.
+     */
     public void onTodoTasksWindowSelected() {
         mainInAppBackgroundTasker.fetchToDoTasksList();
         setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
     }
 
+    /**
+     * Invoked when {@link FinishedTasksFragment} becomes the current selected item in the in-app
+     * screen's {@link ViewPager}.
+     */
     public void onFinishedTasksWindowSelected() {
         mainInAppBackgroundTasker.fetchFinishedTasksList();
     }
 
+    /**
+     * Invoked when {@link TopWordsFragment} becomes the current selected item in the in-app
+     * screen's {@link ViewPager}.
+     */
     public void onTopWordsWindowSelected() {
         mainInAppBackgroundTasker.fetchTopWordsList(10);
         setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
     }
 
+    /**
+     * Invoked when the text in the Add Task Box which is {@link ToDoTasksFragment}'s
+     * {@link android.widget.EditText} for adding new tasks, is changed due to user typing on the
+     * soft keyboard or text being programmatically cleared.
+     *
+     * @param s The new text in the Add Taskbox
+     */
     public void onAddTaskBoxTextChanged(Editable s) {
+        // Show the Add Tasks button when user types an input text for the Add Task Box.
+        // Otherwise, hide the button when text is cleared.
         if (s.length() > 0) {
             toDoTasksFragment.showAddTaskButton();
         } else {
@@ -172,6 +200,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         }
     }
 
+    /**
+     * Invoked when the Add Task Button, which is {@link ToDoTasksFragment}'s
+     * {@link android.widget.ImageButton} for submitting new task to user's account, is clicked.
+     */
     public void onAddTaskButtonClicked() {
         // Close soft keyboard
         if (getCurrentFocus() != null) {
@@ -194,6 +226,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         onAddTaskUserInput();
     }
 
+    /**
+     * Invoked when a new task that was inputted by the user needs to be submitted to user's
+     * account.
+     */
     public void onAddTaskUserInput() {
         // Clear add-task box's text and hide add-task button
         toDoTasksFragment.clearAddTaskBox();
@@ -214,39 +250,93 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         return listItemSwipeHandler;
     }
 
+    /**
+     * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} is touched. Since the {@link ViewPager}
+     * containing these fragments steals any touch events with motion elements, this method is
+     * usually invoked when the user initially touches the item or is touching the item before
+     * any form of swipe motion.
+     *
+     * @param v the list item view being touched
+     * @param event the touch event
+     * @param position the position of the item in the list corresponding to the item view being
+     *                 touched
+     */
     public void onListItemTouch(View v, MotionEvent event, int position) {
+        log("itemtouch");
         selectedItemView = v;
         selectedItemPosition = position;
 
+        // Mark the initial position of the touch
         listItemSwipeHandler.handleMotionEvent(v, event);
     }
 
+    /**
+     * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} is released from being touched.
+     */
     public void onListItemRelease() {
+        // Clear selection
         selectedItemPosition = -1;
         selectedItemView = null;
     }
 
+    /**
+     * Gets the view of the item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} being selected.
+     *
+     * @return a view
+     */
     public View getSelectedItemView() {
         return selectedItemView;
     }
 
+    /**
+     * Gets the position of the item in the list corresponding to the item in
+     * {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} being selected.
+     *
+     * @return an integer
+     */
     public int getSelectedItemPosition() {
         return selectedItemPosition;
     }
 
+    /**
+     * This method is invoked when an item in {@link ToDoTasksFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} is swiped to enough distance to mark it as
+     * checked. Upon release, the selected item that is checked will be submitted as a finished
+     * task.
+     */
     public void onMarkTaskChecked() {
         // TODO Update item in the data. Mark it as checked. Notify recyclerview adapter to update
         // its view.
     }
 
+    /**
+     * This method is invoked when an item in {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} is swiped to enough distance to submit the
+     * selected item to the back-end server to set it as excluded from the top words.
+     */
     public void onWordSwipedToMark() {
         // TODO implement
     }
 
+    /**
+     * This method is invoked when the user selects, via the {@link android.widget.Spinner} in
+     * {@link TopWordsFragment}, a different number of results for top words.
+     *
+     * @param numResults desired number of results for top words
+     */
     public void onChangeTopWordsNumResults(int numResults) {
         mainInAppBackgroundTasker.fetchTopWordsList(numResults);
     }
 
+    /**
+     * This method is invoked when the user presses the {@link android.widget.Button} labeled
+     * 'VIEW EXCLUDED' or 'VIEW TOP' in {@link TopWordsFragment}. This allows the user to choose
+     * which, between top words list and excluded words list, to view.
+     */
     public void onTopWordsViewButtonClicked() {
         TopWordsFragment.ViewState viewState = topWordsFragment.switchViewState();
 

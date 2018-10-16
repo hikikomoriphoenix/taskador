@@ -8,9 +8,9 @@ import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * RunnableTask for updating an account's list of words in tasks. New words will be added and existing
- * ones will be updated for their count. A words's count represents how many times a word is
- * used in tasks.
+ * {@link RunnableTask} for updating an account's list of words in tasks. New words will be added and
+ * existing ones will be updated for their count. A words's count represents how many times a
+ * word is used in tasks.
  */
 public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTask.ResultHandler> {
     private String username;
@@ -89,7 +89,7 @@ public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTas
         void wordsUpdateSuccessfully(String message);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back-end server.
+         * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
         void failedUpdateTaskWordsRequest(String message);
 
@@ -99,7 +99,8 @@ public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTas
         void backendUnableToUpdateTaskWords(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void updateTaskWordsTaskIncomplete(String message);
     }

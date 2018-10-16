@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 /**
  * This class wraps the JSON data. Use the getter methods to get each field. An instance of this
- * class is created by parsing through JSONParser.
+ * class is created by parsing through {@link JSONParser}.
  */
 public class JSON {
     private JSONObject json;

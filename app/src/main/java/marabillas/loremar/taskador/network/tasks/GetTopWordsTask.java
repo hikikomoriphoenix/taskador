@@ -9,7 +9,7 @@ import marabillas.loremar.taskador.json.JSONTreeException;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * RunnableTask for getting the most frequently used words in task.
+ * {@link RunnableTask} for getting the most frequently used words in task.
  */
 public class GetTopWordsTask extends ReauthenticatingTask<GetTopWordsTask.ResultHandler> {
     private String username;
@@ -105,7 +105,7 @@ public class GetTopWordsTask extends ReauthenticatingTask<GetTopWordsTask.Result
         void getTopWordsTaskFailedToPrepareJSONData(String message);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back-end server.
+         * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
         void failedGetTopWordsRequest(String message);
 
@@ -115,7 +115,8 @@ public class GetTopWordsTask extends ReauthenticatingTask<GetTopWordsTask.Result
         void backendUnableToGetTopWords(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void getTopWordsTaskIncomplete(String message);
     }

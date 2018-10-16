@@ -7,6 +7,10 @@ import android.os.HandlerThread;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
+/**
+ * Base class for services that will perform background tasks. Use {@link #getHandler()} to get
+ * its built-in {@link Handler} to post {@link Runnable}'s on a background thread.
+ */
 public abstract class BackgroundTaskManager extends Service {
     private LocalBinder binder;
     private Handler handler;

@@ -15,6 +15,10 @@ import java.util.List;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Adapter for {@link marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment}'s
+ * {@link RecyclerView} to display a list of to-do tasks.
+ */
 public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasksRecyclerViewAdapter.TodoTasksViewHolder> {
     private MainInAppActivity activity;
     private List<String> tasks;

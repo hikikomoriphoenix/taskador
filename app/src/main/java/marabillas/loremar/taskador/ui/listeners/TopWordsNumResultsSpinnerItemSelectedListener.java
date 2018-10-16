@@ -5,6 +5,10 @@ import android.widget.AdapterView;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+/**
+ * Listens to events in {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s
+ * {@link android.widget.Spinner} which is used for selecting number of results for top words list.
+ */
 public class TopWordsNumResultsSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
     private MainInAppActivity mainInAppActivity;
 

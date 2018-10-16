@@ -8,7 +8,7 @@ import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * RunnableTask for getting words excluded from top words.
+ * {@link RunnableTask} for getting words excluded from top words.
  */
 public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsTask.ResultHandler> {
     private String username;
@@ -87,7 +87,7 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
         void excludedWordsObtained(String message, JSON data);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back-end server.
+         * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
         void failedSetExcludedRequest(String message);
 
@@ -97,7 +97,8 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
         void backendUnableToGiveExcludedWords(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void getExcludedWordsTaskIncomplete(String message);
     }

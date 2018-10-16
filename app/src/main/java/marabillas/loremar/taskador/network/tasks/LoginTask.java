@@ -12,16 +12,16 @@ import static marabillas.loremar.taskador.utils.AccountUtils.createAccount;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
 /**
- * A RunnableTask specifically used for login. As a Runnable, it executes the POST request for
- * logging in to the server. This can be set as a listener to login status results and receive
- * auth token as well. Set a LoginTask.ResultHandler to handle these results.
+ * A {@link RunnableTask} specifically used for login. As a {@link Runnable}, it executes the POST
+ * request for logging in to the server. This can be set as a listener to login status results
+ * and receive auth token as well. Set a {@link LoginTask.ResultHandler} to handle these results.
  */
 public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
     private String username;
     private String password;
 
     /**
-     * Creates a LoginTask object with account credentials.
+     * Creates a {@link LoginTask} object with account credentials.
      *
      * @param username account username
      * @param password account password
@@ -92,8 +92,8 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
 
     /**
      * Callback interface for login results. Set a class to implement this interface for handling
-     * of these results and call setResultHandler method to set its instance as the LoginTask
-     * object's ResultHandler.
+     * of these results and call {@link RunnableTask#setResultHandler} method to set its instance
+     * as the {@link LoginTask} object's {@link ResultHandler}.
      */
     public interface ResultHandler extends RunnableTask.ResultHandler {
         /**
@@ -102,7 +102,7 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         void loggedInSuccessfuly(String message);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back end
+         * Callback method when {@link IOException} occur while sending POST request to the back end
          * server.
          */
         void failedToSubmitLogin(String message);
@@ -114,7 +114,8 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         void loginDenied(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void loginTaskIncomplete(String message);
     }

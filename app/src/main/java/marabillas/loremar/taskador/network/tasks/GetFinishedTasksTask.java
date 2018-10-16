@@ -8,7 +8,7 @@ import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * RunnableTask for getting tasks finished during the current week.
+ * {@link RunnableTask} for getting tasks finished during the current week.
  */
 public class GetFinishedTasksTask extends ReauthenticatingTask<GetFinishedTasksTask.ResultHandler> {
     private String username;
@@ -87,7 +87,7 @@ public class GetFinishedTasksTask extends ReauthenticatingTask<GetFinishedTasksT
         void finishedTasksObtained(String message, JSON data);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back-end server.
+         * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
         void failedGetFinishedTasksRequest(String message);
 
@@ -97,7 +97,8 @@ public class GetFinishedTasksTask extends ReauthenticatingTask<GetFinishedTasksT
         void backendUnableToGiveFinishedTasks(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void getFinishedTasksIncomplete(String message);
     }

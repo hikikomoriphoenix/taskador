@@ -12,16 +12,17 @@ import static marabillas.loremar.taskador.utils.AccountUtils.createAccount;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
 /**
- * A RunnableTask specifically used for registering a new account. As a Runnable, it executes the
- * POST request for signing up a new account. This can be set as a listener to signup status
- * results and receive auth token as well. Set a SignupTask.ResultHandler to handle these results.
+ * A {@link RunnableTask} specifically used for registering a new account. As a {@link Runnable}, it
+ * executes the POST request for signing up a new account. This can be set as a listener to
+ * signup status results and receive auth token as well. Set a {@link SignupTask.ResultHandler} to handle
+ * these results.
  */
 public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
     private String username;
     private String password;
 
     /**
-     * Creates a SignupTask object with the desired account login credentials.
+     * Creates a {@link SignupTask} object with the desired account login credentials.
      *
      * @param username account username
      * @param password account password
@@ -92,8 +93,8 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
 
     /**
      * Callback interface for signup results. Set a class to implement this interface for handling
-     * of these results and call setResultHandler method to set its instance as the SignupTask
-     * object's ResultHandler.
+     * of these results and call {@link RunnableTask#setResultHandler} method to set its instance
+     * as the {@link SignupTask} object's {@link ResultHandler}.
      */
     public interface ResultHandler extends RunnableTask.ResultHandler {
         /**
@@ -102,7 +103,7 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         void newAccountSaved(String message);
 
         /**
-         * Callback method when IOException occur while sending POST request to the back end
+         * Callback method when {@link IOException} occur while sending POST request to the back end
          * server.
          */
         void failedToSubmitNewAccount(String message);
@@ -115,7 +116,8 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         void backEndUnableToSaveNewAccount(String message);
 
         /**
-         * Callback method when InterruptedException or ExecutionException is encountered.
+         * Callback method when {@link InterruptedException} or
+         * {@link java.util.concurrent.ExecutionException} is encountered.
          */
         void signupTaskIncomplete(String message);
     }
