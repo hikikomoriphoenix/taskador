@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.CheckUsernameAvailabilityTest;
 import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetExcludedWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
@@ -227,5 +228,18 @@ public class BackEndAPICallTaskerTest {
         BackEndAPICallTasker.getInstance().getExcludedWords(getExcludedWordsTest, username, token);
 
         getExcludedWordsTest.waitForResults();
+    }
+
+    @Test
+    public void checkUsernameAvailability() {
+        String username = "test1";
+
+        CheckUsernameAvailabilityTest checkUsernameAvailabilityTest = new
+                CheckUsernameAvailabilityTest();
+
+        BackEndAPICallTasker.getInstance().checkUsernameAvailability
+                (checkUsernameAvailabilityTest, username);
+
+        checkUsernameAvailabilityTest.waitForResults();
     }
 }
