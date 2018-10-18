@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import marabillas.loremar.taskador.App;
+import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -19,6 +20,7 @@ import okhttp3.ResponseBody;
  */
 public class HttpClient {
     private OkHttpClient client;
+    private Call call;
 
     HttpClient() {
         client = new OkHttpClient();
@@ -86,7 +88,9 @@ public class HttpClient {
     }
 
     private BackEndResponse executeRequest(Request request) throws IOException {
-        Response response = client.newCall(request).execute();
+        cancelRequest();
+        call = client.newCall(request);
+        Response response = call.execute();
 
         BackEndResponse backEndResponse = new BackEndResponse();
         backEndResponse.setStatusCode(response.code());
@@ -99,5 +103,14 @@ public class HttpClient {
         }
 
         return backEndResponse;
+    }
+
+    /**
+     * Cancel an ongoing request.
+     */
+    void cancelRequest() {
+        if (call != null) {
+            call.cancel();
+        }
     }
 }
