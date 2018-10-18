@@ -11,6 +11,9 @@
         characters</string>
     <string name="activity_signup_username_box_hint">Enter username</string>
     <string name="activity_signup_username_invalid">WARNING: Username is invalid</string>
+    <string name="activity_signup_username_checking_availability">Checking availability…</string>
+    <string name="activity_signup_username_isavailable">Username is available.</string>
+    <string name="activity_signup_username_already_exists">Username already exists.</string>
     <string name="activity_signup_password_label">Password</string>
     <string name="activity_signup_password_rules">Must contain 6-16 non-whitespace
         characters</string>

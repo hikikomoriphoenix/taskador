@@ -45,14 +45,91 @@
             android:hint="@string/activity_signup_username_box_hint"
             android:inputType="text" />
 
-        <TextView
-            android:id="@+id/activity_signup_username_invalid"
-            android:layout_width="match_parent"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/activity_signup_username_invalid_section"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/activity_signup_username_invalid"
-            android:textAppearance="@style/SignupInvalidTextAppearance"
-            android:visibility="gone" />
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/activity_signup_username_alertinvalid"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/activity_signup_username_invalid"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_warning_24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_signup_username_invalid"
+                app:layout_constraintEnd_toStartOf="@id/activity_signup_username_invalid"
+                app:layout_constraintTop_toTopOf="@+id/activity_signup_username_invalid" />
+
+            <TextView
+                android:id="@+id/activity_signup_username_invalid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/activity_signup_username_invalid"
+                android:textAppearance="@style/SignupInvalidTextAppearance"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/activity_signup_username_availabilitycheck_section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/activity_signup_username_availability_progress"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_signup_username_availability_textview"
+                app:layout_constraintEnd_toStartOf="@id/activity_signup_username_availability_textview"
+                app:layout_constraintTop_toTopOf="@+id/activity_signup_username_availability_textview" />
+
+            <ImageView
+                android:id="@+id/activity_signup_username_availability_check"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/activity_signup_username_isavailable"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_circledcheck"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_signup_username_availability_textview"
+                app:layout_constraintEnd_toStartOf="@id/activity_signup_username_availability_textview"
+                app:layout_constraintTop_toTopOf="@+id/activity_signup_username_availability_textview" />
+
+            <ImageView
+                android:id="@+id/activity_signup_username_alertunavailable"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/activity_signup_username_already_exists"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_warning_24dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_signup_username_availability_textview"
+                app:layout_constraintEnd_toStartOf="@id/activity_signup_username_availability_textview"
+                app:layout_constraintTop_toTopOf="@+id/activity_signup_username_availability_textview" />
+
+            <TextView
+                android:id="@+id/activity_signup_username_availability_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_signup_username_checking_availability"
+                android:textAppearance="@style/SignupUsernameAvailabilityTextAppearance"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/activity_signup_password_label"

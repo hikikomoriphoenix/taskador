@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import marabillas.loremar.taskador.background.SignupBackgroundTasker;
+
 /**
  *
  */
@@ -20,6 +22,33 @@ public class SignupActivityTest {
 
     @Test
     public void test() {
+        SignupActivity signupActivity = activityTestRule.getActivity();
+
+        class SignupBackgroundTaskerTest implements SignupBackgroundTasker {
+            private SignupActivity activity;
+
+            @Override
+            public void checkUsernameAvailability(String username) {
+                if (username.equals("1111")) {
+                    activity.onUsernameNotAvailable();
+                } else {
+                    activity.onUsernameIsAvailable();
+                }
+            }
+
+            @Override
+            public void bindClient(SignupActivity client) {
+                activity = client;
+            }
+
+            @Override
+            public SignupActivity getClient() {
+                return activity;
+            }
+        }
+
+        signupActivity.setBackgroundTasker(new SignupBackgroundTaskerTest());
+
         CountDownLatch latch = new CountDownLatch(1);
         try {
             latch.await(1, TimeUnit.MINUTES);

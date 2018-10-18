@@ -1,13 +1,19 @@
 package marabillas.loremar.taskador.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.background.BackgroundTaskManager;
+import marabillas.loremar.taskador.background.BackgroundTasker;
+import marabillas.loremar.taskador.background.SignupBackgroundTasker;
 import marabillas.loremar.taskador.ui.listeners.SignupUsernameBoxTextWatcher;
 
 import static marabillas.loremar.taskador.utils.RegexUtils.validateUsername;
@@ -16,8 +22,18 @@ import static marabillas.loremar.taskador.utils.RegexUtils.validateUsername;
  * This activity displays the signup screen where user can submit and register a new taskador
  * account.
  */
-public class SignupActivity extends Activity {
-    private TextView usernameInvalid;
+public class SignupActivity extends BaseActivity {
+    private SignupBackgroundTasker signupBackgroundTasker;
+
+    private View usernameInvalid;
+    private View usernameAvailability;
+    private ProgressBar usernameProgress;
+    private ImageView usernameIsAvailable;
+    private ImageView usernameNotAvailable;
+    private TextView usernameAvailabilityTextView;
+
+    private EditText usernameBox;
+    private CountDownTimerToRequestUsernameAvailabilityCheck timerToRequest;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,19 +41,105 @@ public class SignupActivity extends Activity {
 
         setContentView(R.layout.activity_signup);
 
-        usernameInvalid = findViewById(R.id.activity_signup_username_invalid);
+        usernameInvalid = findViewById(R.id.activity_signup_username_invalid_section);
+        usernameAvailability = findViewById(R.id
+                .activity_signup_username_availabilitycheck_section);
+        usernameProgress = findViewById(R.id.activity_signup_username_availability_progress);
+        usernameIsAvailable = findViewById(R.id.activity_signup_username_availability_check);
+        usernameNotAvailable = findViewById(R.id.activity_signup_username_alertunavailable);
+        usernameAvailabilityTextView = findViewById(R.id
+                .activity_signup_username_availability_textview);
 
-        EditText usernameBox = findViewById(R.id.activity_signup_username_box);
+
+        usernameBox = findViewById(R.id.activity_signup_username_box);
 
         usernameBox.addTextChangedListener(new SignupUsernameBoxTextWatcher(this));
+    }
+
+    @Override
+    public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
+        signupBackgroundTasker = (SignupBackgroundTasker) backgroundTasker;
+        signupBackgroundTasker.bindClient(this);
+    }
+
+    @Override
+    public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
+
     }
 
     public void onUsernameBoxTextChanged(String text) {
         boolean valid = validateUsername(text);
         if (!valid) {
+            // Display text stating invalid username.
             usernameInvalid.setVisibility(View.VISIBLE);
+            usernameAvailability.setVisibility(View.GONE);
         } else {
+            // Display rotating progress bar and the text "Checking Availability...". Hide
+            // inappropriate views.
             usernameInvalid.setVisibility(View.GONE);
+            usernameAvailability.setVisibility(View.VISIBLE);
+            usernameIsAvailable.setVisibility(View.GONE);
+            usernameNotAvailable.setVisibility(View.GONE);
+            usernameProgress.setVisibility(View.VISIBLE);
+            int color = ContextCompat.getColor(this, R.color
+                    .activity_signup_username_availability_textcolor);
+            usernameAvailabilityTextView.setTextColor(color);
+            usernameAvailabilityTextView.setText(R.string.activity_signup_username_checking_availability);
+
+            // Track the time elapsed the user is not typing using a countdown timer resetting
+            // countdown every time the user types. When countdown ends, start checking for
+            // username availability.
+            if (timerToRequest != null) {
+                timerToRequest.cancel();
+                timerToRequest.start();
+            } else {
+                timerToRequest = new CountDownTimerToRequestUsernameAvailabilityCheck(1500, 1500);
+                timerToRequest.start();
+            }
         }
+    }
+
+    private class CountDownTimerToRequestUsernameAvailabilityCheck extends CountDownTimer {
+        /**
+         * @param millisInFuture    The number of millis in the future from the call
+         *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
+         *                          is called.
+         * @param countDownInterval The interval along the way to receive
+         *                          {@link #onTick(long)} callbacks.
+         */
+        CountDownTimerToRequestUsernameAvailabilityCheck(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+        }
+
+        @Override
+        public void onFinish() {
+            String username = String.valueOf(usernameBox.getText());
+            signupBackgroundTasker.checkUsernameAvailability(username);
+        }
+    }
+
+    public void onUsernameIsAvailable() {
+        // Display a check mark and the text "Username is available". Hide inappropriate views.
+        usernameIsAvailable.setVisibility(View.VISIBLE);
+        usernameProgress.setVisibility(View.GONE);
+        usernameNotAvailable.setVisibility(View.GONE);
+        usernameAvailabilityTextView.setText(R.string.activity_signup_username_isavailable);
+    }
+
+    public void onUsernameNotAvailable() {
+        // Display warning sign and the text "Username already exists" in red. Hide inappropriate
+        // views.
+        usernameNotAvailable.setVisibility(View.VISIBLE);
+        usernameProgress.setVisibility(View.GONE);
+        usernameIsAvailable.setVisibility(View.GONE);
+        int color = ContextCompat.getColor(this, R.color
+                .activity_signup_username_notavailable_textcolor);
+        usernameAvailabilityTextView.setTextColor(color);
+        usernameAvailabilityTextView.setText(R.string.activity_signup_username_already_exists);
     }
 }
