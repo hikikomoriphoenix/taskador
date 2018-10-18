@@ -37,6 +37,11 @@ public class SignupActivityTest {
             }
 
             @Override
+            public void cancelUsernameAvailabilityCheck() {
+
+            }
+
+            @Override
             public void bindClient(SignupActivity client) {
                 activity = client;
             }

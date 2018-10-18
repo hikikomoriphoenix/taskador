@@ -74,6 +74,8 @@ public class SignupActivity extends BaseActivity {
             usernameInvalid.setVisibility(View.VISIBLE);
             usernameAvailability.setVisibility(View.GONE);
         } else {
+            signupBackgroundTasker.cancelUsernameAvailabilityCheck();
+
             // Display rotating progress bar and the text "Checking Availability...". Hide
             // inappropriate views.
             usernameInvalid.setVisibility(View.GONE);
