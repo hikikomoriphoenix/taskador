@@ -2,6 +2,7 @@ package marabillas.loremar.taskador.network;
 
 import android.support.annotation.NonNull;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
@@ -81,6 +82,16 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
             new BackEndAPICallTasker();
         }
         return instance;
+    }
+
+    /**
+     * Cancel an ongoing network task and its underlying http request.
+     */
+    public void cancelTask() {
+        if (task != null) {
+            task.cancel(true);
+        }
+        httpClient.cancelRequest();
     }
 
     /**
@@ -250,9 +261,7 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
 
     private void performTask(RunnableTask runnableTask) {
         resetCookieHandledTracking();
-        if (task != null) {
-            task.cancel(true);
-        }
+        cancelTask();
         BackEndResponse response = new BackEndResponse();
         task = new BackEndAPICallTask(runnableTask, response);
         task.run();
@@ -269,6 +278,7 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
             runnableTask.taskIncomplete(e.toString());
         } catch (ExecutionException e) {
             runnableTask.taskIncomplete(e.toString());
+        } catch (CancellationException ignore) {
         } catch (BackEndResponseHandler.RecievedACookieException ignore) {
         }
     }
