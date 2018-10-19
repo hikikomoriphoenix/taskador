@@ -154,6 +154,36 @@
             android:hint="@string/activity_signup_password_box_hint"
             android:inputType="text|textPassword" />
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/activity_signup_password_invalid_section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/activity_signup_password_alertinvalid"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/activity_signup_password_invalid"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_warning_24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_signup_password_invalid"
+                app:layout_constraintEnd_toStartOf="@id/activity_signup_password_invalid"
+                app:layout_constraintTop_toTopOf="@+id/activity_signup_password_invalid" />
+
+            <TextView
+                android:id="@+id/activity_signup_password_invalid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_signup_password_invalid"
+                android:textAppearance="@style/SignupInvalidTextAppearance"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
         <TextView
             android:id="@+id/activity_signup_confirm_password_label"
             android:layout_width="match_parent"

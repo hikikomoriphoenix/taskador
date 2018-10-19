@@ -18,6 +18,7 @@
     <string name="activity_signup_password_rules">Must contain 6-16 non-whitespace
         characters</string>
     <string name="activity_signup_password_box_hint">Enter password</string>
+    <string name="activity_signup_password_invalid">WARNING: Password is invalid</string>
     <string name="activity_signup_confirm_password_label">Confirm Password</string>
     <string name="activity_signup_submit_button_label">Submit</string>
 

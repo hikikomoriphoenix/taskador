@@ -14,8 +14,10 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
+import marabillas.loremar.taskador.ui.listeners.SignupPasswordBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupUsernameBoxTextWatcher;
 
+import static marabillas.loremar.taskador.utils.RegexUtils.validatePassword;
 import static marabillas.loremar.taskador.utils.RegexUtils.validateUsername;
 
 /**
@@ -31,8 +33,11 @@ public class SignupActivity extends BaseActivity {
     private ImageView usernameIsAvailable;
     private ImageView usernameNotAvailable;
     private TextView usernameAvailabilityTextView;
+    private View passwordInvalid;
 
     private EditText usernameBox;
+    private EditText passwordBox;
+
     private CountDownTimerToRequestUsernameAvailabilityCheck timerToRequest;
 
     @Override
@@ -49,11 +54,13 @@ public class SignupActivity extends BaseActivity {
         usernameNotAvailable = findViewById(R.id.activity_signup_username_alertunavailable);
         usernameAvailabilityTextView = findViewById(R.id
                 .activity_signup_username_availability_textview);
-
+        passwordInvalid = findViewById(R.id.activity_signup_password_invalid_section);
 
         usernameBox = findViewById(R.id.activity_signup_username_box);
+        passwordBox = findViewById(R.id.activity_signup_password_box);
 
         usernameBox.addTextChangedListener(new SignupUsernameBoxTextWatcher(this));
+        passwordBox.addTextChangedListener(new SignupPasswordBoxTextWatcher(this));
     }
 
     @Override
@@ -143,5 +150,15 @@ public class SignupActivity extends BaseActivity {
                 .activity_signup_username_notavailable_textcolor);
         usernameAvailabilityTextView.setTextColor(color);
         usernameAvailabilityTextView.setText(R.string.activity_signup_username_already_exists);
+    }
+
+    public void onPasswordBoxTextChanged(String text) {
+        boolean valid = validatePassword(text);
+
+        if (valid) {
+            passwordInvalid.setVisibility(View.GONE);
+        } else {
+            passwordInvalid.setVisibility(View.VISIBLE);
+        }
     }
 }
