@@ -87,8 +87,8 @@
             <ProgressBar
                 android:id="@+id/activity_signup_username_availability_progress"
                 style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_width="@dimen/main_screen_normal_text_size"
+                android:layout_height="@dimen/main_screen_normal_text_size"
                 android:indeterminate="true"
                 app:layout_constraintBottom_toBottomOf="@+id/activity_signup_username_availability_textview"
                 app:layout_constraintEnd_toStartOf="@id/activity_signup_username_availability_textview"

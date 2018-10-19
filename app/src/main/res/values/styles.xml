@@ -12,7 +12,7 @@
 
     <!-- Theme for signup screen-->
     <style name="SignupTheme" parent="@style/MainScreenTheme">
-
+        <item name="android:progressBarStyle">@style/SignupProgressBar</item>
     </style>
 
     <style name="SignupHeaderTextAppearance" parent="MainScreenHeaderTextAppearance">
@@ -37,6 +37,10 @@
     <style name="SignupUsernameAvailabilityTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/activity_signup_username_availability_textcolor</item>
         <item name="android:textSize">@dimen/main_screen_normal_text_size</item>
+    </style>
+
+    <style name="SignupProgressBar" parent="@android:style/Widget.ProgressBar">
+
     </style>
 
     <style name="LoginTheme" parent="MainScreenTheme">
