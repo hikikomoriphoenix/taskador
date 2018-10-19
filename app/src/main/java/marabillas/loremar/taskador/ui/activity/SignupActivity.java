@@ -14,6 +14,7 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
+import marabillas.loremar.taskador.ui.listeners.SignupConfirmPasswordTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupPasswordBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupUsernameBoxTextWatcher;
 
@@ -29,14 +30,17 @@ public class SignupActivity extends BaseActivity {
 
     private View usernameInvalid;
     private View usernameAvailability;
+    private View passwordInvalid;
+    private View confirmPasswordNotMatch;
+
     private ProgressBar usernameProgress;
     private ImageView usernameIsAvailable;
     private ImageView usernameNotAvailable;
     private TextView usernameAvailabilityTextView;
-    private View passwordInvalid;
 
     private EditText usernameBox;
     private EditText passwordBox;
+    private EditText confirmPasswordBox;
 
     private CountDownTimerToRequestUsernameAvailabilityCheck timerToRequest;
 
@@ -55,12 +59,15 @@ public class SignupActivity extends BaseActivity {
         usernameAvailabilityTextView = findViewById(R.id
                 .activity_signup_username_availability_textview);
         passwordInvalid = findViewById(R.id.activity_signup_password_invalid_section);
+        confirmPasswordNotMatch = findViewById(R.id.activity_signup_confirm_password_notmatch_section);
 
         usernameBox = findViewById(R.id.activity_signup_username_box);
         passwordBox = findViewById(R.id.activity_signup_password_box);
+        confirmPasswordBox = findViewById(R.id.activity_signup_confirm_password_box);
 
         usernameBox.addTextChangedListener(new SignupUsernameBoxTextWatcher(this));
         passwordBox.addTextChangedListener(new SignupPasswordBoxTextWatcher(this));
+        confirmPasswordBox.addTextChangedListener(new SignupConfirmPasswordTextWatcher(this));
     }
 
     @Override
@@ -159,6 +166,19 @@ public class SignupActivity extends BaseActivity {
             passwordInvalid.setVisibility(View.GONE);
         } else {
             passwordInvalid.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onConfirmPasswordBoxTextChanged(String text) {
+        String password = String.valueOf(passwordBox.getText());
+        if (password != null && text != null) {
+            boolean match = text.equals(password);
+
+            if (match) {
+                confirmPasswordNotMatch.setVisibility(View.GONE);
+            } else {
+                confirmPasswordNotMatch.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

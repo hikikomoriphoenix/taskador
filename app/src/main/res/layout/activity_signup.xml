@@ -196,17 +196,46 @@
             android:id="@+id/activity_signup_confirm_password_box"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/activity_signup_fields_spacing"
             android:ems="10"
             android:hint="@string/activity_signup_password_box_hint"
             android:inputType="textPassword" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/activity_signup_confirm_password_notmatch_section"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/activity_signup_confirm_password_alertnotmatch"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/activity_signup_confirm_password_notmatch"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_warning_24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/activity_signup_confirm_password_notmatch"
+                app:layout_constraintEnd_toStartOf="@id/activity_signup_confirm_password_notmatch"
+                app:layout_constraintTop_toTopOf="@+id/activity_signup_confirm_password_notmatch" />
+
+            <TextView
+                android:id="@+id/activity_signup_confirm_password_notmatch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_signup_confirm_password_notmatch"
+                android:textAppearance="@style/SignupInvalidTextAppearance"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
         <Button
             android:id="@+id/activity_signup_submit_button"
             android:layout_width="@dimen/activity_signup_submit_button_width"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/activity_signup_fields_spacing"
+            android:layout_marginTop="@dimen/activity_signup_submit_button_topmargin"
             android:text="@string/activity_signup_submit_button_label" />
     </LinearLayout>
 

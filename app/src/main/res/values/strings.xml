@@ -20,6 +20,8 @@
     <string name="activity_signup_password_box_hint">Enter password</string>
     <string name="activity_signup_password_invalid">WARNING: Password is invalid</string>
     <string name="activity_signup_confirm_password_label">Confirm Password</string>
+    <string name="activity_signup_confirm_password_notmatch">WARNING: Password does not
+        match</string>
     <string name="activity_signup_submit_button_label">Submit</string>
 
     <string name="activity_login_username_label">Username</string>
