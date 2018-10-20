@@ -6,4 +6,6 @@ public interface SignupBackgroundTasker extends BackgroundTasker<SignupActivity>
     void checkUsernameAvailability(String username);
 
     void cancelUsernameAvailabilityCheck();
+
+    void submitNewAccount(String username, String password);
 }

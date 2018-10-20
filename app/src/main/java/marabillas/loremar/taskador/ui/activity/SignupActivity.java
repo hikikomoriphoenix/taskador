@@ -5,6 +5,7 @@ import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -15,6 +16,7 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
 import marabillas.loremar.taskador.ui.listeners.SignupConfirmPasswordTextWatcher;
+import marabillas.loremar.taskador.ui.listeners.SignupOnClickListener;
 import marabillas.loremar.taskador.ui.listeners.SignupPasswordBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupUsernameBoxTextWatcher;
 
@@ -41,6 +43,7 @@ public class SignupActivity extends BaseActivity {
     private EditText usernameBox;
     private EditText passwordBox;
     private EditText confirmPasswordBox;
+    private Button submitButton;
 
     private CountDownTimerToRequestUsernameAvailabilityCheck timerToRequest;
 
@@ -64,10 +67,14 @@ public class SignupActivity extends BaseActivity {
         usernameBox = findViewById(R.id.activity_signup_username_box);
         passwordBox = findViewById(R.id.activity_signup_password_box);
         confirmPasswordBox = findViewById(R.id.activity_signup_confirm_password_box);
+        submitButton = findViewById(R.id.activity_signup_submit_button);
+
+        SignupOnClickListener signupOnClickListener = new SignupOnClickListener(this);
 
         usernameBox.addTextChangedListener(new SignupUsernameBoxTextWatcher(this));
         passwordBox.addTextChangedListener(new SignupPasswordBoxTextWatcher(this));
         confirmPasswordBox.addTextChangedListener(new SignupConfirmPasswordTextWatcher(this));
+        submitButton.setOnClickListener(signupOnClickListener);
     }
 
     @Override
@@ -160,25 +167,75 @@ public class SignupActivity extends BaseActivity {
     }
 
     public void onPasswordBoxTextChanged(String text) {
-        boolean valid = validatePassword(text);
+        validatePasswordAndUpdateView(text);
+    }
+
+    public void onConfirmPasswordBoxTextChanged(String text) {
+        confirmPasswordAndUpdateView(text);
+    }
+
+    private boolean validateUsernameAndUpdateView(String username) {
+        boolean valid = validateUsername(username);
+        if (!valid) {
+            // Display text stating invalid username.
+            usernameInvalid.setVisibility(View.VISIBLE);
+            usernameAvailability.setVisibility(View.GONE);
+        } else {
+            usernameInvalid.setVisibility(View.GONE);
+            usernameAvailability.setVisibility(View.GONE);
+        }
+        return valid;
+    }
+
+    private boolean validatePasswordAndUpdateView(String password) {
+        boolean valid = validatePassword(password);
 
         if (valid) {
             passwordInvalid.setVisibility(View.GONE);
         } else {
             passwordInvalid.setVisibility(View.VISIBLE);
         }
+
+        return valid;
     }
 
-    public void onConfirmPasswordBoxTextChanged(String text) {
+    private boolean confirmPasswordAndUpdateView(String confirmPasswordInput) {
         String password = String.valueOf(passwordBox.getText());
-        if (password != null && text != null) {
-            boolean match = text.equals(password);
+        if (password != null && confirmPasswordInput != null) {
+            boolean match = confirmPasswordInput.equals(password);
 
             if (match) {
                 confirmPasswordNotMatch.setVisibility(View.GONE);
             } else {
                 confirmPasswordNotMatch.setVisibility(View.VISIBLE);
             }
+
+            return match;
+        } else {
+            return false;
+        }
+    }
+
+    public void onSubmit() {
+        String username;
+        String password;
+
+        username = String.valueOf(usernameBox.getText());
+        boolean usernameIsValid;
+        if (usernameNotAvailable.getVisibility() == View.VISIBLE) {
+            usernameIsValid = false;
+        } else {
+            usernameIsValid = validateUsernameAndUpdateView(username);
+        }
+
+        password = String.valueOf(passwordBox.getText());
+        boolean passwordIsValid = validatePasswordAndUpdateView(password);
+
+        String confirmPasswordInput = String.valueOf(confirmPasswordBox.getText());
+        boolean passwordIsConfirmed = confirmPasswordAndUpdateView(confirmPasswordInput);
+
+        if (usernameIsValid && passwordIsValid && passwordIsConfirmed) {
+            signupBackgroundTasker.submitNewAccount(username, password);
         }
     }
 }

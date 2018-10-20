@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
 
+import static marabillas.loremar.taskador.utils.LogUtils.log;
+
 /**
  *
  */
@@ -39,6 +41,12 @@ public class SignupActivityTest {
             @Override
             public void cancelUsernameAvailabilityCheck() {
 
+            }
+
+            @Override
+            public void submitNewAccount(String username, String password) {
+                log("New account with username=" + username + ",password=" + password + " is " +
+                        "submitted.");
             }
 
             @Override
