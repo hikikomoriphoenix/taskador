@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
+import marabillas.loremar.taskador.network.tasks.CheckUsernameAvailabilityTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetExcludedWordsTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
@@ -257,6 +258,21 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         GetExcludedWordsTask getExcludedWordsTask = new GetExcludedWordsTask(username, token);
         getExcludedWordsTask.setResultHandler(resultHandler);
         performTask(getExcludedWordsTask);
+    }
+
+    /**
+     * Check if username is still available in the database to be used for registering a new
+     * account.
+     *
+     * @param resultHandler Callback for results
+     * @param username      username to be checked for availability
+     */
+    public void checkUsernameAvailability(@NonNull CheckUsernameAvailabilityTask.ResultHandler
+                                                  resultHandler, String username) {
+        CheckUsernameAvailabilityTask checkUsernameAvailabilityTask = new
+                CheckUsernameAvailabilityTask(username);
+        checkUsernameAvailabilityTask.setResultHandler(resultHandler);
+        performTask(checkUsernameAvailabilityTask);
     }
 
     private void performTask(RunnableTask runnableTask) {
