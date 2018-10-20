@@ -27,12 +27,14 @@ public class SplashActivity extends BaseActivity {
         setContentView(R.layout.activity_splash);
 
         input = getIntent().getExtras();
+        String action = getIntent().getStringExtra("action");
 
         int nextScreenTimerDuration = getResources().getInteger(R.integer
                 .activity_splash_nextscreentimer_duration);
         nextScreenTimer = new NextScreenTimer(nextScreenTimerDuration, nextScreenTimerDuration);
 
-        if (input == null) {
+        if (action == null) {
+            input = null;
             setupBackgroundService(SplashManager.class);
         }
     }
