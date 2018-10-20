@@ -9,6 +9,10 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import marabillas.loremar.taskador.background.LoginBackgroundTasker;
+
+import static marabillas.loremar.taskador.utils.LogUtils.log;
+
 public class LoginActivityTest {
     @Rule
     public ActivityTestRule<LoginActivity> activityTestRule = new ActivityTestRule<>
@@ -16,6 +20,29 @@ public class LoginActivityTest {
 
     @Test
     public void test() {
+        LoginActivity loginActivity = activityTestRule.getActivity();
+
+        class LoginBackgroundTaskerTest implements LoginBackgroundTasker {
+            private LoginActivity activity;
+
+            @Override
+            public void login(String username, String password) {
+                log("Logged in using username=" + username + ",password=" + password);
+            }
+
+            @Override
+            public void bindClient(LoginActivity client) {
+                activity = client;
+            }
+
+            @Override
+            public LoginActivity getClient() {
+                return activity;
+            }
+        }
+
+        loginActivity.setBackgroundTasker(new LoginBackgroundTaskerTest());
+
         CountDownLatch latch = new CountDownLatch(1);
         try {
             latch.await(1, TimeUnit.MINUTES);
