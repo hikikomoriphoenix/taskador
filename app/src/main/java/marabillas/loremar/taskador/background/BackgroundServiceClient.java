@@ -5,10 +5,10 @@ package marabillas.loremar.taskador.background;
  */
 public interface BackgroundServiceClient {
     /**
-     * Bind this object to a {@link BackgroundTaskManager}
+     * Start a {@link BackgroundTaskManager} and bind it to this object
      * using a {@link android.content.Context#bindService} method.
      */
-    void bindBackgroundService(Class<? extends BackgroundTaskManager> serviceClass);
+    void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass);
 
     /**
      * Use this for test or if using service is not suitable.
