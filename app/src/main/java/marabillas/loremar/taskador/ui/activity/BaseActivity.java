@@ -15,9 +15,10 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 public abstract class BaseActivity extends Activity implements BackgroundServiceClient,
         BackgroundServiceConnection.OnServiceConnectedListener {
     @Override
-    public void bindBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
         BackgroundServiceConnection conn = new BackgroundServiceConnection(this);
         Intent serviceIntent = new Intent(this, serviceClass);
+        startService(serviceIntent);
         bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
     }
 }
