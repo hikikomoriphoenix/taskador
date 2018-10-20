@@ -43,5 +43,7 @@
                 android:resource="@xml/authenticator" />
         </service>
         <service android:name=".background.MainInAppManager" />
+        <service android:name=".background.LoginManager" />
+        <service android:name=".background.SplashManager" />
     </application>
 </manifest>

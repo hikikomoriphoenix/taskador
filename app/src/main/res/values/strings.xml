@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">taskador</string>
 
-    <string name="activity_splash_status_none">Nothing here. Try restarting app.</string>
+    <string name="activity_splash_status_default">""</string>
     <string name="activity_splash_status_connecting">Connecting online.</string>
     <string name="activity_splash_status_updating">Updating online service.</string>
 

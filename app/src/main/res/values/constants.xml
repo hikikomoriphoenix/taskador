@@ -5,4 +5,6 @@
     <!-- Time interval in milliseconds when before the next dot in splash screen starts to bounce-->
     <integer name="activity_splash_dot_start_interval">200</integer>
     <item name="activity_splash_bounce_height" type="integer" format="float">16.0</item>
+
+    <integer name="activity_splash_nextscreentimer_duration">3000</integer>
 </resources>
