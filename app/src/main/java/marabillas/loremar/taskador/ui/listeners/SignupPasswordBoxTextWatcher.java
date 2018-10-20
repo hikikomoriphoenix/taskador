@@ -5,6 +5,9 @@ import android.text.TextWatcher;
 
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 
+/**
+ * Listens to text events in signup screen's password box.
+ */
 public class SignupPasswordBoxTextWatcher implements TextWatcher {
     private SignupActivity signupActivity;
 

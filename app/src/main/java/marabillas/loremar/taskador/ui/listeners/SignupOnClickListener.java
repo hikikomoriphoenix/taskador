@@ -5,6 +5,9 @@ import android.view.View;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 
+/**
+ * Listens to click events in signup screen.
+ */
 public class SignupOnClickListener implements View.OnClickListener {
     private SignupActivity signupActivity;
 

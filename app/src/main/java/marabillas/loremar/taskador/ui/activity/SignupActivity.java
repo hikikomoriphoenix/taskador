@@ -193,12 +193,22 @@ public class SignupActivity extends BaseActivity {
         if (valid) {
             passwordInvalid.setVisibility(View.GONE);
         } else {
+            // Dispalay text stating invalid password
             passwordInvalid.setVisibility(View.VISIBLE);
         }
 
         return valid;
     }
 
+    /**
+     * Evaluate if text for password confirmation matches with text for desired password. Display
+     * text stating otherwise.
+     *
+     * @param confirmPasswordInput text in 'Confirm Password' EditText for confirming desired
+     *                             password.
+     * @return true if confirmation password input matches with inputted password. False if
+     * otherwise or if unable to confirm.
+     */
     private boolean confirmPasswordAndUpdateView(String confirmPasswordInput) {
         String password = String.valueOf(passwordBox.getText());
         if (password != null && confirmPasswordInput != null) {
@@ -207,6 +217,8 @@ public class SignupActivity extends BaseActivity {
             if (match) {
                 confirmPasswordNotMatch.setVisibility(View.GONE);
             } else {
+                // Display text stating that text inputted for password confirmation does not
+                // match text in password.
                 confirmPasswordNotMatch.setVisibility(View.VISIBLE);
             }
 
@@ -216,6 +228,10 @@ public class SignupActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Method invoked when inputs need to be submitted to register new account. Inputs are first
+     * checked if they are valid before submitting.
+     */
     public void onSubmit() {
         String username;
         String password;
