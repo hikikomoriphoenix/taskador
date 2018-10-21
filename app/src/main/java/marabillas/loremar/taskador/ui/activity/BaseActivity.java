@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.BackgroundServiceClient;
 import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
@@ -21,4 +22,20 @@ public abstract class BaseActivity extends Activity implements BackgroundService
         startService(serviceIntent);
         bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        boolean backgroundSupported = App.getInstance().getBackgroundTaskManagerSupport();
+        if (backgroundSupported) {
+            onSetupBackgroundService();
+        }
+    }
+
+    /**
+     * Invoked when this activity needs to set up its background service. Call
+     * {@link #setupBackgroundService} and pass this activity's corresponding
+     * {@link BackgroundTaskManager}.
+     */
+    public abstract void onSetupBackgroundService();
 }

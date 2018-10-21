@@ -78,6 +78,11 @@ public class SignupActivity extends BaseActivity {
     }
 
     @Override
+    public void onSetupBackgroundService() {
+
+    }
+
+    @Override
     public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
         signupBackgroundTasker = (SignupBackgroundTasker) backgroundTasker;
         signupBackgroundTasker.bindClient(this);

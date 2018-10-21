@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
 
+import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
@@ -28,15 +29,19 @@ public class SplashActivity extends BaseActivity {
 
         input = getIntent().getExtras();
         String action = getIntent().getStringExtra("action");
+        if (action == null) {
+            input = null;
+            App.getInstance().setBackgroundTaskManagerSupport(true);
+        }
 
         int nextScreenTimerDuration = getResources().getInteger(R.integer
                 .activity_splash_nextscreentimer_duration);
         nextScreenTimer = new NextScreenTimer(nextScreenTimerDuration, nextScreenTimerDuration);
+    }
 
-        if (action == null) {
-            input = null;
-            setupBackgroundService(SplashManager.class);
-        }
+    @Override
+    public void onSetupBackgroundService() {
+        setupBackgroundService(SplashManager.class);
     }
 
     @Override

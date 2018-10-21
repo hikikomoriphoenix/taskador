@@ -11,6 +11,7 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
+import marabillas.loremar.taskador.background.LoginManager;
 
 /**
  * This activity facilitates the Login screen. The screen is shown to the user when taskador can
@@ -38,6 +39,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         loginButton.setOnClickListener(this);
         createNewAccount.setOnClickListener(this);
+    }
+
+    @Override
+    public void onSetupBackgroundService() {
+        setupBackgroundService(LoginManager.class);
     }
 
     @Override
