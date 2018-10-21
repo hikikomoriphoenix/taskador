@@ -1,7 +1,5 @@
 package marabillas.loremar.taskador.background;
 
-import android.content.Intent;
-
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 
@@ -15,10 +13,7 @@ public class LoginManager extends BackgroundTaskManager implements LoginBackgrou
 
     @Override
     public void switchToSignupScreen() {
-        Intent intent = new Intent(loginActivity, SignupActivity.class);
-        loginActivity.startActivity(intent);
-        loginActivity.finish();
-        stopSelf();
+        loginActivity.switchScreen(SignupActivity.class, this, null);
     }
 
     @Override

@@ -3,6 +3,9 @@ package marabillas.loremar.taskador.ui.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.BackgroundServiceClient;
@@ -38,4 +41,25 @@ public abstract class BaseActivity extends Activity implements BackgroundService
      * {@link BackgroundTaskManager}.
      */
     public abstract void onSetupBackgroundService();
+
+    /**
+     * Switch to another activity.
+     *
+     * @param activityClass         class of the target activity.
+     * @param backgroundTaskManager this activity's background service that needs to stop
+     */
+    public void switchScreen(@NonNull Class<? extends Activity> activityClass, @NonNull
+            BackgroundTaskManager
+            backgroundTaskManager, @Nullable Bundle input) {
+        // Prepare intent
+        Intent intent = new Intent(this, activityClass);
+        if (input != null) {
+            intent.putExtra("input", input);
+        }
+
+        // Switch activity and stop old service
+        startActivity(intent);
+        finish();
+        backgroundTaskManager.stopSelf();
+    }
 }

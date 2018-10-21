@@ -1,6 +1,6 @@
 package marabillas.loremar.taskador.background;
 
-import android.content.Intent;
+import android.os.Bundle;
 
 import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.JSON;
@@ -37,13 +37,11 @@ public class SignupManager extends BackgroundTaskManager implements SignupBackgr
 
     @Override
     public void submitNewAccount(String username, String password) {
-        Intent intent = new Intent(signupActivity, SplashActivity.class);
-        intent.putExtra("action", SplashBackgroundTasker.Action.SIGNUP.ordinal());
-        intent.putExtra("username", username);
-        intent.putExtra("password", password);
-        signupActivity.startActivity(intent);
-        signupActivity.finish();
-        stopSelf();
+        Bundle input = new Bundle();
+        input.putInt("action", SplashBackgroundTasker.Action.SIGNUP.ordinal());
+        input.putString("username", username);
+        input.putString("password", password);
+        signupActivity.switchScreen(SplashActivity.class, this, input);
     }
 
     @Override

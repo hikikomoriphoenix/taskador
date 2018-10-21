@@ -34,10 +34,8 @@ public class SplashActivity extends BaseActivity {
 
         statusView = findViewById(R.id.activity_splash_status_text);
 
-        input = getIntent().getExtras();
-        int action = getIntent().getIntExtra("action", -1);
-        if (action == -1) {
-            input = null;
+        input = getIntent().getBundleExtra("input");
+        if (input == null) {
             App.getInstance().setBackgroundTaskManagerSupport(true);
         }
 

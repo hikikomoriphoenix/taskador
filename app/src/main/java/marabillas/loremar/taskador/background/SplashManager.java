@@ -1,6 +1,5 @@
 package marabillas.loremar.taskador.background;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -150,20 +149,14 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class Login implements Runnable {
         @Override
         public void run() {
-            Intent intent = new Intent(splashActivity, LoginActivity.class);
-            splashActivity.startActivity(intent);
-            splashActivity.finish();
-            stopSelf();
+            splashActivity.switchScreen(LoginActivity.class, SplashManager.this, null);
         }
     }
 
     private class InApp implements Runnable {
         @Override
         public void run() {
-            Intent intent = new Intent(splashActivity, MainInAppActivity.class);
-            splashActivity.startActivity(intent);
-            splashActivity.finish();
-            stopSelf();
+            splashActivity.switchScreen(MainInAppActivity.class, SplashManager.this, null);
         }
     }
 }
