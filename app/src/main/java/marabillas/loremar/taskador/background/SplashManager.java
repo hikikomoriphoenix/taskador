@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import marabillas.loremar.taskador.ConfigKeys;
+import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
@@ -19,6 +20,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
 
     private boolean nextScreenTimerFinished;
     private boolean backgroundTaskFinished;
+    private boolean showStatusFirst;
+    private int statusTextResId;
 
     private String username;
 
@@ -58,7 +61,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                splashActivity.setStatusText("Creating New Account...");
+                splashActivity.setStatusText(R.string.activity_splash_status_creating_new_account);
                 String username = input.getString("username");
                 String password = input.getString("password");
                 SplashManager.this.username = username;
@@ -78,10 +81,25 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     }
 
     @Override
+    public void showSatusFirst(int statusTextResId) {
+        showStatusFirst = true;
+        this.statusTextResId = statusTextResId;
+    }
+
+    @Override
     public void nextScreen() {
         if (nextScreenTimerFinished && backgroundTaskFinished) {
-            getHandler().post(nextScreen);
+            if (!showStatusFirst) {
+                getHandler().post(nextScreen);
+            } else {
+                splashActivity.onShowStatus(statusTextResId);
+            }
         }
+    }
+
+    @Override
+    public void continueToNextScreen() {
+        getHandler().post(nextScreen);
     }
 
     @Override
@@ -91,10 +109,9 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             public void run() {
                 SharedPreferences prefs = splashActivity.getSharedPreferences("config", 0);
                 prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
-                // TODO Create a new screen congratulating user for new account. Direct to this
-                // screen instead of in app.
                 nextScreen = new InApp();
                 backgroundTaskFinished();
+                showSatusFirst(R.string.activity_splash_status_new_account_created);
                 nextScreen();
             }
         });

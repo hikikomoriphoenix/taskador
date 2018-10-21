@@ -3,6 +3,8 @@ package marabillas.loremar.taskador.ui.activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.App;
@@ -22,6 +24,7 @@ public class SplashActivity extends BaseActivity {
     private SplashBackgroundTasker splashBackgroundTasker;
     private NextScreenTimer nextScreenTimer;
     private TextView statusView;
+    private WaitingDotsView dotsView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,9 +55,9 @@ public class SplashActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        WaitingDotsView dots = findViewById(R.id.waitingDotsView);
+        dotsView = findViewById(R.id.waitingDotsView);
         // dots.animateContinuousWavesOfDots();
-        dots.animateSingleWavesofDots();
+        dotsView.animateSingleWavesofDots();
 
         nextScreenTimer.start();
     }
@@ -63,8 +66,7 @@ public class SplashActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
 
-        WaitingDotsView dots = findViewById(R.id.waitingDotsView);
-        dots.stopAnimation();
+        dotsView.stopAnimation();
     }
 
     @Override
@@ -80,11 +82,30 @@ public class SplashActivity extends BaseActivity {
         splashBackgroundTasker.startSplashBackground(input);
     }
 
-    public void setStatusText(final String text) {
+    public void setStatusText(final int textResId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                statusView.setText(text);
+                statusView.setText(textResId);
+            }
+        });
+    }
+
+    public void onShowStatus(final int statusTextResId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dotsView.stopAnimation();
+                dotsView.setVisibility(View.GONE);
+                setStatusText(statusTextResId);
+                Button continueButton = findViewById(R.id.activity_splash_continue_button);
+                continueButton.setVisibility(View.VISIBLE);
+                continueButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        splashBackgroundTasker.continueToNextScreen();
+                    }
+                });
             }
         });
     }
