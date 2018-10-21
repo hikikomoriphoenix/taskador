@@ -54,7 +54,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
-
+        loginBackgroundTasker = (LoginBackgroundTasker) backgroundTaskManager;
+        loginBackgroundTasker.bindClient(this);
     }
 
     @Override

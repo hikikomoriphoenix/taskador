@@ -15,6 +15,7 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
+import marabillas.loremar.taskador.background.SignupManager;
 import marabillas.loremar.taskador.ui.listeners.SignupConfirmPasswordTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupOnClickListener;
 import marabillas.loremar.taskador.ui.listeners.SignupPasswordBoxTextWatcher;
@@ -79,7 +80,7 @@ public class SignupActivity extends BaseActivity {
 
     @Override
     public void onSetupBackgroundService() {
-
+        setupBackgroundService(SignupManager.class);
     }
 
     @Override
@@ -90,41 +91,48 @@ public class SignupActivity extends BaseActivity {
 
     @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
-
+        signupBackgroundTasker = (SignupBackgroundTasker) backgroundTaskManager;
+        signupBackgroundTasker.bindClient(this);
     }
 
-    public void onUsernameBoxTextChanged(String text) {
-        boolean valid = validateUsername(text);
-        if (!valid) {
-            // Display text stating invalid username.
-            usernameInvalid.setVisibility(View.VISIBLE);
-            usernameAvailability.setVisibility(View.GONE);
-        } else {
-            signupBackgroundTasker.cancelUsernameAvailabilityCheck();
+    public void onUsernameBoxTextChanged(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                boolean valid = validateUsername(text);
+                if (!valid) {
+                    // Display text stating invalid username.
+                    usernameInvalid.setVisibility(View.VISIBLE);
+                    usernameAvailability.setVisibility(View.GONE);
+                } else {
+                    signupBackgroundTasker.cancelUsernameAvailabilityCheck();
 
-            // Display rotating progress bar and the text "Checking Availability...". Hide
-            // inappropriate views.
-            usernameInvalid.setVisibility(View.GONE);
-            usernameAvailability.setVisibility(View.VISIBLE);
-            usernameIsAvailable.setVisibility(View.GONE);
-            usernameNotAvailable.setVisibility(View.GONE);
-            usernameProgress.setVisibility(View.VISIBLE);
-            int color = ContextCompat.getColor(this, R.color
-                    .activity_signup_username_availability_textcolor);
-            usernameAvailabilityTextView.setTextColor(color);
-            usernameAvailabilityTextView.setText(R.string.activity_signup_username_checking_availability);
+                    // Display rotating progress bar and the text "Checking Availability...". Hide
+                    // inappropriate views.
+                    usernameInvalid.setVisibility(View.GONE);
+                    usernameAvailability.setVisibility(View.VISIBLE);
+                    usernameIsAvailable.setVisibility(View.GONE);
+                    usernameNotAvailable.setVisibility(View.GONE);
+                    usernameProgress.setVisibility(View.VISIBLE);
+                    int color = ContextCompat.getColor(SignupActivity.this, R.color
+                            .activity_signup_username_availability_textcolor);
+                    usernameAvailabilityTextView.setTextColor(color);
+                    usernameAvailabilityTextView.setText(R.string.activity_signup_username_checking_availability);
 
-            // Track the time elapsed the user is not typing using a countdown timer resetting
-            // countdown every time the user types. When countdown ends, start checking for
-            // username availability.
-            if (timerToRequest != null) {
-                timerToRequest.cancel();
-                timerToRequest.start();
-            } else {
-                timerToRequest = new CountDownTimerToRequestUsernameAvailabilityCheck(1500, 1500);
-                timerToRequest.start();
+                    // Track the time elapsed the user is not typing using a countdown timer resetting
+                    // countdown every time the user types. When countdown ends, start checking for
+                    // username availability.
+                    if (timerToRequest != null) {
+                        timerToRequest.cancel();
+                        timerToRequest.start();
+                    } else {
+                        timerToRequest = new CountDownTimerToRequestUsernameAvailabilityCheck(1500, 1500);
+                        timerToRequest.start();
+                    }
+                }
             }
-        }
+        });
+
     }
 
     private class CountDownTimerToRequestUsernameAvailabilityCheck extends CountDownTimer {
@@ -146,37 +154,59 @@ public class SignupActivity extends BaseActivity {
 
         @Override
         public void onFinish() {
-            String username = String.valueOf(usernameBox.getText());
-            signupBackgroundTasker.checkUsernameAvailability(username);
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    String username = String.valueOf(usernameBox.getText());
+                    signupBackgroundTasker.checkUsernameAvailability(username);
+                }
+            });
         }
     }
 
     public void onUsernameIsAvailable() {
-        // Display a check mark and the text "Username is available". Hide inappropriate views.
-        usernameIsAvailable.setVisibility(View.VISIBLE);
-        usernameProgress.setVisibility(View.GONE);
-        usernameNotAvailable.setVisibility(View.GONE);
-        usernameAvailabilityTextView.setText(R.string.activity_signup_username_isavailable);
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // Display a check mark and the text "Username is available". Hide inappropriate views.
+                usernameIsAvailable.setVisibility(View.VISIBLE);
+                usernameProgress.setVisibility(View.GONE);
+                usernameNotAvailable.setVisibility(View.GONE);
+                usernameAvailabilityTextView.setText(R.string.activity_signup_username_isavailable);
+            }
+        });
     }
 
     public void onUsernameNotAvailable() {
-        // Display warning sign and the text "Username already exists" in red. Hide inappropriate
-        // views.
-        usernameNotAvailable.setVisibility(View.VISIBLE);
-        usernameProgress.setVisibility(View.GONE);
-        usernameIsAvailable.setVisibility(View.GONE);
-        int color = ContextCompat.getColor(this, R.color
-                .activity_signup_username_notavailable_textcolor);
-        usernameAvailabilityTextView.setTextColor(color);
-        usernameAvailabilityTextView.setText(R.string.activity_signup_username_already_exists);
+        runOnUiThread(new Runnable() {
+            public void run() {
+                // Display warning sign and the text "Username already exists" in red. Hide inappropriate
+                // views.
+                usernameNotAvailable.setVisibility(View.VISIBLE);
+                usernameProgress.setVisibility(View.GONE);
+                usernameIsAvailable.setVisibility(View.GONE);
+                int color = ContextCompat.getColor(SignupActivity.this, R.color
+                        .activity_signup_username_notavailable_textcolor);
+                usernameAvailabilityTextView.setTextColor(color);
+                usernameAvailabilityTextView.setText(R.string.activity_signup_username_already_exists);
+            }
+        });
     }
 
-    public void onPasswordBoxTextChanged(String text) {
-        validatePasswordAndUpdateView(text);
+    public void onPasswordBoxTextChanged(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                validatePasswordAndUpdateView(text);
+            }
+        });
     }
 
-    public void onConfirmPasswordBoxTextChanged(String text) {
-        confirmPasswordAndUpdateView(text);
+    public void onConfirmPasswordBoxTextChanged(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                confirmPasswordAndUpdateView(text);
+            }
+        });
     }
 
     private boolean validateUsernameAndUpdateView(String username) {
@@ -238,25 +268,30 @@ public class SignupActivity extends BaseActivity {
      * checked if they are valid before submitting.
      */
     public void onSubmit() {
-        String username;
-        String password;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                String username;
+                String password;
 
-        username = String.valueOf(usernameBox.getText());
-        boolean usernameIsValid;
-        if (usernameNotAvailable.getVisibility() == View.VISIBLE) {
-            usernameIsValid = false;
-        } else {
-            usernameIsValid = validateUsernameAndUpdateView(username);
-        }
+                username = String.valueOf(usernameBox.getText());
+                boolean usernameIsValid;
+                if (usernameNotAvailable.getVisibility() == View.VISIBLE) {
+                    usernameIsValid = false;
+                } else {
+                    usernameIsValid = validateUsernameAndUpdateView(username);
+                }
 
-        password = String.valueOf(passwordBox.getText());
-        boolean passwordIsValid = validatePasswordAndUpdateView(password);
+                password = String.valueOf(passwordBox.getText());
+                boolean passwordIsValid = validatePasswordAndUpdateView(password);
 
-        String confirmPasswordInput = String.valueOf(confirmPasswordBox.getText());
-        boolean passwordIsConfirmed = confirmPasswordAndUpdateView(confirmPasswordInput);
+                String confirmPasswordInput = String.valueOf(confirmPasswordBox.getText());
+                boolean passwordIsConfirmed = confirmPasswordAndUpdateView(confirmPasswordInput);
 
-        if (usernameIsValid && passwordIsValid && passwordIsConfirmed) {
-            signupBackgroundTasker.submitNewAccount(username, password);
-        }
+                if (usernameIsValid && passwordIsValid && passwordIsConfirmed) {
+                    signupBackgroundTasker.submitNewAccount(username, password);
+                }
+            }
+        });
     }
 }

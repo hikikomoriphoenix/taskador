@@ -12,4 +12,6 @@ public interface SplashBackgroundTasker extends BackgroundTasker<SplashActivity>
     void nextScreenTimerFinished();
 
     void nextScreen();
+
+    enum Action {SIGNUP}
 }

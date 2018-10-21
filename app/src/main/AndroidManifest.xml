@@ -45,5 +45,6 @@
         <service android:name=".background.MainInAppManager" />
         <service android:name=".background.LoginManager" />
         <service android:name=".background.SplashManager" />
+        <service android:name=".background.SignupManager" />
     </application>
 </manifest>

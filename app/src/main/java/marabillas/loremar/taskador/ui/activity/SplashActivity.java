@@ -3,6 +3,7 @@ package marabillas.loremar.taskador.ui.activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.widget.TextView;
 
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.R;
@@ -20,6 +21,7 @@ public class SplashActivity extends BaseActivity {
     private Bundle input;
     private SplashBackgroundTasker splashBackgroundTasker;
     private NextScreenTimer nextScreenTimer;
+    private TextView statusView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,9 +29,11 @@ public class SplashActivity extends BaseActivity {
 
         setContentView(R.layout.activity_splash);
 
+        statusView = findViewById(R.id.activity_splash_status_text);
+
         input = getIntent().getExtras();
-        String action = getIntent().getStringExtra("action");
-        if (action == null) {
+        int action = getIntent().getIntExtra("action", -1);
+        if (action == -1) {
             input = null;
             App.getInstance().setBackgroundTaskManagerSupport(true);
         }
@@ -74,6 +78,15 @@ public class SplashActivity extends BaseActivity {
         splashBackgroundTasker.bindClient(this);
 
         splashBackgroundTasker.startSplashBackground(input);
+    }
+
+    public void setStatusText(final String text) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                statusView.setText(text);
+            }
+        });
     }
 
     private class NextScreenTimer extends CountDownTimer {
