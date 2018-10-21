@@ -13,6 +13,9 @@ import marabillas.loremar.taskador.ui.activity.SplashActivity;
 
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
+/**
+ * Service that handles background tasks for splash screen.
+ */
 public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker, SignupTask.ResultHandler {
     private SplashActivity splashActivity;
     private Runnable nextScreen;
@@ -39,7 +42,10 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
+                // Identify the background task to perform using value from input with "action"
+                // key. If no task set, then attempt to log in.
                 if (input == null) {
+                    // Get current account to log in. If not set, proceed to login screen.
                     SharedPreferences prefs = getSharedPreferences("config", 0);
                     String currentAccountUsername = prefs.getString(ConfigKeys
                             .CURRENT_ACCOUNT_USERNAME, null);
@@ -56,14 +62,23 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         });
     }
 
+    /**
+     * Perform a signup task.
+     *
+     * @param input values needed for signup task.
+     */
     private void signup(final Bundle input) {
         getHandler().post(new Runnable() {
             @Override
             public void run() {
                 splashActivity.setStatusText(R.string.activity_splash_status_creating_new_account);
+
+                // Prepare values for signup task
                 String username = input.getString("username");
                 String password = input.getString("password");
                 SplashManager.this.username = username;
+
+                // Execute a network task requesting back-end to create new account
                 BackEndAPICallTasker.getInstance().signup(SplashManager.this, username, password);
             }
         });
@@ -91,7 +106,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             if (!showStatusFirst) {
                 getHandler().post(nextScreen);
             } else {
-                splashActivity.onShowStatus(statusTextResId);
+                splashActivity.onShowStatusFirst(statusTextResId);
             }
         }
     }
@@ -106,8 +121,11 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
+                // Set newly created account as current account.
                 SharedPreferences prefs = splashActivity.getSharedPreferences("config", 0);
                 prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
+
+                // Set to continue to in-app screen but show status first before continuing.
                 nextScreen = new InApp();
                 backgroundTaskFinished();
                 showSatusFirst(R.string.activity_splash_status_new_account_created);
@@ -146,6 +164,9 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         });
     }
 
+    /**
+     * Runnable to continue to login screen.
+     */
     private class Login implements Runnable {
         @Override
         public void run() {
@@ -153,6 +174,9 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         }
     }
 
+    /**
+     * Runnable to continue to in-app screen.
+     */
     private class InApp implements Runnable {
         @Override
         public void run() {

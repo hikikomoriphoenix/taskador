@@ -34,11 +34,16 @@ public class SplashActivity extends BaseActivity {
 
         statusView = findViewById(R.id.activity_splash_status_text);
 
+        // Get data passed into this activity. This data will determine what background task to
+        // perform on the splash screen. It also contains values necessary to perform the task.
         input = getIntent().getBundleExtra("input");
+        // When app is launched through this activity, set this app to support
+        // BackgroundTaskManager to perform background tasks for its activities.
         if (input == null) {
             App.getInstance().setBackgroundTaskManagerSupport(true);
         }
 
+        // Initiate timer. When countdown completes, allow to continue to next screen.
         int nextScreenTimerDuration = getResources().getInteger(R.integer
                 .activity_splash_nextscreentimer_duration);
         nextScreenTimer = new NextScreenTimer(nextScreenTimerDuration, nextScreenTimerDuration);
@@ -53,6 +58,7 @@ public class SplashActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        // Display bouncing dots to indicate ongoing process.
         dotsView = findViewById(R.id.waitingDotsView);
         // dots.animateContinuousWavesOfDots();
         dotsView.animateSingleWavesofDots();
@@ -89,13 +95,17 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
-    public void onShowStatus(final int statusTextResId) {
+    public void onShowStatusFirst(final int statusTextResId) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // Hide bouncing dots.
                 dotsView.stopAnimation();
                 dotsView.setVisibility(View.GONE);
+
                 setStatusText(statusTextResId);
+
+                // Show Continue button that allows continuing to next screen on click.
                 Button continueButton = findViewById(R.id.activity_splash_continue_button);
                 continueButton.setVisibility(View.VISIBLE);
                 continueButton.setOnClickListener(new View.OnClickListener() {
