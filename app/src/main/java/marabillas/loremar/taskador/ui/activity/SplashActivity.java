@@ -86,16 +86,16 @@ public class SplashActivity extends BaseActivity {
         splashBackgroundTasker.startSplashBackground(input);
     }
 
-    public void setStatusText(final int textResId) {
+    public void setStatusText(final String text) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                statusView.setText(textResId);
+                statusView.setText(text);
             }
         });
     }
 
-    public void onShowStatusFirst(final int statusTextResId) {
+    public void onShowStatusFirst(final String status) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -103,7 +103,7 @@ public class SplashActivity extends BaseActivity {
                 dotsView.stopAnimation();
                 dotsView.setVisibility(View.GONE);
 
-                setStatusText(statusTextResId);
+                setStatusText(status);
 
                 // Show Continue button that allows continuing to next screen on click.
                 Button continueButton = findViewById(R.id.activity_splash_continue_button);

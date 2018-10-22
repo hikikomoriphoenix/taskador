@@ -29,9 +29,9 @@ public interface SplashBackgroundTasker extends BackgroundTasker<SplashActivity>
     /**
      * Set screen to show status first before allowing to continue to next screen.
      *
-     * @param statusTextResId Resource ID of status.
+     * @param status text describing status of task.
      */
-    void showSatusFirst(int statusTextResId);
+    void showStatusFirst(String status);
 
     /**
      * Continue to next screen. Show status first if set so.

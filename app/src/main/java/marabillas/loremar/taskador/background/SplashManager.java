@@ -23,7 +23,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private boolean nextScreenTimerFinished;
     private boolean backgroundTaskFinished;
     private boolean showStatusFirst;
-    private int statusTextResId;
+    private String status;
 
     private String username;
 
@@ -71,7 +71,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                splashActivity.setStatusText(R.string.activity_splash_status_creating_new_account);
+                String text = getString(R.string.activity_splash_status_creating_new_account);
+                splashActivity.setStatusText(text);
 
                 // Prepare values for signup task
                 String username = input.getString("username");
@@ -95,9 +96,9 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     }
 
     @Override
-    public void showSatusFirst(int statusTextResId) {
+    public void showStatusFirst(String status) {
         showStatusFirst = true;
-        this.statusTextResId = statusTextResId;
+        this.status = status;
     }
 
     @Override
@@ -106,7 +107,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             if (!showStatusFirst) {
                 getHandler().post(nextScreen);
             } else {
-                splashActivity.onShowStatusFirst(statusTextResId);
+                splashActivity.onShowStatusFirst(status);
             }
         }
     }
@@ -128,7 +129,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 // Set to continue to in-app screen but show status first before continuing.
                 nextScreen = new InApp();
                 backgroundTaskFinished();
-                showSatusFirst(R.string.activity_splash_status_new_account_created);
+                String status = getString(R.string.activity_splash_status_new_account_created);
+                showStatusFirst(status);
                 nextScreen();
             }
         });
