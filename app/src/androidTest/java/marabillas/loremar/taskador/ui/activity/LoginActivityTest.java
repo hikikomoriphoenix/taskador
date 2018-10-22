@@ -31,6 +31,11 @@ public class LoginActivityTest {
             }
 
             @Override
+            public void switchToSignupScreen() {
+
+            }
+
+            @Override
             public void bindClient(LoginActivity client) {
                 activity = client;
             }

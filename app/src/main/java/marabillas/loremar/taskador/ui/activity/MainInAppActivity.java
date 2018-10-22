@@ -35,8 +35,6 @@ import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
 
-import static marabillas.loremar.taskador.utils.LogUtils.log;
-
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
  * finished tasks and also features listing of most frequently used words for tasks. These
@@ -65,6 +63,9 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     private View selectedItemView;
     private int selectedItemPosition;
+
+    private boolean isSwipingItem;
+    private boolean isScrollingPage;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -123,6 +124,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     public TopWordsFragment getTopWordsFragment() {
         return topWordsFragment;
+    }
+
+    public ViewPager getPager() {
+        return pager;
     }
 
     public View.OnClickListener getOnClickListener() {
@@ -251,6 +256,44 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     }
 
     /**
+     * Check if a list item in in-app's {@link android.support.v7.widget.RecyclerView} is being
+     * swiped.
+     *
+     * @return true or false.
+     */
+    public boolean isSwipingItem() {
+        return isSwipingItem;
+    }
+
+    /**
+     * Set wether a list item in in-app's {@link android.support.v7.widget.RecyclerView} is being
+     * swiped or not.
+     *
+     * @param isSwipingItem true or false.
+     */
+    public void setIsSwipingItem(boolean isSwipingItem) {
+        this.isSwipingItem = isSwipingItem;
+    }
+
+    /**
+     * Check if in-app's {@link ViewPager} is being scrolled.
+     *
+     * @return true or false.
+     */
+    public boolean isScrollingPage() {
+        return isScrollingPage;
+    }
+
+    /**
+     * Set wether in-app's {@link ViewPager} is being scrolled or not.
+     *
+     * @param isScrollingPage true or false.
+     */
+    public void setIsScrollingPage(boolean isScrollingPage) {
+        this.isScrollingPage = isScrollingPage;
+    }
+
+    /**
      * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
      * {@link android.support.v7.widget.RecyclerView} is touched. Since the {@link ViewPager}
      * containing these fragments steals any touch events with motion elements, this method is
@@ -263,7 +306,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      *                 touched
      */
     public void onListItemTouch(View v, MotionEvent event, int position) {
-        log("itemtouch");
         selectedItemView = v;
         selectedItemPosition = position;
 
@@ -279,6 +321,8 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         // Clear selection
         selectedItemPosition = -1;
         selectedItemView = null;
+
+        setIsSwipingItem(false);
     }
 
     /**

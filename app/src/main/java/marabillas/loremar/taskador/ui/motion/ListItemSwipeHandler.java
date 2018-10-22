@@ -72,6 +72,11 @@ public abstract class ListItemSwipeHandler {
                     float d = x1 - x0;
                     x0 = x1;
 
+                    // If in-app's ViewPager is being scrolled, do not swipe item.
+                    if (mainInAppActivity.isScrollingPage()) {
+                        return;
+                    }
+
                     // The item's view needs to move in the same amount of horizontal movement.
                     // Get the final position of the view.
                     float itemViewTranslation = v.getTranslationX();
@@ -82,12 +87,46 @@ public abstract class ListItemSwipeHandler {
                     if (startPosition == StartPosition.LEFT) {
                         if (targetItemViewTranslation < 0) {
                             v.setTranslationX(0);
+                            // Notify activity that item is no longer being swiped and that
+                            // ViewPager is being scrolled instead. When ViewPager is being
+                            // scrolled, list items are not allowed to be swiped until ViewPager
+                            // is already in the idle state after no longer being scrolled.
+                            mainInAppActivity.setIsSwipingItem(false);
+                            mainInAppActivity.setIsScrollingPage(true);
                             return;
+                        } else if (targetItemViewTranslation > 0) {
+                            // When a list item is set as being swiped, scrolling ViewPager is
+                            // disallowed. Do not set list item as being swiped when ViewPager is
+                            // being scrolled to avoid ViewPager being stuck while being
+                            // scrolled halfway.
+                            if (!mainInAppActivity.isScrollingPage()) {
+                                mainInAppActivity.setIsSwipingItem(true);
+                                // Prevent ViewPager from stealing touch events.
+                                mainInAppActivity.getPager().requestDisallowInterceptTouchEvent
+                                        (true);
+                            }
                         }
                     } else {
                         if (targetItemViewTranslation > 0) {
                             v.setTranslationX(0);
+                            // Notify activity that item is no longer being swiped and that
+                            // ViewPager is being scrolled instead. When ViewPager is being
+                            // scrolled, list items are not allowed to be swiped until ViewPager
+                            // is already in the idle state after no longer being scrolled.
+                            mainInAppActivity.setIsSwipingItem(false);
+                            mainInAppActivity.setIsScrollingPage(true);
                             return;
+                        } else if (targetItemViewTranslation < 0) {
+                            // When a list item is set as being swiped, scrolling ViewPager is
+                            // disallowed. Do not set list item as being swiped when ViewPager is
+                            // being scrolled to avoid ViewPager being stuck while being
+                            // scrolled halfway.
+                            if (!mainInAppActivity.isScrollingPage()) {
+                                mainInAppActivity.setIsSwipingItem(true);
+                                // Prevent ViewPager from stealing touch events
+                                mainInAppActivity.getPager().requestDisallowInterceptTouchEvent
+                                        (true);
+                            }
                         }
                     }
 
