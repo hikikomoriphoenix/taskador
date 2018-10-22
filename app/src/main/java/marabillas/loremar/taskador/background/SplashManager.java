@@ -7,15 +7,20 @@ import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
+import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
+import marabillas.loremar.taskador.utils.AccountUtils;
+
+import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;
+import static marabillas.loremar.taskador.utils.LogUtils.log;
 
 /**
  * Service that handles background tasks for splash screen.
  */
-public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker, SignupTask.ResultHandler {
+public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker, SignupTask.ResultHandler, VerifyTokenTask.ResultHandler {
     private SplashActivity splashActivity;
     private Runnable nextScreen;
 
@@ -48,11 +53,14 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                     SharedPreferences prefs = getSharedPreferences("config", 0);
                     String currentAccountUsername = prefs.getString(ConfigKeys
                             .CURRENT_ACCOUNT_USERNAME, null);
+                    username = currentAccountUsername;
 
                     if (currentAccountUsername == null) {
                         nextScreen = new Login();
                         backgroundTaskFinished();
                         nextScreen();
+                    } else {
+                        connect(currentAccountUsername);
                     }
                 } else if (input.getInt("action") == Action.SIGNUP.ordinal()) {
                     signup(input);
@@ -80,6 +88,25 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
 
                 // Execute a network task requesting back-end to create new account
                 BackEndAPICallTasker.getInstance().signup(SplashManager.this, username, password);
+            }
+        });
+    }
+
+    private void connect(final String username) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                String text = getString(R.string.activity_splash_status_connecting);
+                splashActivity.setStatusText(text);
+
+                String token = null;
+                try {
+                    token = getAuthToken(username);
+                } catch (AccountUtils.GetAuthTokenException e) {
+                    splashActivity.setStatusText(e.getMessage());
+                }
+
+                BackEndAPICallTasker.getInstance().verifyToken(SplashManager.this, username, token);
             }
         });
     }
@@ -174,6 +201,71 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         });
     }
 
+    @Override
+    public void tokenVerifiedCorrect(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                log("Logged in as " + username);
+                nextScreen = new InApp();
+                backgroundTaskFinished();
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void failedToRequestVerification(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Exit();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void tokenVerifiedNotCorrect(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Exit();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void backEndFailedToVerifyToken(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Exit();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void tokenVerificationIncomplete(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Exit();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
     /**
      * Runnable to continue to login screen.
      */
@@ -201,6 +293,17 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         @Override
         public void run() {
             splashActivity.switchScreen(SignupActivity.class, SplashManager.this, null);
+        }
+    }
+
+    /**
+     * Runnable to exit app.
+     */
+    private class Exit implements Runnable {
+        @Override
+        public void run() {
+            splashActivity.finish();
+            System.exit(0);
         }
     }
 }
