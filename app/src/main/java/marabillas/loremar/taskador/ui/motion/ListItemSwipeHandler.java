@@ -64,7 +64,6 @@ public abstract class ListItemSwipeHandler {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x0 = motionEvent.getRawX();
-                    v.clearAnimation();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     // Get horizontal movement and update initial position for next calculation

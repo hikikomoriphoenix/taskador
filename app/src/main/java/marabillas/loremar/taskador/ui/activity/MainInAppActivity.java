@@ -309,6 +309,9 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         selectedItemView = v;
         selectedItemPosition = position;
 
+        // Stop item when touched
+        selectedItemView.animate().cancel();
+
         // Mark the initial position of the touch
         listItemSwipeHandler.handleMotionEvent(v, event);
     }
