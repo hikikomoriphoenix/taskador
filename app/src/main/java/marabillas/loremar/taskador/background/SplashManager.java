@@ -9,9 +9,8 @@ import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.activity.SignupActivity;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
-
-import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
 /**
  * Service that handles background tasks for splash screen.
@@ -141,7 +140,10 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                logError(message);
+                nextScreen = new Signup();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
             }
         });
     }
@@ -151,7 +153,10 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                logError(message);
+                nextScreen = new Signup();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
             }
         });
     }
@@ -161,7 +166,10 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                logError(message);
+                nextScreen = new Signup();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
             }
         });
     }
@@ -183,6 +191,16 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         @Override
         public void run() {
             splashActivity.switchScreen(MainInAppActivity.class, SplashManager.this, null);
+        }
+    }
+
+    /**
+     * Runnable to continue to signup screen.
+     */
+    private class Signup implements Runnable {
+        @Override
+        public void run() {
+            splashActivity.switchScreen(SignupActivity.class, SplashManager.this, null);
         }
     }
 }
