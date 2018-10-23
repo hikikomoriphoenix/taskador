@@ -1,6 +1,5 @@
 package marabillas.loremar.taskador.ui.motion;
 
-import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -17,7 +16,6 @@ public abstract class ListItemSwipeHandler {
     private float x0;
     private StartPosition startPosition;
     private MainInAppActivity mainInAppActivity;
-    private NoSwipeTimer noSwipeTimer;
 
     /**
      * A list item's initial position indicating from which position the swipe motion starts from.
@@ -52,15 +50,6 @@ public abstract class ListItemSwipeHandler {
 
         @Override
         public void run() {
-            // Set up a countdown timer to track the time elapsed when there are no swipe-related
-            // events. When the timer completes its countdown, the list item is set released.
-            if (noSwipeTimer != null) {
-                noSwipeTimer.cancel();
-                noSwipeTimer.start();
-            } else {
-                noSwipeTimer = new NoSwipeTimer(500, 500, v);
-            }
-
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x0 = motionEvent.getRawX();
@@ -137,7 +126,6 @@ public abstract class ListItemSwipeHandler {
                 case MotionEvent.ACTION_UP:
                     finishSwipe(v);
                     break;
-
                 default:
                     if (v.getTranslationX() != 0) {
                         finishSwipe(v);
@@ -161,36 +149,6 @@ public abstract class ListItemSwipeHandler {
         ViewPropertyAnimator animator = itemView.animate();
         animator.setDuration(500);
         animator.translationX(0);
-    }
-
-    private class NoSwipeTimer extends CountDownTimer {
-        private View selectedItemView;
-
-        /**
-         * @param millisInFuture    The number of millis in the future from the call
-         *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
-         *                          is called.
-         * @param countDownInterval The interval along the way to receive
-         *                          {@link #onTick(long)} callbacks.
-         */
-        private NoSwipeTimer(long millisInFuture, long countDownInterval, View selectedItemView) {
-            super(millisInFuture, countDownInterval);
-            this.selectedItemView = selectedItemView;
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-        }
-
-        @Override
-        public void onFinish() {
-            mainInAppActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    finishSwipe(selectedItemView);
-                }
-            });
-        }
     }
 
     /**
