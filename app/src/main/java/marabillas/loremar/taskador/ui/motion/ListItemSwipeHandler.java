@@ -175,6 +175,10 @@ public abstract class ListItemSwipeHandler {
 
         @Override
         public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+            // Check if item is flung to mark. This allows the user to fling an item to marking
+            // position instead of just dragging the item towards it.
+            checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
+
             moveItemBackToOriginalPosition();
         }
 
