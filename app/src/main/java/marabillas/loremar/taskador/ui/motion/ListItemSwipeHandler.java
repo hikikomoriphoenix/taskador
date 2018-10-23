@@ -1,8 +1,12 @@
 package marabillas.loremar.taskador.ui.motion;
 
+import android.support.animation.DynamicAnimation;
+import android.support.animation.FlingAnimation;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+
+import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
@@ -14,6 +18,9 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  */
 public abstract class ListItemSwipeHandler {
     private float x0;
+    private long t0;
+    private float velocity;
+
     private StartPosition startPosition;
     private MainInAppActivity mainInAppActivity;
 
@@ -39,7 +46,7 @@ public abstract class ListItemSwipeHandler {
         mainInAppActivity.runOnUiThread(new HandleMotionEventRunnable(v, motionEvent));
     }
 
-    private class HandleMotionEventRunnable implements Runnable {
+    private class HandleMotionEventRunnable implements Runnable, DynamicAnimation.OnAnimationEndListener {
         private View v;
         private MotionEvent motionEvent;
 
@@ -53,12 +60,19 @@ public abstract class ListItemSwipeHandler {
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x0 = motionEvent.getRawX();
+                    t0 = System.nanoTime();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     // Get horizontal movement and update initial position for next calculation
                     float x1 = motionEvent.getRawX();
                     float d = x1 - x0;
                     x0 = x1;
+
+                    // Calculate velocity
+                    long t1 = System.nanoTime();
+                    long dt = t1 - t0;
+                    velocity = d / (float) dt;
+                    t0 = t1;
 
                     // If in-app's ViewPager is being scrolled, do not swipe item.
                     if (mainInAppActivity.isScrollingPage()) {
@@ -124,31 +138,51 @@ public abstract class ListItemSwipeHandler {
                     checkIfSwipedToMark(mainInAppActivity, targetItemViewTranslation);
                     break;
                 case MotionEvent.ACTION_UP:
-                    finishSwipe(v);
+                    if (v.getTranslationX() != 0) {
+                        finishSwipe();
+                    }
                     break;
                 default:
                     if (v.getTranslationX() != 0) {
-                        finishSwipe(v);
+                        finishSwipe();
                     }
             }
         }
-    }
 
-    /**
-     * If the item is not marked for action, the swipe motion is finished by moving the item to
-     * starting position and set it as released.
-     *
-     * @param v the selected item's view.
-     */
-    private void finishSwipe(View v) {
-        moveItemBackToOriginalPosition(v);
-        mainInAppActivity.onListItemRelease();
-    }
+        private void finishSwipe() {
+            // End the swipe motion with some fling animation. Limit animation to within the
+            // screen using setMinValue and setMaxValue.
+            int screenWidth = mainInAppActivity.getResources().getDisplayMetrics().widthPixels;
+            float velocityInPixelsPerSecond = velocity * TimeUnit.SECONDS.toNanos(1);
+            FlingAnimation flingAnimation = new FlingAnimation(v, DynamicAnimation.TRANSLATION_X)
+                    .setStartVelocity(velocityInPixelsPerSecond)
+                    .setMinValue(0)
+                    .setMaxValue((float) screenWidth);
 
-    private void moveItemBackToOriginalPosition(View itemView) {
-        ViewPropertyAnimator animator = itemView.animate();
-        animator.setDuration(500);
-        animator.translationX(0);
+            // If the item is set to move towards its original position, lessen the fling
+            // animation's friction.
+            boolean ifLeftStart = startPosition == StartPosition.LEFT;
+            boolean ifRightStart = startPosition == StartPosition.RIGHT;
+            if ((ifLeftStart && velocity <= 0) || (ifRightStart && velocity >= 0)) {
+                flingAnimation.setFriction(0.1f);
+            }
+
+            flingAnimation.addEndListener(this);
+            flingAnimation.start();
+
+            mainInAppActivity.onListItemRelease();
+        }
+
+        @Override
+        public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+            moveItemBackToOriginalPosition();
+        }
+
+        private void moveItemBackToOriginalPosition() {
+            ViewPropertyAnimator animator = v.animate();
+            animator.setDuration(500);
+            animator.translationX(0);
+        }
     }
 
     /**
