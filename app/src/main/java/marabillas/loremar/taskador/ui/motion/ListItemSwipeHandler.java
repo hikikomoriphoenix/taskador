@@ -110,21 +110,28 @@ public abstract class ListItemSwipeHandler {
             }
         }
 
+        /**
+         * End the swipe motion with some fling animation.
+         */
         private void finishSwipe() {
-            // End the swipe motion with some fling animation. Limit animation to within the
-            // screen using setMinValue and setMaxValue.
             int screenWidth = mainInAppActivity.getResources().getDisplayMetrics().widthPixels;
             float velocityInPixelsPerSecond = velocity * TimeUnit.SECONDS.toNanos(1);
             FlingAnimation flingAnimation = new FlingAnimation(v, DynamicAnimation.TRANSLATION_X)
-                    .setStartVelocity(velocityInPixelsPerSecond)
-                    .setMinValue(0)
-                    .setMaxValue((float) screenWidth);
+                    .setStartVelocity(velocityInPixelsPerSecond);
+
+            boolean startsLeft = startPosition == StartPosition.LEFT;
+            boolean startsRight = startPosition == StartPosition.RIGHT;
+
+            // Limit animation to within the screen using setMinValue and setMaxValue.
+            if (startsLeft) {
+                flingAnimation.setMinValue(0).setMaxValue((float) screenWidth);
+            } else {
+                flingAnimation.setMinValue(-((float) screenWidth)).setMaxValue(0);
+            }
 
             // If the item is set to move towards its original position, lessen the fling
             // animation's friction.
-            boolean ifLeftStart = startPosition == StartPosition.LEFT;
-            boolean ifRightStart = startPosition == StartPosition.RIGHT;
-            if ((ifLeftStart && velocity <= 0) || (ifRightStart && velocity >= 0)) {
+            if ((startsLeft && velocity <= 0) || (startsRight && velocity >= 0)) {
                 flingAnimation.setFriction(0.1f);
             }
 
