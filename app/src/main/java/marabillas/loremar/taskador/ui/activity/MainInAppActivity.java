@@ -28,14 +28,11 @@ import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.ui.listeners.AddTaskBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.AddTaskOnEditorActionListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppOnClickListener;
-import marabillas.loremar.taskador.ui.listeners.MainInAppOnTouchListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeListener;
 import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSelectedListener;
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
-
-import static marabillas.loremar.taskador.utils.LogUtils.log;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
@@ -83,7 +80,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         MainInappViewPagerAdapter adapter = new MainInappViewPagerAdapter(fm, fragments);
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new MainInAppViewPagerOnPageChangeListener(this));
-        pager.setOnTouchListener(new MainInAppOnTouchListener(this));
 
         contentView = findViewById(android.R.id.content);
         contentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -123,6 +119,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     public TopWordsFragment getTopWordsFragment() {
         return topWordsFragment;
+    }
+
+    public ViewPager getPager() {
+        return pager;
     }
 
     public View.OnClickListener getOnClickListener() {
@@ -246,37 +246,35 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         this.listItemSwipeHandler = listItemSwipeHandler;
     }
 
-    public ListItemSwipeHandler getListItemSwipeHandler() {
-        return listItemSwipeHandler;
-    }
-
     /**
-     * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
-     * {@link android.support.v7.widget.RecyclerView} is touched. Since the {@link ViewPager}
-     * containing these fragments steals any touch events with motion elements, this method is
-     * usually invoked when the user initially touches the item or is touching the item before
-     * any form of swipe motion.
+     * Invoked when a list item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} is touched.
      *
-     * @param v the list item view being touched
-     * @param event the touch event
-     * @param position the position of the item in the list corresponding to the item view being
-     *                 touched
+     * @param v        list item's view
+     * @param event    touch event of the list item's view
+     * @param position position of the item in the list
      */
     public void onListItemTouch(View v, MotionEvent event, int position) {
-        log("itemtouch");
-        selectedItemView = v;
-        selectedItemPosition = position;
+        //If no list item has been selected yet, select this item.
+        if (selectedItemView == null) {
+            selectedItemView = v;
+            selectedItemPosition = position;
+        }
 
-        // Mark the initial position of the touch
+        // This allows the selected item to get motion events that would otherwise be stolen by the
+        // ViewPager.
+        pager.requestDisallowInterceptTouchEvent(true);
+
+        // Stop item when touched
+        selectedItemView.animate().cancel();
+
         listItemSwipeHandler.handleMotionEvent(v, event);
     }
 
     /**
-     * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
-     * {@link android.support.v7.widget.RecyclerView} is released from being touched.
+     * Clear selection of list item.
      */
-    public void onListItemRelease() {
-        // Clear selection
+    public void onListItemClear() {
         selectedItemPosition = -1;
         selectedItemView = null;
     }

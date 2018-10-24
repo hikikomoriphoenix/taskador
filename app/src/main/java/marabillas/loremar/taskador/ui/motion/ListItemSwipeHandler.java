@@ -1,9 +1,12 @@
 package marabillas.loremar.taskador.ui.motion;
 
-import android.os.CountDownTimer;
+import android.support.animation.DynamicAnimation;
+import android.support.animation.FlingAnimation;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+
+import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
@@ -15,9 +18,11 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  */
 public abstract class ListItemSwipeHandler {
     private float x0;
+    private long t0;
+    private float velocity;
+
     private StartPosition startPosition;
     private MainInAppActivity mainInAppActivity;
-    private NoSwipeTimer noSwipeTimer;
 
     /**
      * A list item's initial position indicating from which position the swipe motion starts from.
@@ -30,18 +35,17 @@ public abstract class ListItemSwipeHandler {
     }
 
     /**
-     * Handles events on a list item related to swipe motion
+     * Handles events on a list item to produce swipe motion.
      *
      * @param v           the view of the selected or touched list item
-     * @param motionEvent the event caught by
-     *                    {@link marabillas.loremar.taskador.ui.listeners.MainInAppOnTouchListener} or the list
-     *                    item's view's {@link android.view.View.OnTouchListener}.
+     * @param motionEvent the event caught by the list item's view's
+     * {@link android.view.View.OnTouchListener}.
      */
     public void handleMotionEvent(View v, MotionEvent motionEvent) {
         mainInAppActivity.runOnUiThread(new HandleMotionEventRunnable(v, motionEvent));
     }
 
-    private class HandleMotionEventRunnable implements Runnable {
+    private class HandleMotionEventRunnable implements Runnable, DynamicAnimation.OnAnimationEndListener {
         private View v;
         private MotionEvent motionEvent;
 
@@ -52,25 +56,22 @@ public abstract class ListItemSwipeHandler {
 
         @Override
         public void run() {
-            // Set up a countdown timer to track the time elapsed when there are no swipe-related
-            // events. When the timer completes its countdown, the list item is set released.
-            if (noSwipeTimer != null) {
-                noSwipeTimer.cancel();
-                noSwipeTimer.start();
-            } else {
-                noSwipeTimer = new NoSwipeTimer(500, 500, v);
-            }
-
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     x0 = motionEvent.getRawX();
-                    v.clearAnimation();
+                    t0 = System.nanoTime();
                     break;
                 case MotionEvent.ACTION_MOVE:
                     // Get horizontal movement and update initial position for next calculation
                     float x1 = motionEvent.getRawX();
                     float d = x1 - x0;
                     x0 = x1;
+
+                    // Calculate velocity
+                    long t1 = System.nanoTime();
+                    long dt = t1 - t0;
+                    velocity = d / (float) dt;
+                    t0 = t1;
 
                     // The item's view needs to move in the same amount of horizontal movement.
                     // Get the final position of the view.
@@ -79,16 +80,17 @@ public abstract class ListItemSwipeHandler {
 
                     // If movement is towards the start position, make sure the item doesn't move
                     // past it.
-                    if (startPosition == StartPosition.LEFT) {
-                        if (targetItemViewTranslation < 0) {
-                            v.setTranslationX(0);
-                            return;
-                        }
-                    } else {
-                        if (targetItemViewTranslation > 0) {
-                            v.setTranslationX(0);
-                            return;
-                        }
+                    if (startPosition == StartPosition.LEFT && targetItemViewTranslation < 0) {
+                        v.setTranslationX(0);
+                        // Allow ViewPager to scroll right.
+                        mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
+                        return;
+                    } else if (startPosition == StartPosition.RIGHT && targetItemViewTranslation >
+                            0) {
+                        v.setTranslationX(0);
+                        // Allow ViewPager to scroll left.
+                        mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
+                        return;
                     }
 
                     // Move item to final position.
@@ -97,61 +99,61 @@ public abstract class ListItemSwipeHandler {
                     checkIfSwipedToMark(mainInAppActivity, targetItemViewTranslation);
                     break;
                 case MotionEvent.ACTION_UP:
-                    finishSwipe(v);
+                    if (v.getTranslationX() != 0) {
+                        finishSwipe();
+                    }
                     break;
-
                 default:
                     if (v.getTranslationX() != 0) {
-                        finishSwipe(v);
+                        finishSwipe();
                     }
             }
         }
-    }
-
-    /**
-     * If the item is not marked for action, the swipe motion is finished by moving the item to
-     * starting position and set it as released.
-     *
-     * @param v the selected item's view.
-     */
-    private void finishSwipe(View v) {
-        moveItemBackToOriginalPosition(v);
-        mainInAppActivity.onListItemRelease();
-    }
-
-    private void moveItemBackToOriginalPosition(View itemView) {
-        ViewPropertyAnimator animator = itemView.animate();
-        animator.setDuration(500);
-        animator.translationX(0);
-    }
-
-    private class NoSwipeTimer extends CountDownTimer {
-        private View selectedItemView;
 
         /**
-         * @param millisInFuture    The number of millis in the future from the call
-         *                          to {@link #start()} until the countdown is done and {@link #onFinish()}
-         *                          is called.
-         * @param countDownInterval The interval along the way to receive
-         *                          {@link #onTick(long)} callbacks.
+         * End the swipe motion with some fling animation.
          */
-        private NoSwipeTimer(long millisInFuture, long countDownInterval, View selectedItemView) {
-            super(millisInFuture, countDownInterval);
-            this.selectedItemView = selectedItemView;
+        private void finishSwipe() {
+            int screenWidth = mainInAppActivity.getResources().getDisplayMetrics().widthPixels;
+            float velocityInPixelsPerSecond = velocity * TimeUnit.SECONDS.toNanos(1);
+            FlingAnimation flingAnimation = new FlingAnimation(v, DynamicAnimation.TRANSLATION_X)
+                    .setStartVelocity(velocityInPixelsPerSecond);
+
+            boolean startsLeft = startPosition == StartPosition.LEFT;
+            boolean startsRight = startPosition == StartPosition.RIGHT;
+
+            // Limit animation to within the screen using setMinValue and setMaxValue.
+            if (startsLeft) {
+                flingAnimation.setMinValue(0).setMaxValue((float) screenWidth);
+            } else {
+                flingAnimation.setMinValue(-((float) screenWidth)).setMaxValue(0);
+            }
+
+            // If the item is set to move towards its original position, lessen the fling
+            // animation's friction.
+            if ((startsLeft && velocity <= 0) || (startsRight && velocity >= 0)) {
+                flingAnimation.setFriction(0.1f);
+            }
+
+            flingAnimation.addEndListener(this);
+            flingAnimation.start();
         }
 
         @Override
-        public void onTick(long millisUntilFinished) {
+        public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
+            // Check if item is flung to mark. This allows the user to fling an item to marking
+            // position instead of just dragging the item towards it.
+            checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
+
+            mainInAppActivity.onListItemClear();
+
+            moveItemBackToOriginalPosition();
         }
 
-        @Override
-        public void onFinish() {
-            mainInAppActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    finishSwipe(selectedItemView);
-                }
-            });
+        private void moveItemBackToOriginalPosition() {
+            ViewPropertyAnimator animator = v.animate();
+            animator.setDuration(500);
+            animator.translationX(0);
         }
     }
 
