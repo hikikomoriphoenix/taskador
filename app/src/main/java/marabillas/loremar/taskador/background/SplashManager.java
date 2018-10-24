@@ -6,6 +6,7 @@ import android.os.Bundle;
 import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
+import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
@@ -20,7 +21,7 @@ import static marabillas.loremar.taskador.utils.LogUtils.log;
 /**
  * Service that handles background tasks for splash screen.
  */
-public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker, SignupTask.ResultHandler, VerifyTokenTask.ResultHandler {
+public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker, SignupTask.ResultHandler, VerifyTokenTask.ResultHandler, LoginTask.ResultHandler {
     private SplashActivity splashActivity;
     private Runnable nextScreen;
 
@@ -64,6 +65,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                     }
                 } else if (input.getInt("action") == Action.SIGNUP.ordinal()) {
                     signup(input);
+                } else if (input.getInt("action") == Action.LOGIN.ordinal()) {
+                    login(input);
                 }
             }
         });
@@ -107,6 +110,22 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 }
 
                 BackEndAPICallTasker.getInstance().verifyToken(SplashManager.this, username, token);
+            }
+        });
+    }
+
+    private void login(final Bundle input) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                String text = getString(R.string.activity_splash_status_logging);
+                splashActivity.setStatusText(text);
+
+                String username = input.getString("username");
+                String password = input.getString("password");
+                SplashManager.this.username = username;
+
+                BackEndAPICallTasker.getInstance().login(SplashManager.this, username, password);
             }
         });
     }
@@ -259,6 +278,58 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 nextScreen = new Exit();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void loggedInSuccessfuly(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                log("Logged in as " + username);
+                nextScreen = new InApp();
+                backgroundTaskFinished();
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void failedToSubmitLogin(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Login();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void loginDenied(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Login();
+                backgroundTaskFinished();
+                showStatusFirst(message);
+                nextScreen();
+            }
+        });
+    }
+
+    @Override
+    public void loginTaskIncomplete(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                nextScreen = new Login();
                 backgroundTaskFinished();
                 showStatusFirst(message);
                 nextScreen();
