@@ -35,12 +35,11 @@ public abstract class ListItemSwipeHandler {
     }
 
     /**
-     * Handles events on a list item related to swipe motion
+     * Handles events on a list item to produce swipe motion.
      *
      * @param v           the view of the selected or touched list item
-     * @param motionEvent the event caught by
-     *                    {@link marabillas.loremar.taskador.ui.listeners.MainInAppOnTouchListener} or the list
-     *                    item's view's {@link android.view.View.OnTouchListener}.
+     * @param motionEvent the event caught by the list item's view's
+     * {@link android.view.View.OnTouchListener}.
      */
     public void handleMotionEvent(View v, MotionEvent motionEvent) {
         mainInAppActivity.runOnUiThread(new HandleMotionEventRunnable(v, motionEvent));
@@ -74,11 +73,6 @@ public abstract class ListItemSwipeHandler {
                     velocity = d / (float) dt;
                     t0 = t1;
 
-                    // If in-app's ViewPager is being scrolled, do not swipe item.
-                    if (mainInAppActivity.isScrollingPage()) {
-                        return;
-                    }
-
                     // The item's view needs to move in the same amount of horizontal movement.
                     // Get the final position of the view.
                     float itemViewTranslation = v.getTranslationX();
@@ -86,50 +80,17 @@ public abstract class ListItemSwipeHandler {
 
                     // If movement is towards the start position, make sure the item doesn't move
                     // past it.
-                    if (startPosition == StartPosition.LEFT) {
-                        if (targetItemViewTranslation < 0) {
-                            v.setTranslationX(0);
-                            // Notify activity that item is no longer being swiped and that
-                            // ViewPager is being scrolled instead. When ViewPager is being
-                            // scrolled, list items are not allowed to be swiped until ViewPager
-                            // is already in the idle state after no longer being scrolled.
-                            mainInAppActivity.setIsSwipingItem(false);
-                            mainInAppActivity.setIsScrollingPage(true);
-                            return;
-                        } else if (targetItemViewTranslation > 0) {
-                            // When a list item is set as being swiped, scrolling ViewPager is
-                            // disallowed. Do not set list item as being swiped when ViewPager is
-                            // being scrolled to avoid ViewPager being stuck while being
-                            // scrolled halfway.
-                            if (!mainInAppActivity.isScrollingPage()) {
-                                mainInAppActivity.setIsSwipingItem(true);
-                                // Prevent ViewPager from stealing touch events.
-                                mainInAppActivity.getPager().requestDisallowInterceptTouchEvent
-                                        (true);
-                            }
-                        }
-                    } else {
-                        if (targetItemViewTranslation > 0) {
-                            v.setTranslationX(0);
-                            // Notify activity that item is no longer being swiped and that
-                            // ViewPager is being scrolled instead. When ViewPager is being
-                            // scrolled, list items are not allowed to be swiped until ViewPager
-                            // is already in the idle state after no longer being scrolled.
-                            mainInAppActivity.setIsSwipingItem(false);
-                            mainInAppActivity.setIsScrollingPage(true);
-                            return;
-                        } else if (targetItemViewTranslation < 0) {
-                            // When a list item is set as being swiped, scrolling ViewPager is
-                            // disallowed. Do not set list item as being swiped when ViewPager is
-                            // being scrolled to avoid ViewPager being stuck while being
-                            // scrolled halfway.
-                            if (!mainInAppActivity.isScrollingPage()) {
-                                mainInAppActivity.setIsSwipingItem(true);
-                                // Prevent ViewPager from stealing touch events
-                                mainInAppActivity.getPager().requestDisallowInterceptTouchEvent
-                                        (true);
-                            }
-                        }
+                    if (startPosition == StartPosition.LEFT && targetItemViewTranslation < 0) {
+                        v.setTranslationX(0);
+                        // Allow ViewPager to scroll right.
+                        mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
+                        return;
+                    } else if (startPosition == StartPosition.RIGHT && targetItemViewTranslation >
+                            0) {
+                        v.setTranslationX(0);
+                        // Allow ViewPager to scroll left.
+                        mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
+                        return;
                     }
 
                     // Move item to final position.
@@ -169,8 +130,6 @@ public abstract class ListItemSwipeHandler {
 
             flingAnimation.addEndListener(this);
             flingAnimation.start();
-
-            mainInAppActivity.onListItemRelease();
         }
 
         @Override
@@ -178,6 +137,8 @@ public abstract class ListItemSwipeHandler {
             // Check if item is flung to mark. This allows the user to fling an item to marking
             // position instead of just dragging the item towards it.
             checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
+
+            mainInAppActivity.onListItemClear();
 
             moveItemBackToOriginalPosition();
         }

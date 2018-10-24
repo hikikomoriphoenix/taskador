@@ -36,10 +36,5 @@ public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageC
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        // When ViewPager is set as not being scrolled, then list items are then allowed to be
-        // swiped.
-        if (state == ViewPager.SCROLL_STATE_IDLE) {
-            mainInAppActivity.setIsScrollingPage(false);
-        }
     }
 }

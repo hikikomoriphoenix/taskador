@@ -28,7 +28,6 @@ import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.ui.listeners.AddTaskBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.AddTaskOnEditorActionListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppOnClickListener;
-import marabillas.loremar.taskador.ui.listeners.MainInAppOnTouchListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeListener;
 import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSelectedListener;
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
@@ -64,9 +63,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private View selectedItemView;
     private int selectedItemPosition;
 
-    private boolean isSwipingItem;
-    private boolean isScrollingPage;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,7 +80,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         MainInappViewPagerAdapter adapter = new MainInappViewPagerAdapter(fm, fragments);
         pager.setAdapter(adapter);
         pager.addOnPageChangeListener(new MainInAppViewPagerOnPageChangeListener(this));
-        pager.setOnTouchListener(new MainInAppOnTouchListener(this));
 
         contentView = findViewById(android.R.id.content);
         contentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -251,81 +246,37 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         this.listItemSwipeHandler = listItemSwipeHandler;
     }
 
-    public ListItemSwipeHandler getListItemSwipeHandler() {
-        return listItemSwipeHandler;
-    }
-
     /**
-     * Check if a list item in in-app's {@link android.support.v7.widget.RecyclerView} is being
-     * swiped.
+     * Invoked when a list item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} is touched.
      *
-     * @return true or false.
-     */
-    public boolean isSwipingItem() {
-        return isSwipingItem;
-    }
-
-    /**
-     * Set wether a list item in in-app's {@link android.support.v7.widget.RecyclerView} is being
-     * swiped or not.
-     *
-     * @param isSwipingItem true or false.
-     */
-    public void setIsSwipingItem(boolean isSwipingItem) {
-        this.isSwipingItem = isSwipingItem;
-    }
-
-    /**
-     * Check if in-app's {@link ViewPager} is being scrolled.
-     *
-     * @return true or false.
-     */
-    public boolean isScrollingPage() {
-        return isScrollingPage;
-    }
-
-    /**
-     * Set wether in-app's {@link ViewPager} is being scrolled or not.
-     *
-     * @param isScrollingPage true or false.
-     */
-    public void setIsScrollingPage(boolean isScrollingPage) {
-        this.isScrollingPage = isScrollingPage;
-    }
-
-    /**
-     * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
-     * {@link android.support.v7.widget.RecyclerView} is touched. Since the {@link ViewPager}
-     * containing these fragments steals any touch events with motion elements, this method is
-     * usually invoked when the user initially touches the item or is touching the item before
-     * any form of swipe motion.
-     *
-     * @param v the list item view being touched
-     * @param event the touch event
-     * @param position the position of the item in the list corresponding to the item view being
-     *                 touched
+     * @param v        list item's view
+     * @param event    touch event of the list item's view
+     * @param position position of the item in the list
      */
     public void onListItemTouch(View v, MotionEvent event, int position) {
-        selectedItemView = v;
-        selectedItemPosition = position;
+        //If no list item has been selected yet, select this item.
+        if (selectedItemView == null) {
+            selectedItemView = v;
+            selectedItemPosition = position;
+        }
+
+        // This allows the selected item to get motion events that would otherwise be stolen by the
+        // ViewPager.
+        pager.requestDisallowInterceptTouchEvent(true);
 
         // Stop item when touched
         selectedItemView.animate().cancel();
 
-        // Mark the initial position of the touch
         listItemSwipeHandler.handleMotionEvent(v, event);
     }
 
     /**
-     * Invoked when an item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
-     * {@link android.support.v7.widget.RecyclerView} is released from being touched.
+     * Clear selection of list item.
      */
-    public void onListItemRelease() {
-        // Clear selection
+    public void onListItemClear() {
         selectedItemPosition = -1;
         selectedItemView = null;
-
-        setIsSwipingItem(false);
     }
 
     /**
