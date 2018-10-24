@@ -60,6 +60,7 @@ public class SplashActivity extends BaseActivity {
 
         // Display bouncing dots to indicate ongoing process.
         dotsView = findViewById(R.id.waitingDotsView);
+        dotsView.setVisibility(View.VISIBLE);
         // dots.animateContinuousWavesOfDots();
         dotsView.animateSingleWavesofDots();
 
@@ -71,6 +72,7 @@ public class SplashActivity extends BaseActivity {
         super.onPause();
 
         dotsView.stopAnimation();
+        dotsView.setVisibility(View.INVISIBLE);
     }
 
     @Override
