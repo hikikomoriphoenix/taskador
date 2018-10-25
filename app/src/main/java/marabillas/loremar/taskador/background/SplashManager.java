@@ -104,14 +104,12 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 String text = getString(R.string.activity_splash_status_connecting);
                 splashActivity.setStatusText(text);
 
-                String token = null;
                 try {
-                    token = getAuthToken(username);
+                    String token = getAuthToken(username);
+                    BackEndAPICallTasker.getInstance().verifyToken(SplashManager.this, username, token);
                 } catch (AccountUtils.GetAuthTokenException e) {
-                    splashActivity.setStatusText(e.getMessage());
+                    onTaskCompleteProceedToShowStatusFirst(new Exit(), e.getMessage());
                 }
-
-                BackEndAPICallTasker.getInstance().verifyToken(SplashManager.this, username, token);
             }
         });
     }
