@@ -11,6 +11,7 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
+import marabillas.loremar.taskador.background.LoginManager;
 
 /**
  * This activity facilitates the Login screen. The screen is shown to the user when taskador can
@@ -41,6 +42,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     }
 
     @Override
+    public void onSetupBackgroundService() {
+        setupBackgroundService(LoginManager.class);
+    }
+
+    @Override
     public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
         loginBackgroundTasker = (LoginBackgroundTasker) backgroundTasker;
         loginBackgroundTasker.bindClient(this);
@@ -48,7 +54,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
-
+        loginBackgroundTasker = (LoginBackgroundTasker) backgroundTaskManager;
+        loginBackgroundTasker.bindClient(this);
     }
 
     @Override

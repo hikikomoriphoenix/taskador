@@ -21,6 +21,7 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
+import marabillas.loremar.taskador.background.MainInAppManager;
 import marabillas.loremar.taskador.ui.adapter.MainInappViewPagerAdapter;
 import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment;
@@ -93,6 +94,12 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         selectedItemView = null;
         selectedItemPosition = -1;
+    }
+
+    @Override
+    public void onSetupBackgroundService() {
+        pager.setCurrentItem(0);
+        setupBackgroundService(MainInAppManager.class);
     }
 
     @Override

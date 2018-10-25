@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 
 /**
@@ -37,6 +38,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         // Login screen when the user chooses to add an account from the device's account settings.
 
         final Intent intent = new Intent(context, LoginActivity.class);
+        App.getInstance().setBackgroundTaskManagerSupport(true);
 
         intent.putExtra(this.accountType, accountType);
         intent.putExtra(this.authTokenType, authTokenType);
