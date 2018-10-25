@@ -48,7 +48,7 @@ public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTas
     public void onStatusOK(String message, JSON data) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.wordsUpdateSuccessfully(message);
+            resultHandler.wordsUpdatedSuccessfully(message);
         }
     }
 
@@ -86,7 +86,7 @@ public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTas
         /**
          * Callback for successful words update
          */
-        void wordsUpdateSuccessfully(String message);
+        void wordsUpdatedSuccessfully(String message);
 
         /**
          * Callback method when {@link IOException} occur while sending POST request to the back-end server.

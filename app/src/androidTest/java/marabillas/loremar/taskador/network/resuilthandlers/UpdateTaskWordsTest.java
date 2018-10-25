@@ -4,7 +4,7 @@ import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 
 public class UpdateTaskWordsTest extends ResultHandlerTest implements UpdateTaskWordsTask.ResultHandler {
     @Override
-    public void wordsUpdateSuccessfully(String message) {
+    public void wordsUpdatedSuccessfully(String message) {
         handleSuccess(message);
     }
 

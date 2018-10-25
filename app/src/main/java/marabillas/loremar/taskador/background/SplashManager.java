@@ -8,6 +8,7 @@ import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
+import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
@@ -22,7 +23,7 @@ import static marabillas.loremar.taskador.utils.LogUtils.log;
  * Service that handles background tasks for splash screen.
  */
 public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker,
-        SignupTask.ResultHandler, VerifyTokenTask.ResultHandler, LoginTask.ResultHandler {
+        SignupTask.ResultHandler, VerifyTokenTask.ResultHandler, LoginTask.ResultHandler, UpdateTaskWordsTask.ResultHandler {
     private SplashActivity splashActivity;
     private Runnable nextScreen;
 
@@ -214,7 +215,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 log("Logged in as " + username);
-                onTaskCompleteProceedToNextScreen(new InApp());
+                updateWordsTableInAccount(new InApp(), new Exit());
             }
         });
     }
@@ -265,7 +266,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 log("Logged in as " + username);
-                onTaskCompleteProceedToNextScreen(new InApp());
+                updateWordsTableInAccount(new InApp(), new Login());
             }
         });
     }
@@ -300,6 +301,47 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         });
     }
 
+    @Override
+    public void wordsUpdatedSuccessfully(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                log("Words in account are updated.");
+                onTaskCompleteProceedToNextScreen(nextScreen);
+            }
+        });
+    }
+
+    @Override
+    public void failedUpdateTaskWordsRequest(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                onTaskCompleteProceedToShowStatusFirst(nextScreen, message);
+            }
+        });
+    }
+
+    @Override
+    public void backendUnableToUpdateTaskWords(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                onTaskCompleteProceedToShowStatusFirst(nextScreen, message);
+            }
+        });
+    }
+
+    @Override
+    public void updateTaskWordsTaskIncomplete(final String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                onTaskCompleteProceedToShowStatusFirst(nextScreen, message);
+            }
+        });
+    }
+
     private void onTaskCompleteProceedToShowStatusFirst(final Runnable nextScreen, final String
             status) {
         SplashManager.this.nextScreen = nextScreen;
@@ -312,6 +354,26 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         SplashManager.this.nextScreen = nextScreen;
         backgroundTaskFinished();
         nextScreen();
+    }
+
+    /**
+     * @param nextScreen    screen to go to after updating
+     * @param failureScreen screen to go to when unable to get auth token
+     */
+    private void updateWordsTableInAccount(Runnable nextScreen, Runnable failureScreen) {
+        try {
+            String token = getAuthToken(username);
+
+            String text = getString(R.string.activity_splash_status_updating);
+            splashActivity.setStatusText(text);
+
+            this.nextScreen = nextScreen;
+
+            BackEndAPICallTasker.getInstance().updateTaskWords(SplashManager.this, username,
+                    token);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            onTaskCompleteProceedToShowStatusFirst(failureScreen, e.getMessage());
+        }
     }
 
     /**
