@@ -21,7 +21,8 @@ import static marabillas.loremar.taskador.utils.LogUtils.log;
 /**
  * Service that handles background tasks for splash screen.
  */
-public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker, SignupTask.ResultHandler, VerifyTokenTask.ResultHandler, LoginTask.ResultHandler {
+public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker,
+        SignupTask.ResultHandler, VerifyTokenTask.ResultHandler, LoginTask.ResultHandler {
     private SplashActivity splashActivity;
     private Runnable nextScreen;
 
@@ -171,12 +172,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 SharedPreferences prefs = splashActivity.getSharedPreferences("config", 0);
                 prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
 
-                // Set to continue to in-app screen but show status first before continuing.
-                nextScreen = new InApp();
-                backgroundTaskFinished();
                 String status = getString(R.string.activity_splash_status_new_account_created);
-                showStatusFirst(status);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new InApp(), status);
             }
         });
     }
@@ -186,10 +183,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Signup();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Signup(), message);
             }
         });
     }
@@ -199,10 +193,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Signup();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Signup(), message);
             }
         });
     }
@@ -212,10 +203,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Signup();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Signup(), message);
             }
         });
     }
@@ -226,9 +214,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 log("Logged in as " + username);
-                nextScreen = new InApp();
-                backgroundTaskFinished();
-                nextScreen();
+                onTaskCompleteProceedToNextScreen(new InApp());
             }
         });
     }
@@ -238,10 +224,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Exit();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
             }
         });
     }
@@ -251,10 +234,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Exit();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
             }
         });
     }
@@ -264,10 +244,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Exit();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
             }
         });
     }
@@ -277,10 +254,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Exit();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
             }
         });
     }
@@ -291,9 +265,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 log("Logged in as " + username);
-                nextScreen = new InApp();
-                backgroundTaskFinished();
-                nextScreen();
+                onTaskCompleteProceedToNextScreen(new InApp());
             }
         });
     }
@@ -303,10 +275,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Login();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Login(), message);
             }
         });
     }
@@ -316,10 +285,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Login();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Login(), message);
             }
         });
     }
@@ -329,12 +295,23 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                nextScreen = new Login();
-                backgroundTaskFinished();
-                showStatusFirst(message);
-                nextScreen();
+                onTaskCompleteProceedToShowStatusFirst(new Login(), message);
             }
         });
+    }
+
+    private void onTaskCompleteProceedToShowStatusFirst(final Runnable nextScreen, final String
+            status) {
+        SplashManager.this.nextScreen = nextScreen;
+        backgroundTaskFinished();
+        showStatusFirst(status);
+        nextScreen();
+    }
+
+    private void onTaskCompleteProceedToNextScreen(final Runnable nextScreen) {
+        SplashManager.this.nextScreen = nextScreen;
+        backgroundTaskFinished();
+        nextScreen();
     }
 
     /**
