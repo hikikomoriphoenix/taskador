@@ -52,6 +52,24 @@ public class SplashActivityTest {
         activityTestRule.launchActivity(intent);
     }
 
+    @Test
+    public void testSignupUnavailableUsername() {
+        Intent intent = new Intent(App.getInstance(), SplashActivity.class);
+
+        Bundle input = new Bundle();
+        input.putInt("action", SplashBackgroundTasker.Action.SIGNUP.ordinal());
+        input.putString("username", "test1");
+        input.putString("password", "password");
+        intent.putExtra("input", input);
+
+        App.getInstance().setBackgroundTaskManagerSupport(true);
+
+        activityTestRule = new ActivityTestRule<>(SplashActivity.class);
+        activityTestRule.launchActivity(intent);
+
+        await();
+    }
+
     private void await() {
         CountDownLatch latch = new CountDownLatch(1);
         try {
