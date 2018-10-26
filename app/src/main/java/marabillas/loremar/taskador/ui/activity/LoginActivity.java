@@ -1,5 +1,7 @@
 package marabillas.loremar.taskador.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -64,9 +66,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             String username = String.valueOf(usernameBox.getText());
             String password = String.valueOf(passwordBox.getText());
 
-            loginBackgroundTasker.login(username, password);
+            // Make sure the user filled all the required fields. Notify if otherwise.
+            if (username.isEmpty() || password.isEmpty()) {
+                notifyUserToFillInAllFields();
+            } else {
+                loginBackgroundTasker.login(username, password);
+            }
         } else if (v == createNewAccount) {
             loginBackgroundTasker.switchToSignupScreen();
         }
+    }
+
+    private void notifyUserToFillInAllFields() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialog.Builder(LoginActivity.this)
+                        .setTitle(R.string.activity_login_noinputwarning_title)
+                        .setMessage(R.string.activity_login_noinputwarning_message)
+                        .setPositiveButton(R.string.activity_login_noinputwarning_ok, new
+                                DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                })
+                        .create()
+                        .show();
+            }
+        });
     }
 }
