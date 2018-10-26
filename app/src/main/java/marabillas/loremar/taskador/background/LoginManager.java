@@ -7,6 +7,9 @@ import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
 
+/**
+ * Service that handles background tasks for login screen.
+ */
 public class LoginManager extends BackgroundTaskManager implements LoginBackgroundTasker {
     private LoginActivity loginActivity;
 

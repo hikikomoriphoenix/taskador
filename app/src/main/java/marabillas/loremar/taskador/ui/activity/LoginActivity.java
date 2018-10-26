@@ -10,16 +10,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.account.DirectLogin;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
 import marabillas.loremar.taskador.background.LoginManager;
 
 /**
- * This activity facilitates the Login screen. The screen is shown to the user when taskador can
- * not authenticate the user. The user have to log in with his/her username and password. The
- * server then returns an auth token which will be used for the user's account authentication.
- * The screen also provides sign up option if he/she doesn't have an account yet.
+ * Activity facilitating login screen. The login screen is shown when:
+ * 1. No account is set to be used for automatic login when launching app. This occurs when user
+ * logged out or has not yet logged in once.
+ * 2. No auth token available to authenticate account and that {@link DirectLogin} used
+ * automatically for logging in using saved password, has also failed.
+ * 3. Auth token verification from back-end returns false either because auth token has expired or
+ * is incorrect, and that {@link DirectLogin} also failed using saved password.
+ * 4. User has just logged out.
+ * 5. User chooses to add account to taskador from the device through the settings or Account
+ * Manager.
+ *
+ * You can also click 'Create New Account' at the bottom to go to signup screen to register a new
+ * taskador account.
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
     private LoginBackgroundTasker loginBackgroundTasker;
