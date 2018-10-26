@@ -1,5 +1,6 @@
 package marabillas.loremar.taskador.ui.activity;
 
+import android.content.Intent;
 import android.support.test.rule.ActivityTestRule;
 
 import org.junit.Assert;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
 
 import static marabillas.loremar.taskador.utils.LogUtils.log;
@@ -48,6 +50,19 @@ public class LoginActivityTest {
 
         loginActivity.setBackgroundTasker(new LoginBackgroundTaskerTest());
 
+        await();
+    }
+
+    @Test
+    public void testWithLoginManager() {
+        App.getInstance().setBackgroundTaskManagerSupport(true);
+        activityTestRule.launchActivity(new Intent(activityTestRule.getActivity(), LoginActivity
+                .class));
+
+        await();
+    }
+
+    private void await() {
         CountDownLatch latch = new CountDownLatch(1);
         try {
             latch.await(1, TimeUnit.MINUTES);

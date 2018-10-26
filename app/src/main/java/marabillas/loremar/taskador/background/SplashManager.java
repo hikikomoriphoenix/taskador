@@ -264,6 +264,12 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 log("Logged in as " + username);
+
+                // Set the newly logged in account as the current account of this app. When the
+                // app is launched, it will automatically log in to this account.
+                SharedPreferences prefs = splashActivity.getSharedPreferences("config", 0);
+                prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
+
                 updateWordsTableInAccount(new InApp(), new Login());
             }
         });

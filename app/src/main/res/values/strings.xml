@@ -35,6 +35,10 @@
     <string name="activity_login_password_box_hint">Enter password</string>
     <string name="activity_login_login_button">Login</string>
     <string name="activity_login_signup_link"><u>Create New Account?</u></string>
+    <string name="activity_login_noinputwarning_title">WARNING!</string>
+    <string name="activity_login_noinputwarning_message">Username and Password can not be
+        empty</string>
+    <string name="activity_login_noinputwarning_ok">OK</string>
 
     <string name="activity_maininapp_helptool"><u>Help</u></string>
     <string name="fragment_todotasks_header">To-Do Tasks</string>
