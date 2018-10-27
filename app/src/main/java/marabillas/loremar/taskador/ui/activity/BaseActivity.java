@@ -47,12 +47,9 @@ public abstract class BaseActivity extends Activity implements BackgroundService
      *
      * @param activityClass         class of the target activity.
      * @param backgroundTaskManager this activity's background service that needs to stop
-     * @param clearHistory          Set true to clear stack history for activities, allowing to
-     *                              exit app with back button. Set false otherwise.
      */
     public void switchScreen(@NonNull Class<? extends Activity> activityClass, @NonNull
-            BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input, boolean
-                                     clearHistory) {
+            BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
         // Prepare intent
         Intent intent = new Intent(this, activityClass);
         if (input != null) {
@@ -61,9 +58,7 @@ public abstract class BaseActivity extends Activity implements BackgroundService
 
         // Clear stack history for activities upon starting new activity. This allows to exit app
         // with back button.
-        if (clearHistory) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
         // Switch activity and stop old service
         startActivity(intent);
