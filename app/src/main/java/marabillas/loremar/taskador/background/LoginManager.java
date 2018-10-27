@@ -1,6 +1,5 @@
 package marabillas.loremar.taskador.background;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
@@ -24,10 +23,7 @@ public class LoginManager extends BackgroundTaskManager implements LoginBackgrou
                 input.putInt("action", SplashBackgroundTasker.Action.LOGIN.ordinal());
                 input.putString("username", username);
                 input.putString("password", password);
-
-                Intent intent = new Intent(loginActivity, SplashActivity.class);
-                intent.putExtra("input", input);
-                loginActivity.startActivity(intent);
+                loginActivity.switchScreen(SplashActivity.class, LoginManager.this, input, true);
             }
         });
     }
