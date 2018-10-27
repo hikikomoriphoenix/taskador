@@ -294,4 +294,13 @@ public class SignupActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        // Stop SignupManager service when going back to login screen.
+        if (signupBackgroundTasker instanceof SignupManager) {
+            ((SignupManager) signupBackgroundTasker).stopSelf();
+        }
+        super.onBackPressed();
+    }
 }
