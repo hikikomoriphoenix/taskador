@@ -26,9 +26,11 @@ public abstract class BackgroundTaskManager extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        HandlerThread thread = new HandlerThread("BackgroundThread");
-        thread.start();
-        handler = new Handler(thread.getLooper());
+        if (handler == null) {
+            HandlerThread thread = new HandlerThread("BackgroundThread");
+            thread.start();
+            handler = new Handler(thread.getLooper());
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }
