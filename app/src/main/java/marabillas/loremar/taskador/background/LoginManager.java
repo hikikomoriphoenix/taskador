@@ -23,14 +23,14 @@ public class LoginManager extends BackgroundTaskManager implements LoginBackgrou
                 input.putInt("action", SplashBackgroundTasker.Action.LOGIN.ordinal());
                 input.putString("username", username);
                 input.putString("password", password);
-                loginActivity.switchScreen(SplashActivity.class, LoginManager.this, input, true);
+                loginActivity.switchScreen(SplashActivity.class, LoginManager.this, input);
             }
         });
     }
 
     @Override
     public void switchToSignupScreen() {
-        loginActivity.switchScreen(SignupActivity.class, this, null, false);
+        loginActivity.switchScreen(SignupActivity.class, this, null);
     }
 
     @Override

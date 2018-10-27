@@ -396,7 +396,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class Login implements Runnable {
         @Override
         public void run() {
-            splashActivity.switchScreen(LoginActivity.class, SplashManager.this, null, true);
+            splashActivity.switchScreen(LoginActivity.class, SplashManager.this, null);
         }
     }
 
@@ -406,7 +406,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class InApp implements Runnable {
         @Override
         public void run() {
-            splashActivity.switchScreen(MainInAppActivity.class, SplashManager.this, null, true);
+            splashActivity.switchScreen(MainInAppActivity.class, SplashManager.this, null);
         }
     }
 
@@ -416,7 +416,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class Signup implements Runnable {
         @Override
         public void run() {
-            splashActivity.switchScreen(SignupActivity.class, SplashManager.this, null, true);
+            splashActivity.switchScreen(SignupActivity.class, SplashManager.this, null);
         }
     }
 
