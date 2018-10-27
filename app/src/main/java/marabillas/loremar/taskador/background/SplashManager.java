@@ -1,5 +1,7 @@
 package marabillas.loremar.taskador.background;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -223,7 +225,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
+                onTaskCompleteProceedToShowStatusFirst(new Login(), message);
             }
         });
     }
@@ -233,7 +235,15 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
+                // Try to automatically login using a stored password.
+                AccountManager am = AccountManager.get(splashActivity);
+                String password = am.getPassword(new Account(username, getPackageName()));
+                if (password != null && !password.isEmpty()) {
+                    BackEndAPICallTasker.getInstance().login(SplashManager.this, username,
+                            password);
+                } else {
+                    onTaskCompleteProceedToShowStatusFirst(new Login(), message);
+                }
             }
         });
     }
@@ -243,7 +253,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
+                onTaskCompleteProceedToShowStatusFirst(new Login(), message);
             }
         });
     }
@@ -253,7 +263,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                onTaskCompleteProceedToShowStatusFirst(new Exit(), message);
+                onTaskCompleteProceedToShowStatusFirst(new Login(), message);
             }
         });
     }
