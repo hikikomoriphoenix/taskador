@@ -31,15 +31,7 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("token", token);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedSetExcludedRequest(e.getMessage());
-            }
-        }
+        postForm(form);
     }
 
     @Override
@@ -63,6 +55,14 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backendUnableToGiveExcludedWords(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedSetExcludedRequest(message);
         }
     }
 

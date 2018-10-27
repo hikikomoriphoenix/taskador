@@ -46,15 +46,7 @@ public class VerifyTokenTask extends ReauthenticatingTask<VerifyTokenTask.Result
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("token", token);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedToRequestVerification(e.getMessage());
-            }
-        }
+        postForm(form);
 
     }
 
@@ -79,6 +71,14 @@ public class VerifyTokenTask extends ReauthenticatingTask<VerifyTokenTask.Result
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backEndFailedToVerifyToken(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedToRequestVerification(message);
         }
     }
 

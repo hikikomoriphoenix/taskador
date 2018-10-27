@@ -38,15 +38,7 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("password", password);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedToSubmitLogin(e.getMessage());
-            }
-        }
+        postForm(form);
     }
 
     @Override
@@ -79,6 +71,14 @@ public class LoginTask extends RunnableTask<LoginTask.ResultHandler> {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.loginDenied(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedToSubmitLogin(message);
         }
     }
 

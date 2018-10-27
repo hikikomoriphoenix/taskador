@@ -39,15 +39,7 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("password", password);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedToSubmitNewAccount(e.getMessage());
-            }
-        }
+        postForm(form);
     }
 
     @Override
@@ -80,6 +72,14 @@ public class SignupTask extends RunnableTask<SignupTask.ResultHandler> {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backEndUnableToSaveNewAccount(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedToSubmitNewAccount(message);
         }
     }
 

@@ -21,6 +21,11 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     private WeakReference<RH> resultHandlerReference;
 
     /**
+     * Invoked when {@link IOException} is encountered while sending request to back-end.
+     */
+    public abstract void failedRequest(String message);
+
+    /**
      * Called when {@link InterruptedException} or
      * {@link java.util.concurrent.ExecutionException} is encountered.
      */
@@ -79,26 +84,36 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
      * Execute a basic POST request
      *
      * @param form a form to send along with the request
-     * @throws IOException when request fails
      */
-    void postForm(Map<String, String> form) throws IOException {
-        BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
-        HttpClient httpClient = tasker.getHttpClient();
-        BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
-        saveResult(backEndResponse);
+    void postForm(Map<String, String> form) {
+        BackEndAPICallTasker tasker = null;
+        try {
+            tasker = BackEndAPICallTasker.getInstance();
+            HttpClient httpClient = tasker.getHttpClient();
+            BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
+            saveResult(backEndResponse);
+        } catch (IOException e) {
+            failedRequest(e.getMessage());
+            tasker.cancelTask();
+        }
     }
 
     /**
      * Execute a POST request with JSON data
      *
      * @param json string representing a JSON data
-     * @throws IOException when request fails
      */
-    void postJSON(String json) throws IOException {
-        BackEndAPICallTasker taskser = BackEndAPICallTasker.getInstance();
-        HttpClient httpClient = taskser.getHttpClient();
-        BackEndResponse backEndResponse = httpClient.postJSON(json, getRequestUrl());
-        saveResult(backEndResponse);
+    void postJSON(String json) {
+        BackEndAPICallTasker tasker = null;
+        try {
+            tasker = BackEndAPICallTasker.getInstance();
+            HttpClient httpClient = tasker.getHttpClient();
+            BackEndResponse backEndResponse = httpClient.postJSON(json, getRequestUrl());
+            saveResult(backEndResponse);
+        } catch (IOException e) {
+            failedRequest(e.getMessage());
+            tasker.cancelTask();
+        }
     }
 
     /**

@@ -57,11 +57,7 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
             if (resultHandler != null) {
                 resultHandler.finishTasksTaskFailedToPrepareJSONData(e.getMessage());
             }
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedFinishTasksRequest(e.getMessage());
-            }
+            BackEndAPICallTasker.getInstance().cancelTask();
         }
     }
 
@@ -93,6 +89,14 @@ public class FinishTasksTask extends ReauthenticatingTask<FinishTasksTask.Result
     public void onReauthenticationComplete(String newToken) {
         BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
         tasker.finishTasks(getResultHandler(), username, newToken, idTaskEntries);
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedFinishTasksRequest(message);
+        }
     }
 
     @Override

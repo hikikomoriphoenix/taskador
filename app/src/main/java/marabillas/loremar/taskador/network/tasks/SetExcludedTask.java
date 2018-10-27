@@ -58,13 +58,8 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
             if (resultHandler != null) {
                 resultHandler.setExcludedFailedToPrepareJSONData(e.getMessage());
             }
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedSetExcludedRequest(e.getMessage());
-            }
+            BackEndAPICallTasker.getInstance().cancelTask();
         }
-
     }
 
     @Override
@@ -88,6 +83,14 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backendUnableUnableToExclude(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedSetExcludedRequest(message);
         }
     }
 

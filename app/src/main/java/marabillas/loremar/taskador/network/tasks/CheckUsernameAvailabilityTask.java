@@ -27,15 +27,7 @@ public class CheckUsernameAvailabilityTask extends RunnableTask<CheckUsernameAva
     public void run() {
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedUsernameAvailabilityCheckRequest(e.getMessage());
-            }
-        }
+        postForm(form);
     }
 
     @Override
@@ -59,6 +51,14 @@ public class CheckUsernameAvailabilityTask extends RunnableTask<CheckUsernameAva
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.BackendFailedToCheckUsernameAbility(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedUsernameAvailabilityCheckRequest(message);
         }
     }
 
