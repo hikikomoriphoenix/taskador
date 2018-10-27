@@ -8,6 +8,8 @@ import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.BackEndResponse;
 import marabillas.loremar.taskador.network.HttpClient;
 
+import static marabillas.loremar.taskador.utils.NetworkUtils.checkNetworkConnection;
+
 /**
  * Base class for all network-related tasks which involves sending request to the back-end server,
  * and receiving response and passing it to another class for handling.
@@ -93,7 +95,15 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
             BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
             saveResult(backEndResponse);
         } catch (IOException e) {
-            failedRequest(e.getMessage());
+            // Check if IOException is due to lack of network connection.
+            boolean connected = checkNetworkConnection();
+
+            if (!connected) {
+                failedRequest(ResultHandler.NO_INTERNET_CONNECTION);
+            } else {
+                failedRequest(e.getMessage());
+            }
+
             tasker.cancelTask();
         }
     }
@@ -120,5 +130,6 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
      * A callback interface to handle this task's results.
      */
     interface ResultHandler {
+        String NO_INTERNET_CONNECTION = "No Internet Connection.";
     }
 }
