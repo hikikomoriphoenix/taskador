@@ -49,11 +49,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
             if (resultHandler != null) {
                 resultHandler.addTasksTaskFailedToPrepareJSONData(e.getMessage());
             }
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedAddTasksRequest(e.getMessage());
-            }
+            BackEndAPICallTasker.getInstance().cancelTask();
         }
     }
 
@@ -78,6 +74,14 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backendUnableToAddTasks(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedAddTasksRequest(message);
         }
     }
 

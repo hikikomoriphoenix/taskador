@@ -33,15 +33,7 @@ public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTas
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("token", token);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedUpdateTaskWordsRequest(e.getMessage());
-            }
-        }
+        postForm(form);
     }
 
     @Override
@@ -65,6 +57,14 @@ public class UpdateTaskWordsTask extends ReauthenticatingTask<UpdateTaskWordsTas
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backendUnableToUpdateTaskWords(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedUpdateTaskWordsRequest(message);
         }
     }
 

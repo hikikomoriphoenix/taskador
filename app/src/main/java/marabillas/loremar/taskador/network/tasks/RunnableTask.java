@@ -8,6 +8,8 @@ import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.BackEndResponse;
 import marabillas.loremar.taskador.network.HttpClient;
 
+import static marabillas.loremar.taskador.utils.NetworkUtils.checkNetworkConnection;
+
 /**
  * Base class for all network-related tasks which involves sending request to the back-end server,
  * and receiving response and passing it to another class for handling.
@@ -19,6 +21,11 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     private BackEndResponse response;
     private String requestUrl;
     private WeakReference<RH> resultHandlerReference;
+
+    /**
+     * Invoked when {@link IOException} is encountered while sending request to back-end.
+     */
+    public abstract void failedRequest(String message);
 
     /**
      * Called when {@link InterruptedException} or
@@ -79,31 +86,50 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
      * Execute a basic POST request
      *
      * @param form a form to send along with the request
-     * @throws IOException when request fails
      */
-    void postForm(Map<String, String> form) throws IOException {
-        BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
-        HttpClient httpClient = tasker.getHttpClient();
-        BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
-        saveResult(backEndResponse);
+    void postForm(Map<String, String> form) {
+        BackEndAPICallTasker tasker = null;
+        try {
+            tasker = BackEndAPICallTasker.getInstance();
+            HttpClient httpClient = tasker.getHttpClient();
+            BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
+            saveResult(backEndResponse);
+        } catch (IOException e) {
+            // Check if IOException is due to lack of network connection.
+            boolean connected = checkNetworkConnection();
+
+            if (!connected) {
+                failedRequest(ResultHandler.NO_INTERNET_CONNECTION);
+            } else {
+                failedRequest(e.getMessage());
+            }
+
+            tasker.cancelTask();
+        }
     }
 
     /**
      * Execute a POST request with JSON data
      *
      * @param json string representing a JSON data
-     * @throws IOException when request fails
      */
-    void postJSON(String json) throws IOException {
-        BackEndAPICallTasker taskser = BackEndAPICallTasker.getInstance();
-        HttpClient httpClient = taskser.getHttpClient();
-        BackEndResponse backEndResponse = httpClient.postJSON(json, getRequestUrl());
-        saveResult(backEndResponse);
+    void postJSON(String json) {
+        BackEndAPICallTasker tasker = null;
+        try {
+            tasker = BackEndAPICallTasker.getInstance();
+            HttpClient httpClient = tasker.getHttpClient();
+            BackEndResponse backEndResponse = httpClient.postJSON(json, getRequestUrl());
+            saveResult(backEndResponse);
+        } catch (IOException e) {
+            failedRequest(e.getMessage());
+            tasker.cancelTask();
+        }
     }
 
     /**
      * A callback interface to handle this task's results.
      */
     interface ResultHandler {
+        String NO_INTERNET_CONNECTION = "No Internet Connection.";
     }
 }

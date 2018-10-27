@@ -47,11 +47,7 @@ public class GetTopWordsTask extends ReauthenticatingTask<GetTopWordsTask.Result
             if (resultHandler != null) {
                 resultHandler.getTopWordsTaskFailedToPrepareJSONData(e.getMessage());
             }
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedGetTopWordsRequest(e.getMessage());
-            }
+            BackEndAPICallTasker.getInstance().cancelTask();
         }
     }
 
@@ -76,6 +72,14 @@ public class GetTopWordsTask extends ReauthenticatingTask<GetTopWordsTask.Result
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backendUnableToGetTopWords(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedGetTopWordsRequest(message);
         }
     }
 

@@ -31,15 +31,7 @@ public class GetFinishedTasksTask extends ReauthenticatingTask<GetFinishedTasksT
         HashMap<String, String> form = new HashMap<>();
         form.put("username", username);
         form.put("token", token);
-
-        try {
-            postForm(form);
-        } catch (IOException e) {
-            ResultHandler resultHandler = getResultHandler();
-            if (resultHandler != null) {
-                resultHandler.failedGetFinishedTasksRequest(e.getMessage());
-            }
-        }
+        postForm(form);
     }
 
     @Override
@@ -63,6 +55,14 @@ public class GetFinishedTasksTask extends ReauthenticatingTask<GetFinishedTasksT
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
             resultHandler.backendUnableToGiveFinishedTasks(message);
+        }
+    }
+
+    @Override
+    public void failedRequest(String message) {
+        ResultHandler resultHandler = getResultHandler();
+        if (resultHandler != null) {
+            resultHandler.failedGetFinishedTasksRequest(message);
         }
     }
 
