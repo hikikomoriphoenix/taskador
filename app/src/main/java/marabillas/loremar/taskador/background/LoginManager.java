@@ -34,7 +34,7 @@ public class LoginManager extends BackgroundTaskManager implements LoginBackgrou
 
     @Override
     public void switchToSignupScreen() {
-        loginActivity.switchScreen(SignupActivity.class, this, null);
+        loginActivity.switchScreen(SignupActivity.class, this, null, false);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class SignupManager extends BackgroundTaskManager implements SignupBackgr
         input.putInt("action", SplashBackgroundTasker.Action.SIGNUP.ordinal());
         input.putString("username", username);
         input.putString("password", password);
-        signupActivity.switchScreen(SplashActivity.class, this, input);
+        signupActivity.switchScreen(SplashActivity.class, this, input, true);
     }
 
     @Override
