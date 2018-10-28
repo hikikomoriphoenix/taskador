@@ -36,20 +36,25 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void bindClient(MainInAppActivity client) {
         mainInAppActivity = client;
 
-        // Get current account and its associated token.
-        SharedPreferences prefs = mainInAppActivity.getSharedPreferences("config", 0);
-        username = prefs.getString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null);
-        if (username != null) {
-            try {
-                token = getAuthToken(username);
-            } catch (AccountUtils.GetAuthTokenException e) {
-                logError(e.getMessage());
-                promptErrorAndLogout("Unable to get authorization token.");
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                // Get current account and its associated token.
+                SharedPreferences prefs = mainInAppActivity.getSharedPreferences("config", 0);
+                username = prefs.getString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null);
+                if (username != null) {
+                    try {
+                        token = getAuthToken(username);
+                    } catch (AccountUtils.GetAuthTokenException e) {
+                        logError(e.getMessage());
+                        promptErrorAndLogout("Unable to get authorization token.");
+                    }
+                } else {
+                    logError("Current account username is null.");
+                    promptErrorAndLogout("Unable to get current account username.");
+                }
             }
-        } else {
-            logError("Current account username is null.");
-            promptErrorAndLogout("Unable to get current account username.");
-        }
+        });
 
         tasksToAdd = new ArrayList<>();
     }

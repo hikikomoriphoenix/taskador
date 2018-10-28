@@ -40,7 +40,9 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
 
     @Override
     protected void onStop() {
-        unbindService(backgroundServiceConnection);
+        if (backgroundServiceConnection != null) {
+            unbindService(backgroundServiceConnection);
+        }
         super.onStop();
     }
 

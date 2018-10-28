@@ -1,9 +1,9 @@
 package marabillas.loremar.taskador.ui.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.rule.ServiceTestRule;
-
-import junit.framework.Assert;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import marabillas.loremar.taskador.App;
+import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
@@ -118,19 +120,26 @@ public class MainInAppActivityTest {
 
         mainInAppActivity.setBackgroundTasker(new MainInAppBackgroundTaskerTest());
 
-/*        BackgroundServiceConnection conn = new BackgroundServiceConnection(mainInAppActivity);
-        Intent intent = new Intent(mainInAppActivity, MainInAppManager.class);
-        try {
-            serviceTestRule.bindService(intent, conn, Context.BIND_AUTO_CREATE);
-        } catch (TimeoutException e) {
-            Assert.fail(e.getMessage());
-        }*/
+        await();
+    }
 
+    @Test
+    public void testWithMainInAppManager() {
+        MainInAppActivity mainInAppActivity = activityTestRule.getActivity();
+        App.getInstance().setBackgroundTaskManagerSupport(true);
+        SharedPreferences prefs = mainInAppActivity.getSharedPreferences("config", 0);
+        prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, "test1");
+        activityTestRule.launchActivity(new Intent(mainInAppActivity, MainInAppActivity.class));
+
+        await();
+    }
+
+    private void await() {
         CountDownLatch latch = new CountDownLatch(1);
         try {
             latch.await(1, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            Assert.fail(e.getMessage());
+            org.junit.Assert.fail(e.getMessage());
         }
     }
 }

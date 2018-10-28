@@ -228,9 +228,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
             }
         }
 
-        // Clear add-task box's text and hide add-task button
-        toDoTasksFragment.clearAddTaskBox();
-
         onAddTaskUserInput();
     }
 
@@ -239,12 +236,12 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * account.
      */
     public void onAddTaskUserInput() {
-        // Clear add-task box's text and hide add-task button
-        toDoTasksFragment.clearAddTaskBox();
-
         // If user inputted a task, trigger the onAddNewTask for handling, passing the string
         // of the new task to add.
         String task = toDoTasksFragment.getAddTaskBoxTextInput();
+
+        // Clear add-task box's text and hide add-task button
+        toDoTasksFragment.clearAddTaskBox();
         if (task != null && task.length() > 0) {
             mainInAppBackgroundTasker.submitNewTask(task);
         }
