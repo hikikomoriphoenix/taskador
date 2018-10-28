@@ -1,12 +1,13 @@
 package marabillas.loremar.taskador.ui.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.ServiceTestRule;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,21 +16,22 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.App;
-import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
 
+import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
+
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class MainInAppActivityTest {
     @Rule
     public ActivityTestRule<MainInAppActivity> activityTestRule = new ActivityTestRule<>
-            (MainInAppActivity.class);
-
-    @Rule
-    public ServiceTestRule serviceTestRule = new ServiceTestRule();
+            (MainInAppActivity.class, true, false);
 
     @Test
     public void test() {
+        activityTestRule.launchActivity(new Intent(App.getInstance(), MainInAppActivity.class));
         final MainInAppActivity mainInAppActivity = activityTestRule.getActivity();
 
         // Prepare the list of tasks
@@ -125,11 +127,11 @@ public class MainInAppActivityTest {
 
     @Test
     public void testWithMainInAppManager() {
-        MainInAppActivity mainInAppActivity = activityTestRule.getActivity();
         App.getInstance().setBackgroundTaskManagerSupport(true);
-        SharedPreferences prefs = mainInAppActivity.getSharedPreferences("config", 0);
-        prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, "test1");
-        activityTestRule.launchActivity(new Intent(mainInAppActivity, MainInAppActivity.class));
+
+        setCurrentAccountUsername("test1");
+
+        activityTestRule.launchActivity(new Intent(App.getInstance(), MainInAppActivity.class));
 
         await();
     }

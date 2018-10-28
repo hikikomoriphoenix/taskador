@@ -5,10 +5,12 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import java.io.IOException;
 
 import marabillas.loremar.taskador.App;
+import marabillas.loremar.taskador.ConfigKeys;
 
 /**
  * Account-related helper methods
@@ -64,5 +66,25 @@ public final class AccountUtils {
         GetAuthTokenException(String message) {
             super(message);
         }
+    }
+
+    /**
+     * Get the set current account's username.
+     *
+     * @return username
+     */
+    public static String getCurrentAccountUsername() {
+        SharedPreferences config = App.getInstance().getSharedPreferences("config", 0);
+        return config.getString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null);
+    }
+
+    /**
+     * Set the current account by saving its username in SharedPreferences.
+     *
+     * @param username username of the current account to set.
+     */
+    public static void setCurrentAccountUsername(String username) {
+        SharedPreferences config = App.getInstance().getSharedPreferences("config", 0);
+        config.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
     }
 }

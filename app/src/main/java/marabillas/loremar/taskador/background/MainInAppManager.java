@@ -1,18 +1,17 @@
 package marabillas.loremar.taskador.background;
 
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;
+import static marabillas.loremar.taskador.utils.AccountUtils.getCurrentAccountUsername;
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
 
@@ -36,12 +35,11 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void bindClient(MainInAppActivity client) {
         mainInAppActivity = client;
 
+        // Get current account and its associated token.
+        username = getCurrentAccountUsername();
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                // Get current account and its associated token.
-                SharedPreferences prefs = mainInAppActivity.getSharedPreferences("config", 0);
-                username = prefs.getString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null);
                 if (username != null) {
                     try {
                         token = getAuthToken(username);
