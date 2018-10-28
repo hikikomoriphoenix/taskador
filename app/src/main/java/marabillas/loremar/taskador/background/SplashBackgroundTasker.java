@@ -53,8 +53,13 @@ public interface SplashBackgroundTasker extends BackgroundTasker<SplashActivity>
         SIGNUP,
 
         /**
-         * Login to account
+         * Log in to account
          */
-        LOGIN
+        LOGIN,
+
+        /**
+         * Log out from account
+         */
+        LOGOUT
     }
 }

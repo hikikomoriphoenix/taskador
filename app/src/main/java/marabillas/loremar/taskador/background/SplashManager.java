@@ -71,6 +71,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                     signup(input);
                 } else if (input.getInt("action") == Action.LOGIN.ordinal()) {
                     login(input);
+                } else if (input.getInt("action") == Action.LOGOUT.ordinal()) {
+                    logout();
                 }
             }
         });
@@ -120,7 +122,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                String text = getString(R.string.activity_splash_status_logging);
+                String text = getString(R.string.activity_splash_status_logging_in);
                 splashActivity.setStatusText(text);
 
                 String username = input.getString("username");
@@ -128,6 +130,23 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 SplashManager.this.username = username;
 
                 BackEndAPICallTasker.getInstance().login(SplashManager.this, username, password);
+            }
+        });
+    }
+
+    private void logout() {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                String text = getString(R.string.activity_splash_status_logging_out);
+                splashActivity.setStatusText(text);
+
+                // Clear current account
+                SharedPreferences prefs = getSharedPreferences("config", 0);
+                prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null).apply();
+
+                // Go to login screen
+                onTaskCompleteProceedToNextScreen(new Login());
             }
         });
     }

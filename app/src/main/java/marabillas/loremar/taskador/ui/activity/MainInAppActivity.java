@@ -22,6 +22,7 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppManager;
+import marabillas.loremar.taskador.background.SplashBackgroundTasker;
 import marabillas.loremar.taskador.ui.adapter.MainInappViewPagerAdapter;
 import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment;
@@ -353,6 +354,18 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
             case EXCLUDED:
                 mainInAppBackgroundTasker.fetchExcludedWordsList();
                 break;
+        }
+    }
+
+    /**
+     * Log out from account. Set current account will be cleared and you will be directed to login
+     * screen.
+     */
+    public void logout() {
+        if (mainInAppBackgroundTasker instanceof MainInAppManager) {
+            Bundle input = new Bundle();
+            input.putInt("action", SplashBackgroundTasker.Action.LOGOUT.ordinal());
+            switchScreen(SplashActivity.class, (BackgroundTaskManager) mainInAppBackgroundTasker, input);
         }
     }
 }
