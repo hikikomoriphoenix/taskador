@@ -19,12 +19,14 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
  */
 public abstract class BaseAppCompatActivity extends AppCompatActivity implements BackgroundServiceClient,
         BackgroundServiceConnection.OnServiceConnectedListener {
+    private BackgroundServiceConnection backgroundServiceConnection;
+
     @Override
     public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
-        BackgroundServiceConnection conn = new BackgroundServiceConnection(this);
+        backgroundServiceConnection = new BackgroundServiceConnection(this);
         Intent serviceIntent = new Intent(this, serviceClass);
         startService(serviceIntent);
-        bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
+        bindService(serviceIntent, backgroundServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -34,6 +36,12 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         if (backgroundSupported) {
             onSetupBackgroundService();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        unbindService(backgroundServiceConnection);
+        super.onStop();
     }
 
     /**
