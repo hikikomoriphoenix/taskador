@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import java.util.List;
 
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.adapter.TodoTasksRecyclerViewAdapter;
 
@@ -28,6 +29,7 @@ public class ToDoTasksFragment extends Fragment {
     private ImageButton addTaskButton;
     private MainInAppActivity mainInAppActivity;
     private RecyclerView recyclerView;
+    private View fetchingDataView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class ToDoTasksFragment extends Fragment {
 
         addTaskBox = view.findViewById(R.id.fragment_todotasks_addtask_box);
         addTaskButton = view.findViewById(R.id.fragment_todotasks_addtask_button);
+        fetchingDataView = view.findViewById(R.id.fragment_todotasks_fetchingdata);
 
         return view;
     }
@@ -60,7 +63,7 @@ public class ToDoTasksFragment extends Fragment {
         addTaskButton.setOnClickListener(mainInAppActivity.getOnClickListener());
     }
 
-    public void updateList(final List<String> tasks) {
+    public void updateList(final List<IdTaskPair> tasks) {
         mainInAppActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -110,5 +113,32 @@ public class ToDoTasksFragment extends Fragment {
 
     public RecyclerView getRecyclerView() {
         return recyclerView;
+    }
+
+    /**
+     * Display indeterminate horizontal progress bar to indicate that the list of to-do tasks is
+     * being fetched from the back-end server.
+     */
+    public void showFetchingData() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.setVisibility(View.GONE);
+                fetchingDataView.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    /**
+     * Hide fetching-data view and display the recycler view to show the list of to-do tasks.
+     */
+    public void showRecyclerView() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fetchingDataView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }

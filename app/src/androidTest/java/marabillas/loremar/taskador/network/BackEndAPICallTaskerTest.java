@@ -115,19 +115,13 @@ public class BackEndAPICallTaskerTest {
         }
 
         IdTaskPair[] entries = new IdTaskPair[3];
-        IdTaskPair entry = new IdTaskPair();
-        entry.id = 1;
-        entry.task = "task1";
+        IdTaskPair entry = new IdTaskPair(1, "task1");
         entries[0] = entry;
 
-        entry = new IdTaskPair();
-        entry.id = 2;
-        entry.task = "task2";
+        entry = new IdTaskPair(2, "task2");
         entries[1] = entry;
 
-        entry = new IdTaskPair();
-        entry.id = 3;
-        entry.task = "task3";
+        entry = new IdTaskPair(3, "task3");
         entries[2] = entry;
 
         FinishTasksTest finishTasksTest = new FinishTasksTest();

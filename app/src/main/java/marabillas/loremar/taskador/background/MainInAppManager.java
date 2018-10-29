@@ -5,8 +5,13 @@ import android.content.DialogInterface;
 import java.util.ArrayList;
 import java.util.List;
 
+import marabillas.loremar.taskador.entries.IdTaskPair;
+import marabillas.loremar.taskador.json.FailedToGetFieldException;
+import marabillas.loremar.taskador.json.JSON;
+import marabillas.loremar.taskador.json.JSON_Array;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.AddTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
@@ -20,7 +25,7 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
  * bind this service to call its methods.
  */
 public class MainInAppManager extends BackgroundTaskManager implements
-        MainInAppBackgroundTasker, AddTasksTask.ResultHandler {
+        MainInAppBackgroundTasker, AddTasksTask.ResultHandler, GetTasksTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
@@ -28,6 +33,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private List<String> tasksToAdd;
     private int tasksToAddSubmitSize; // Size of the portion of the list that is currently being
     // submitted.
+
+    private List<IdTaskPair> todoTasks;
 
     private boolean isAddingTask;
 
@@ -55,6 +62,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
         });
 
         tasksToAdd = new ArrayList<>();
+        todoTasks = new ArrayList<>();
     }
 
     @Override
@@ -64,7 +72,13 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void fetchToDoTasksList() {
-        // TODO implement
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                BackEndAPICallTasker.getInstance().getTasks(MainInAppManager.this, username,
+                        token);
+            }
+        });
     }
 
     @Override
@@ -152,6 +166,52 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void addTasksTaskIncomplete(String message) {
         logError(message);
         isAddingTask = false;
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void tasksObtained(final String message, final JSON data) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                todoTasks.clear();
+                // Get all to-do tasks and its corresponding id's from the JSON data and add each
+                // pair of these values to the list as an IdTaskPair object. The UI should then be
+                // updated with this new updated list.
+                try {
+                    JSON_Array tasks = data.getArray("tasks");
+                    for (int i = 0; i < tasks.getCount(); ++i) {
+                        JSON taskObject = tasks.getObject(i);
+                        String taskText = taskObject.getString("task");
+                        int taskId = taskObject.getInt("id");
+                        IdTaskPair taskPair = new IdTaskPair(taskId, taskText);
+                        todoTasks.add(taskPair);
+                    }
+                } catch (FailedToGetFieldException e) {
+                    logError(e.getMessage());
+                    promptErrorAndLogout(e.getMessage());
+                }
+                mainInAppActivity.getToDoTasksFragment().showRecyclerView();
+                mainInAppActivity.getToDoTasksFragment().updateList(todoTasks);
+            }
+        });
+    }
+
+    @Override
+    public void failedGetTasksRequest(String message) {
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void backendUnableToGiveTasks(String message) {
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void getTasksTaskIncomplete(String message) {
+        logError(message);
         promptErrorAndLogout(message);
     }
 

@@ -170,6 +170,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onTodoTasksWindowSelected() {
+        toDoTasksFragment.showFetchingData();
         mainInAppBackgroundTasker.fetchToDoTasksList();
         setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
     }

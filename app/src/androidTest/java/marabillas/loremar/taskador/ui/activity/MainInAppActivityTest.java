@@ -10,13 +10,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
 
@@ -35,26 +35,12 @@ public class MainInAppActivityTest {
         final MainInAppActivity mainInAppActivity = activityTestRule.getActivity();
 
         // Prepare the list of tasks
-        final List<String> todoTasks = new ArrayList<>();
-        String[] tasksArray = {
-                "A task",
-                "A loooooooooooooonnngggggggggggggg task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task"
-        };
-        Collections.addAll(todoTasks, tasksArray);
+        final List<IdTaskPair> todoTasks = new ArrayList<>();
+        todoTasks.add(new IdTaskPair(1, "A task"));
+        todoTasks.add(new IdTaskPair(2, "A looooooooooooooooooonnnnnnnnnnggggggggg task"));
+        for (int i = 0; i < 15; ++i) {
+            todoTasks.add(new IdTaskPair(3 + i, "Another task"));
+        }
 
         final List<TaskDatePair> finishedTasks = new ArrayList<>();
 
@@ -79,6 +65,7 @@ public class MainInAppActivityTest {
 
             @Override
             public void fetchToDoTasksList() {
+                activity.getToDoTasksFragment().showRecyclerView();
                 activity.getToDoTasksFragment().updateList(todoTasks);
             }
 

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
 /**
@@ -21,7 +22,7 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  */
 public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasksRecyclerViewAdapter.TodoTasksViewHolder> {
     private MainInAppActivity activity;
-    private List<String> tasks;
+    private List<IdTaskPair> tasks;
 
     public TodoTasksRecyclerViewAdapter(Activity activity) {
         this.activity = (MainInAppActivity) activity;
@@ -40,7 +41,8 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
     public void onBindViewHolder(@NonNull TodoTasksViewHolder holder, int position) {
         TextView textView = holder.itemView.findViewById(R.id
                 .fragment_todotasks_listitem_textview);
-        String text = tasks.get(position);
+        IdTaskPair task = tasks.get(position);
+        String text = task.task;
         textView.setText(text);
     }
 
@@ -49,7 +51,7 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         return tasks.size();
     }
 
-    public void update(List<String> tasks) {
+    public void update(List<IdTaskPair> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
     }
