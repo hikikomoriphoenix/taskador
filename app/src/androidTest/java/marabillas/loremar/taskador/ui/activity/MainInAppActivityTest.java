@@ -66,7 +66,7 @@ public class MainInAppActivityTest {
             @Override
             public void fetchToDoTasksList() {
                 activity.getToDoTasksFragment().showRecyclerView();
-                activity.getToDoTasksFragment().updateList(todoTasks);
+                activity.getToDoTasksFragment().bindList(todoTasks);
             }
 
             @Override

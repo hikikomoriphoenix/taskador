@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -65,6 +66,8 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private View selectedItemView;
     private int selectedItemPosition;
 
+    private AlertDialog addTaskProgressDialog;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +98,12 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         selectedItemView = null;
         selectedItemPosition = -1;
+
+        // Prepare a dialog that will indicate new task submissions.
+        addTaskProgressDialog = new AlertDialog.Builder(this)
+                .setView(R.layout.activity_maininapp_addtaskprogress)
+                .setCancelable(false)
+                .create();
     }
 
     @Override
@@ -244,8 +253,34 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         // Clear add-task box's text and hide add-task button
         toDoTasksFragment.clearAddTaskBox();
         if (task != null && task.length() > 0) {
+            showAddTaskProgressDialog();
             mainInAppBackgroundTasker.submitNewTask(task);
         }
+    }
+
+    /**
+     * Show a dialog displaying an indeterminate horizontal progress bar to indicate that a new
+     * task is being submitted. User will be unable to interact with the app.
+     */
+    public void showAddTaskProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                addTaskProgressDialog.show();
+            }
+        });
+    }
+
+    /**
+     * Dismiss the dialog indicating new task submission. User interaction is also regained.
+     */
+    public void dismissAddTaskProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                addTaskProgressDialog.dismiss();
+            }
+        });
     }
 
     public void setListItemSwipeHandler(ListItemSwipeHandler listItemSwipeHandler) {

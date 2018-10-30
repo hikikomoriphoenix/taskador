@@ -51,7 +51,7 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         return tasks.size();
     }
 
-    public void update(List<IdTaskPair> tasks) {
+    public void bindList(List<IdTaskPair> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
     }

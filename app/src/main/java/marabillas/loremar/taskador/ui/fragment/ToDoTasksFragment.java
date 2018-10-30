@@ -63,11 +63,31 @@ public class ToDoTasksFragment extends Fragment {
         addTaskButton.setOnClickListener(mainInAppActivity.getOnClickListener());
     }
 
-    public void updateList(final List<IdTaskPair> tasks) {
+    /**
+     * Bind the list for to-do tasks to the adapter and update the view to display the values in
+     * the list.
+     *
+     * @param tasks list of to-do tasks
+     */
+    public void bindList(final List<IdTaskPair> tasks) {
         mainInAppActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.update(tasks);
+                adapter.bindList(tasks);
+            }
+        });
+    }
+
+    /**
+     * Notify the recycler view's adapter to update its view for the newly added task in the list.
+     *
+     * @param position position of the new task in the list
+     */
+    public void notifyTaskAdded(final int position) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyItemInserted(position);
             }
         });
     }

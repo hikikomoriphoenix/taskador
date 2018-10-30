@@ -10,7 +10,7 @@ import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSON_Array;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
-import marabillas.loremar.taskador.network.tasks.AddTasksTask;
+import marabillas.loremar.taskador.network.tasks.AddTaskTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
@@ -25,18 +25,15 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
  * bind this service to call its methods.
  */
 public class MainInAppManager extends BackgroundTaskManager implements
-        MainInAppBackgroundTasker, AddTasksTask.ResultHandler, GetTasksTask.ResultHandler {
+        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
 
-    private List<String> tasksToAdd;
     private int tasksToAddSubmitSize; // Size of the portion of the list that is currently being
     // submitted.
 
     private List<IdTaskPair> todoTasks;
-
-    private boolean isAddingTask;
 
     @Override
     public void bindClient(MainInAppActivity client) {
@@ -61,7 +58,6 @@ public class MainInAppManager extends BackgroundTaskManager implements
             }
         });
 
-        tasksToAdd = new ArrayList<>();
         todoTasks = new ArrayList<>();
     }
 
@@ -83,28 +79,13 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void submitNewTask(final String task) {
-        // Queue new task for submission. In the next submission, all the tasks in the queue will
-        // be submitted all at once.
-        tasksToAdd.add(task);
-        // If there is no ongoing submission, initiate submission of new task immediately.
-        if (!isAddingTask) {
-            getHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    isAddingTask = true;
-
-                    // This will take note of the range in the list indicating tasks that are
-                    // currently being submitted. These will be removed after submission,
-                    // excluding aside new tasks that aren't submitted yet.
-                    tasksToAddSubmitSize = tasksToAdd.size();
-
-                    // Get the array of new tasks and submit.
-                    String[] tasksArray = tasksToAdd.toArray(new String[tasksToAddSubmitSize]);
-                    BackEndAPICallTasker.getInstance().addTasks(MainInAppManager.this, username,
-                            token, tasksArray);
-                }
-            });
-        }
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                BackEndAPICallTasker.getInstance().addTask(MainInAppManager.this, username,
+                        token, task);
+            }
+        });
     }
 
     @Override
@@ -124,49 +105,54 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
 
     @Override
-    public void newTasksSavedSuccessfully(String message) {
-        // Clear all tasks that was submitted, leaving all the new tasks in the list that are not
-        // submitted yet.
-        tasksToAdd.subList(0, tasksToAddSubmitSize).clear();
+    public void newTaskSavedSuccessfully(final String message, final String task, final JSON data) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // Get the id of the new task to create and add an IdTaskPair entry to the
+                    // list. Notify the recycler view's adapter that is bound to this list to
+                    // update its view.
+                    int id = data.getInt("id");
+                    todoTasks.add(new IdTaskPair(id, task));
 
-        // If there are new tasks that are yet to be submitted, initiate submission. Otherwise,
-        // mark that submission has ended and that there are currently no ongoing submission.
-        if (tasksToAdd.size() > 0) {
-            tasksToAddSubmitSize = tasksToAdd.size();
-            String[] tasksArray = tasksToAdd.toArray(new String[tasksToAddSubmitSize]);
-            BackEndAPICallTasker.getInstance().addTasks(MainInAppManager.this, username,
-                    token, tasksArray);
-        } else {
-            isAddingTask = false;
-        }
+                    mainInAppActivity.dismissAddTaskProgressDialog();
+                    mainInAppActivity.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
+                } catch (FailedToGetFieldException e) {
+                    logError(e.getMessage());
+                    mainInAppActivity.dismissAddTaskProgressDialog();
+                    promptError(e.getMessage());
+                }
+            }
+        });
     }
 
     @Override
-    public void addTasksTaskFailedToPrepareJSONData(String message) {
+    public void addTaskTaskFailedToPrepareJSONData(String message) {
         logError(message);
-        isAddingTask = false;
-        promptErrorAndLogout(message);
+        mainInAppActivity.dismissAddTaskProgressDialog();
+        promptError(message);
     }
 
     @Override
-    public void failedAddTasksRequest(String message) {
+    public void failedAddTaskRequest(String message) {
         logError(message);
-        isAddingTask = false;
-        promptErrorAndLogout(message);
+        mainInAppActivity.dismissAddTaskProgressDialog();
+        promptError(message);
     }
 
     @Override
-    public void backendUnableToAddTasks(String message) {
+    public void backendUnableToAddTask(String message) {
         logError(message);
-        isAddingTask = false;
-        promptErrorAndLogout(message);
+        mainInAppActivity.dismissAddTaskProgressDialog();
+        promptError(message);
     }
 
     @Override
-    public void addTasksTaskIncomplete(String message) {
+    public void addTaskTaskIncomplete(String message) {
         logError(message);
-        isAddingTask = false;
-        promptErrorAndLogout(message);
+        mainInAppActivity.dismissAddTaskProgressDialog();
+        promptError(message);
     }
 
     @Override
@@ -192,7 +178,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     promptErrorAndLogout(e.getMessage());
                 }
                 mainInAppActivity.getToDoTasksFragment().showRecyclerView();
-                mainInAppActivity.getToDoTasksFragment().updateList(todoTasks);
+                mainInAppActivity.getToDoTasksFragment().bindList(todoTasks);
             }
         });
     }
@@ -213,6 +199,20 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void getTasksTaskIncomplete(String message) {
         logError(message);
         promptErrorAndLogout(message);
+    }
+
+    private void promptError(final String message) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing.
+                    }
+                });
+            }
+        });
     }
 
     private void promptErrorAndLogout(String message) {

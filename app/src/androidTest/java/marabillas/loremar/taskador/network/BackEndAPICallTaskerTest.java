@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
-import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.AddTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.CheckUsernameAvailabilityTest;
 import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetExcludedWordsTest;
@@ -69,7 +69,7 @@ public class BackEndAPICallTaskerTest {
     }
 
     @Test
-    public void addTasks() {
+    public void addTask() {
         String username = "test1";
         String token = null;
         try {
@@ -78,13 +78,13 @@ public class BackEndAPICallTaskerTest {
             Assert.fail(e.getMessage());
         }
 
-        String[] tasks = {"task1", "task2", "task3"};
+        String task = "task1";
 
-        AddTasksTest addTasksTest = new AddTasksTest();
+        AddTaskTest addTaskTest = new AddTaskTest();
 
-        BackEndAPICallTasker.getInstance().addTasks(addTasksTest, username, token, tasks);
+        BackEndAPICallTasker.getInstance().addTask(addTaskTest, username, token, task);
 
-        addTasksTest.waitForResults();
+        addTaskTest.waitForResults();
     }
 
     @Test
