@@ -21,6 +21,7 @@ public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
+        mainInAppActivity.onListItemSelectionClear();
         switch (position) {
             case 0:
                 mainInAppActivity.onTodoTasksWindowSelected();

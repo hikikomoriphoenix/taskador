@@ -18,6 +18,8 @@ import static android.support.v4.view.ViewCompat.animate;
  * {@link marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment}'s
  * and {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s
  * {@link android.support.v7.widget.RecyclerView}.
+ *
+ * TODO Mechanism of List Item Swipe:
  */
 public abstract class ListItemSwipeHandler {
     private float x0;
@@ -85,12 +87,14 @@ public abstract class ListItemSwipeHandler {
                     // past it.
                     if (startPosition == StartPosition.LEFT && targetItemViewTranslation < 0) {
                         v.setTranslationX(0);
+                        mainInAppActivity.onListItemSelectionClear();
                         // Allow ViewPager to scroll right.
                         mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
                         return;
                     } else if (startPosition == StartPosition.RIGHT && targetItemViewTranslation >
                             0) {
                         v.setTranslationX(0);
+                        mainInAppActivity.onListItemSelectionClear();
                         // Allow ViewPager to scroll left.
                         mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
                         return;
@@ -148,23 +152,25 @@ public abstract class ListItemSwipeHandler {
             // position instead of just dragging the item towards it.
             boolean swipedToMark = checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
 
-            mainInAppActivity.onListItemClear();
-
             if (swipedToMark) {
-                removeItem();
+                moveItemOffScreen();
             } else {
                 moveItemBackToOriginalPosition();
             }
         }
 
         private void moveItemBackToOriginalPosition() {
+            mainInAppActivity.onListItemSelectionClear();
             ViewPropertyAnimator animator = v.animate();
             animator.setDuration(500);
             animator.translationX(0);
         }
 
-        private void removeItem() {
+        private void moveItemOffScreen() {
             int totalWidth = mainInAppActivity.getToDoTasksFragment().getRecyclerView().getWidth();
+
+            // The compat version is used since withEndAction doesn't seemed to be supported in
+            // older versions.
             ViewPropertyAnimatorCompat animatorCompat = animate(v);
             animatorCompat.setDuration(100);
 
@@ -178,6 +184,7 @@ public abstract class ListItemSwipeHandler {
                 @Override
                 public void run() {
                     performActionOnMarkedItem(mainInAppActivity);
+                    mainInAppActivity.onListItemSelectionClear();
                 }
             });
         }

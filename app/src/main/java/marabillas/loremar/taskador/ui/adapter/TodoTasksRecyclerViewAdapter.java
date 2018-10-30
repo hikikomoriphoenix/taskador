@@ -1,6 +1,5 @@
 package marabillas.loremar.taskador.ui.adapter;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,18 +20,18 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  * {@link RecyclerView} to display a list of to-do tasks.
  */
 public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasksRecyclerViewAdapter.TodoTasksViewHolder> {
-    private MainInAppActivity activity;
+    private MainInAppActivity mainInAppActivity;
     private List<IdTaskPair> tasks;
 
-    public TodoTasksRecyclerViewAdapter(Activity activity) {
-        this.activity = (MainInAppActivity) activity;
+    public TodoTasksRecyclerViewAdapter(MainInAppActivity mainInAppActivity) {
+        this.mainInAppActivity = mainInAppActivity;
         tasks = new ArrayList<>();
     }
 
     @NonNull
     @Override
     public TodoTasksViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(activity);
+        LayoutInflater inflater = LayoutInflater.from(mainInAppActivity);
         View view = inflater.inflate(R.layout.fragment_todotasks_listitem, parent, false);
         return new TodoTasksViewHolder(view);
     }
@@ -44,6 +43,16 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         IdTaskPair task = tasks.get(position);
         String text = task.task;
         textView.setText(text);
+
+        // Clear any changes to translation. The item view could have been moved previously and
+        // it may also be no longer bound to the same item in the list, therefore, the item view
+        // should be restored to its original position.
+        holder.itemView.setTranslationX(0);
+
+        // Update to the new item view bound to the selected task.
+        if (mainInAppActivity.getSelectedItemPosition() == position) {
+            mainInAppActivity.setSelectedItemView(holder.itemView);
+        }
     }
 
     @Override
@@ -69,7 +78,7 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            activity.onListItemTouch(v, event, getAdapterPosition());
+            mainInAppActivity.onListItemTouch(v, event, getAdapterPosition());
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 v.performClick();

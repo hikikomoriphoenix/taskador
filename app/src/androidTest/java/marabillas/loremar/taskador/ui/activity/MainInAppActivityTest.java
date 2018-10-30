@@ -38,8 +38,8 @@ public class MainInAppActivityTest {
         final List<IdTaskPair> todoTasks = new ArrayList<>();
         todoTasks.add(new IdTaskPair(1, "A task"));
         todoTasks.add(new IdTaskPair(2, "A looooooooooooooooooonnnnnnnnnnggggggggg task"));
-        for (int i = 0; i < 15; ++i) {
-            todoTasks.add(new IdTaskPair(3 + i, "Another task"));
+        for (int i = 3; i < 15; ++i) {
+            todoTasks.add(new IdTaskPair(3, "task" + i));
         }
 
         final List<TaskDatePair> finishedTasks = new ArrayList<>();
@@ -126,7 +126,7 @@ public class MainInAppActivityTest {
     private void await() {
         CountDownLatch latch = new CountDownLatch(1);
         try {
-            latch.await(1, TimeUnit.MINUTES);
+            latch.await(5, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
             org.junit.Assert.fail(e.getMessage());
         }

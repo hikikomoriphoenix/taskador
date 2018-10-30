@@ -21,17 +21,23 @@ public class TodoTasksListItemSwipeHandler extends ListItemSwipeHandler {
     boolean checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation) {
         float totalWidth = mainInAppActivity.getToDoTasksFragment().getRecyclerView().getWidth();
         View selectedItemView = mainInAppActivity.getSelectedItemView();
-        ImageView check = selectedItemView.findViewById(R.id.fragment_todotasks_listitem_check);
+        ImageView check = null;
+        if (selectedItemView != null) {
+            check = selectedItemView.findViewById(R.id.fragment_todotasks_listitem_check);
+        }
+
         if (Math.abs(translation) > 0.50 * totalWidth) {
-            Drawable checkDrawable = mainInAppActivity.getResources().getDrawable(R.drawable.ic_checked);
-            check.setImageDrawable(checkDrawable);
-            mainInAppActivity.setTaskMarkedFinished(true);
+            if (check != null) {
+                Drawable checkDrawable = mainInAppActivity.getResources().getDrawable(R.drawable.ic_checked);
+                check.setImageDrawable(checkDrawable);
+            }
             return true;
         } else {
-            Drawable notCheckedDrawable = mainInAppActivity.getResources().getDrawable(R.drawable
-                    .ic_notchecked);
-            check.setImageDrawable(notCheckedDrawable);
-            mainInAppActivity.setTaskMarkedFinished(false);
+            if (check != null) {
+                Drawable notCheckedDrawable = mainInAppActivity.getResources().getDrawable(R.drawable
+                        .ic_notchecked);
+                check.setImageDrawable(notCheckedDrawable);
+            }
             return false;
         }
     }
@@ -39,5 +45,10 @@ public class TodoTasksListItemSwipeHandler extends ListItemSwipeHandler {
     @Override
     void performActionOnMarkedItem(MainInAppActivity mainInAppActivity) {
         mainInAppActivity.onTaskMarkedFinishedAction();
+        View selectedItemView = mainInAppActivity.getSelectedItemView();
+        ImageView check = selectedItemView.findViewById(R.id.fragment_todotasks_listitem_check);
+        Drawable notCheckedDrawable = mainInAppActivity.getResources().getDrawable(R.drawable
+                .ic_notchecked);
+        check.setImageDrawable(notCheckedDrawable);
     }
 }
