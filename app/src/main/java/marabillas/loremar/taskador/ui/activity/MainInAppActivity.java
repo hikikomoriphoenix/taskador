@@ -37,6 +37,8 @@ import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
 
+import static marabillas.loremar.taskador.utils.LogUtils.log;
+
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
  * finished tasks and also features listing of most frequently used words for tasks. These
@@ -67,6 +69,8 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private int selectedItemPosition;
 
     private AlertDialog addTaskProgressDialog;
+
+    private boolean taskMarkedFinished;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -305,7 +309,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         // This allows the selected item to get motion events that would otherwise be stolen by the
         // ViewPager.
         pager.requestDisallowInterceptTouchEvent(true);
-
         // Stop item when touched
         selectedItemView.animate().cancel();
 
@@ -316,7 +319,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * Clear selection of list item.
      */
     public void onListItemClear() {
-        selectedItemPosition = -1;
         selectedItemView = null;
     }
 
@@ -342,14 +344,21 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     }
 
     /**
-     * This method is invoked when an item in {@link ToDoTasksFragment}'s
-     * {@link android.support.v7.widget.RecyclerView} is swiped to enough distance to mark it as
-     * checked. Upon release, the selected item that is checked will be submitted as a finished
-     * task.
+     * Set whether a task corresponding to the selected list item is marked finished or not. Upon
+     * release of the list item. A marked task will be submitted to the back-end to set it as
+     * finished and its corresponding list item is removed from to-do tasks window.
+     *
+     * @param markedFinished value to set with
      */
-    public void onMarkTaskChecked() {
-        // TODO Update item in the data. Mark it as checked. Notify recyclerview adapter to update
-        // its view.
+    public void setTaskMarkedFinished(boolean markedFinished) {
+        taskMarkedFinished = markedFinished;
+    }
+
+    public void onTaskMarkedFinishedAction() {
+        taskMarkedFinished = false;
+        toDoTasksFragment.removeTask(selectedItemPosition);
+        // TODO Implement
+        log("task finished");
     }
 
     /**

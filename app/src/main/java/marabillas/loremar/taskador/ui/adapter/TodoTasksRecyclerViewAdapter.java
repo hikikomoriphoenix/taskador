@@ -56,6 +56,11 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         notifyDataSetChanged();
     }
 
+    public void removeItem(int position) {
+        tasks.remove(position);
+        notifyItemRemoved(position);
+    }
+
     class TodoTasksViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
         TodoTasksViewHolder(View itemView) {
             super(itemView);

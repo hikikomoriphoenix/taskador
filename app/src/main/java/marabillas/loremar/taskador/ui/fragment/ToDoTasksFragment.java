@@ -92,6 +92,15 @@ public class ToDoTasksFragment extends Fragment {
         });
     }
 
+    public void removeTask(final int position) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.removeItem(position);
+            }
+        });
+    }
+
     public void showAddTaskButton() {
         mainInAppActivity.runOnUiThread(new Runnable() {
             @Override
