@@ -7,4 +7,9 @@
     <item name="activity_splash_bounce_height" type="integer" format="float">16.0</item>
 
     <integer name="activity_splash_nextscreentimer_duration">3000</integer>
+
+    <integer name="fragment_todotasks_popupcheckmark_popupduration">200</integer>
+    <integer name="fragment_todotasks_popupcheckmark_translationxby">-40</integer>
+    <integer name="fragment_todotasks_popupcheckmark_translationyby">-60</integer>
+    <integer name="fragment_todotasks_popupcheckmark_fadeoutduration">500</integer>
 </resources>

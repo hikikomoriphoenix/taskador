@@ -36,6 +36,7 @@ import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSel
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
+import marabillas.loremar.taskador.ui.view.PopUpCheckMark;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
@@ -357,6 +358,13 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      */
     public void onTaskMarkedFinishedAction() {
         toDoTasksFragment.removeTask(selectedItemPosition);
+
+        // Show a pop-up checkmark.
+        float x = selectedItemView.getTranslationX();
+        int[] l = new int[2];
+        selectedItemView.getLocationOnScreen(l);
+        float y = l[1];
+        new PopUpCheckMark(this).popUp(x, y);
     }
 
     /**
