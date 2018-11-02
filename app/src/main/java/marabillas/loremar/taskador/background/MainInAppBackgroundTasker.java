@@ -20,6 +20,14 @@ public interface MainInAppBackgroundTasker extends BackgroundTasker<MainInAppAct
     void submitNewTask(String task);
 
     /**
+     * Method to invoke when a user sets a task as finished
+     *
+     * @param position position  of the task in the list of to-do tasks that is to be set as
+     *                 finished.
+     */
+    void submitFinishedTask(int position);
+
+    /**
      * Method to invoke when in-app screen requires a list of finished tasks
      */
     void fetchFinishedTasksList();

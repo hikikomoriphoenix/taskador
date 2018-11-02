@@ -357,6 +357,8 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * and submit the task to the back-end to save it as finished.
      */
     public void onTaskMarkedFinishedAction() {
+        mainInAppBackgroundTasker.submitFinishedTask(selectedItemPosition);
+
         toDoTasksFragment.removeTask(selectedItemPosition);
 
         // Show a pop-up checkmark.

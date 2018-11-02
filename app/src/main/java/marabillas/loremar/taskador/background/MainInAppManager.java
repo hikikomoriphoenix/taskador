@@ -11,6 +11,7 @@ import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSON_Array;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.AddTaskTask;
+import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
@@ -25,15 +26,16 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
  * bind this service to call its methods.
  */
 public class MainInAppManager extends BackgroundTaskManager implements
-        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler {
+        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler, FinishTasksTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
 
-    private int tasksToAddSubmitSize; // Size of the portion of the list that is currently being
-    // submitted.
-
     private List<IdTaskPair> todoTasks;
+    private List<IdTaskPair> tasksToFinish;
+
+    private boolean submittingFinishedTasks;
+    private int sizeOfFinishedTasksSubmitted;
 
     @Override
     public void bindClient(MainInAppActivity client) {
@@ -59,6 +61,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
         });
 
         todoTasks = new ArrayList<>();
+        tasksToFinish = new ArrayList<>();
     }
 
     @Override
@@ -89,6 +92,39 @@ public class MainInAppManager extends BackgroundTaskManager implements
     }
 
     @Override
+    public void submitFinishedTask(final int position) {
+        // Given the position of the task in the list to be set finished, get the task and its id.
+        // Allow to save the new finished task while BackEndAPICallTasker is currently submitting
+        // previously set finished tasks. When the current submission is finished, the newly
+        // saved finished tasks that has not been submitted yet will be submitted next. This is a
+        // strategy to minimizes POST requests.
+        String taskToFinish = todoTasks.get(position).task;
+        int idOfTaskToFinish = todoTasks.get(position).id;
+        tasksToFinish.add(new IdTaskPair(idOfTaskToFinish, taskToFinish));
+
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                if (!submittingFinishedTasks) {
+                    submittingFinishedTasks = true;
+                    submitFinishedTasksEntries();
+                }
+            }
+        });
+    }
+
+    private void submitFinishedTasksEntries() {
+        // Take note of the number of tasks being submitted. This value will help determine the
+        // range of tasks to remove in the list, removing all successfully submitted tasks.
+        sizeOfFinishedTasksSubmitted = tasksToFinish.size();
+        IdTaskPair[] idTaskEntries = tasksToFinish.toArray(new
+                IdTaskPair[sizeOfFinishedTasksSubmitted]);
+        // Begin back-end API call
+        BackEndAPICallTasker.getInstance().finishTasks(MainInAppManager.this,
+                username, token, idTaskEntries);
+    }
+
+    @Override
     public void fetchFinishedTasksList() {
         // TODO implement
     }
@@ -102,7 +138,6 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void fetchExcludedWordsList() {
         // TODO implement
     }
-
 
     @Override
     public void newTaskSavedSuccessfully(final String message, final String task, final JSON data) {
@@ -222,5 +257,50 @@ public class MainInAppManager extends BackgroundTaskManager implements
                 mainInAppActivity.logout();
             }
         });
+    }
+
+    @Override
+    public void finishedTasksSavedSuccessfully(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                // Remove successfully submitted finished tasks from the list.
+                tasksToFinish.subList(0, sizeOfFinishedTasksSubmitted).clear();
+
+                // Submit remaining finished tasks. If none, set the submittingFinishedTasks flag
+                // to false indicating that BackEndAPICallTasker is not currently submitting
+                // finished tasks. This flag if set to false allows initiating future finished
+                // tasks submission.
+                if (tasksToFinish.size() > 0) {
+                    submitFinishedTasksEntries();
+                } else {
+                    submittingFinishedTasks = false;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void finishTasksTaskFailedToPrepareJSONData(String message) {
+        submittingFinishedTasks = false;
+        logError(message);
+    }
+
+    @Override
+    public void failedFinishTasksRequest(String message) {
+        submittingFinishedTasks = false;
+        logError(message);
+    }
+
+    @Override
+    public void backendUnableToFinishTask(String message) {
+        submittingFinishedTasks = false;
+        logError(message);
+    }
+
+    @Override
+    public void finishTasksTaskIncomplete(String message) {
+        submittingFinishedTasks = false;
+        logError(message);
     }
 }

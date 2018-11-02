@@ -75,6 +75,11 @@ public class MainInAppActivityTest {
             }
 
             @Override
+            public void submitFinishedTask(int position) {
+
+            }
+
+            @Override
             public void fetchFinishedTasksList() {
                 activity.getFinishedTasksFragment().updateList(finishedTasks);
             }
