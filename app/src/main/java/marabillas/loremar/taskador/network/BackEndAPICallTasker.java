@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.tasks.AddTaskTask;
 import marabillas.loremar.taskador.network.tasks.CheckUsernameAvailabilityTask;
+import marabillas.loremar.taskador.network.tasks.DeleteTaskTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetExcludedWordsTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
@@ -153,6 +154,21 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         AddTaskTask addTaskTask = new AddTaskTask(username, token, task);
         addTaskTask.setResultHandler(resultHandler);
         performTask(addTaskTask);
+    }
+
+    /**
+     * Delete a to-do task in account.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param id            id of to-do task to delete
+     */
+    public void deleteTask(@NonNull DeleteTaskTask.ResultHandler resultHandler, String username,
+                           String token, int id) {
+        DeleteTaskTask deleteTaskTask = new DeleteTaskTask(username, token, id);
+        deleteTaskTask.setResultHandler(resultHandler);
+        performTask(deleteTaskTask);
     }
 
     /**

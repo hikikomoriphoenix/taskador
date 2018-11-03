@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.network.resuilthandlers.AddTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.CheckUsernameAvailabilityTest;
+import marabillas.loremar.taskador.network.resuilthandlers.DeleteTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetExcludedWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
@@ -85,6 +86,25 @@ public class BackEndAPICallTaskerTest {
         BackEndAPICallTasker.getInstance().addTask(addTaskTest, username, token, task);
 
         addTaskTest.waitForResults();
+    }
+
+    @Test
+    public void deleteTask() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        int id = 28;
+
+        DeleteTaskTest deleteTaskTest = new DeleteTaskTest();
+
+        BackEndAPICallTasker.getInstance().deleteTask(deleteTaskTest, username, token, id);
+
+        deleteTaskTest.waitForResults();
     }
 
     @Test
