@@ -70,21 +70,32 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         notifyItemRemoved(position);
     }
 
-    class TodoTasksViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
+    class TodoTasksViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener, View.OnLongClickListener {
+        private float touchX;
+        private float touchY;
         TodoTasksViewHolder(View itemView) {
             super(itemView);
             itemView.setOnTouchListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            touchX = event.getRawX();
+            touchY = event.getRawY();
             mainInAppActivity.onListItemTouch(v, event, getAdapterPosition());
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 v.performClick();
             }
 
-            return true;
+            return false;
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mainInAppActivity.onToDoTaskLongClicked(touchX, touchY, getAdapterPosition());
+            return false;
         }
     }
 }

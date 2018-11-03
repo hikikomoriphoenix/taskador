@@ -43,6 +43,8 @@
     <dimen name="fragment_todotasks_listitem_textview_textsize">16sp</dimen>
     <dimen name="fragment_todotasks_listitem_divider_height">1dp</dimen>
     <dimen name="fragment_todotasks_popup_checkmark_size">48dp</dimen>
+    <dimen name="fragment_todotasks_deletebubble_width">120dp</dimen>
+    <dimen name="fragment_todotasks_deletebubble_topallowance">32dp</dimen>
 
     <dimen name="fragment_finishedtasks_listitem_check_size">20dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_textview_textsize">16sp</dimen>
