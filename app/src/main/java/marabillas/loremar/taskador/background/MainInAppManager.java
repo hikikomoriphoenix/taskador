@@ -316,24 +316,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
     @Override
     public void deleteTaskTaskFailedToPrepareJSONData(String message) {
         logError(message);
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void failedDeleteTaskRequest(String message) {
         logError(message);
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void backendUnableToDeleteTask(String message) {
         logError(message);
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void deleteTaskTaskIncomplete(String message) {
         logError(message);
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
