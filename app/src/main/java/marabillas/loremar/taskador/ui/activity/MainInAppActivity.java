@@ -200,6 +200,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onFinishedTasksWindowSelected() {
+        finishedTasksFragment.showFetchingData();
         mainInAppBackgroundTasker.fetchFinishedTasksList();
     }
 

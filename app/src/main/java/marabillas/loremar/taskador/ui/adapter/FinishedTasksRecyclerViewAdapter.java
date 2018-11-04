@@ -63,7 +63,7 @@ public class FinishedTasksRecyclerViewAdapter extends RecyclerView.Adapter {
         return tasks.size();
     }
 
-    public void update(List<TaskDatePair> tasks) {
+    public void bindList(List<TaskDatePair> tasks) {
         this.tasks = tasks;
         notifyDataSetChanged();
     }

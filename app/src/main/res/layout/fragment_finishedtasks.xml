@@ -34,5 +34,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_finishedtasks_topdivider"
-        tools:listitem="@layout/fragment_finishedtasks_listitem" />
+        tools:listitem="@layout/fragment_finishedtasks_listitem">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <include
+        android:id="@+id/fragment_finishedtasks_fetchingdata"
+        layout="@layout/activity_maininapp_fetchingdataview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_finishedtasks_topdivider" />
 </android.support.constraint.ConstraintLayout>
