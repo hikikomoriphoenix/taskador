@@ -75,6 +75,11 @@ public class MainInAppActivityTest {
             }
 
             @Override
+            public void deleteToDoTask(int position) {
+
+            }
+
+            @Override
             public void submitFinishedTask(int position) {
 
             }

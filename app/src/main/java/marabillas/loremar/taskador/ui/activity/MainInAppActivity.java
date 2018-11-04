@@ -73,6 +73,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private int selectedItemPosition;
 
     private AlertDialog addTaskProgressDialog;
+    private AlertDialog deleteTaskProgressDialog;
     private View deleteBubbleView;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -109,6 +110,12 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         // Prepare a dialog that will indicate new task submissions.
         addTaskProgressDialog = new AlertDialog.Builder(this)
                 .setView(R.layout.activity_maininapp_addtaskprogress)
+                .setCancelable(false)
+                .create();
+
+        // Prepare a dialog that will indicate task deletion.
+        deleteTaskProgressDialog = new AlertDialog.Builder(this)
+                .setView(R.layout.activity_maininapp_deletetaskprogress)
                 .setCancelable(false)
                 .create();
     }
@@ -394,7 +401,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
                 // "Delete".
                 int deleteBubbleWidth = getResources().getDimensionPixelSize(R.dimen
                         .fragment_todotasks_deletebubble_width);
-                PopupWindow deleteBubble = new PopupWindow(deleteBubbleWidth, ViewGroup.LayoutParams
+                final PopupWindow deleteBubble = new PopupWindow(deleteBubbleWidth, ViewGroup.LayoutParams
                         .WRAP_CONTENT);
                 deleteBubbleView = View.inflate(MainInAppActivity.this, R.layout
                         .fragment_todotasks_deletebubble, null);
@@ -402,7 +409,12 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
                 deleteBubbleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        onListItemSelectionClear();
+                        deleteBubble.dismiss();
 
+                        showDeleteTaskProgressDialog();
+
+                        mainInAppBackgroundTasker.deleteToDoTask(longClickedListItemPosition);
                     }
                 });
                 // setFocusable and setBackgroundDrawable are necessary to allow dismissing the
@@ -430,6 +442,31 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
                 float topY = y - ((float) deleteBubbleWidth * 28.0f / 85.0f) - topSpace;
                 deleteBubble.showAtLocation(screen, Gravity.START | Gravity.TOP, (int) centerX,
                         (int) topY);
+            }
+        });
+    }
+
+    /**
+     * Show a dialog displaying an indeterminate horizontal progress bar to indicate that a to-do
+     * task is in the process of being deleted. User will be unable to interact with the app.
+     */
+    public void showDeleteTaskProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                deleteTaskProgressDialog.show();
+            }
+        });
+    }
+
+    /**
+     * Dismiss the progress dialog indicating task deletion. User interaction will also be regained.
+     */
+    public void dismissDeleteTaskProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                deleteTaskProgressDialog.dismiss();
             }
         });
     }

@@ -11,6 +11,7 @@ import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSON_Array;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.AddTaskTask;
+import marabillas.loremar.taskador.network.tasks.DeleteTaskTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
@@ -26,7 +27,7 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
  * bind this service to call its methods.
  */
 public class MainInAppManager extends BackgroundTaskManager implements
-        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler, FinishTasksTask.ResultHandler {
+        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler, FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
@@ -34,6 +35,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private List<IdTaskPair> todoTasks;
     private List<IdTaskPair> tasksToFinish;
 
+    private int todoTaskDeletedPosition;
     private boolean submittingFinishedTasks;
     private int sizeOfFinishedTasksSubmitted;
 
@@ -62,6 +64,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
         todoTasks = new ArrayList<>();
         tasksToFinish = new ArrayList<>();
+
+        todoTaskDeletedPosition = -1;
     }
 
     @Override
@@ -87,6 +91,22 @@ public class MainInAppManager extends BackgroundTaskManager implements
             public void run() {
                 BackEndAPICallTasker.getInstance().addTask(MainInAppManager.this, username,
                         token, task);
+            }
+        });
+    }
+
+    @Override
+    public void deleteToDoTask(final int position) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                // Note the task to delete in the list when back-end task is successful
+                todoTaskDeletedPosition = position;
+
+                // Send request to delete task.
+                IdTaskPair task = todoTasks.get(position);
+                BackEndAPICallTasker.getInstance().deleteTask(MainInAppManager.this, username,
+                        token, task.id);
             }
         });
     }
@@ -236,29 +256,6 @@ public class MainInAppManager extends BackgroundTaskManager implements
         promptErrorAndLogout(message);
     }
 
-    private void promptError(final String message) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing.
-                    }
-                });
-            }
-        });
-    }
-
-    private void promptErrorAndLogout(String message) {
-        showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mainInAppActivity.logout();
-            }
-        });
-    }
-
     @Override
     public void finishedTasksSavedSuccessfully(String message) {
         getHandler().post(new Runnable() {
@@ -302,5 +299,64 @@ public class MainInAppManager extends BackgroundTaskManager implements
     public void finishTasksTaskIncomplete(String message) {
         submittingFinishedTasks = false;
         logError(message);
+    }
+
+    @Override
+    public void taskDeletedSuccessfully(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mainInAppActivity.dismissDeleteTaskProgressDialog();
+                mainInAppActivity.getToDoTasksFragment().removeTask(todoTaskDeletedPosition);
+                todoTaskDeletedPosition = -1;
+            }
+        });
+    }
+
+    @Override
+    public void deleteTaskTaskFailedToPrepareJSONData(String message) {
+        logError(message);
+        promptError(message);
+    }
+
+    @Override
+    public void failedDeleteTaskRequest(String message) {
+        logError(message);
+        promptError(message);
+    }
+
+    @Override
+    public void backendUnableToDeleteTask(String message) {
+        logError(message);
+        promptError(message);
+    }
+
+    @Override
+    public void deleteTaskTaskIncomplete(String message) {
+        logError(message);
+        promptError(message);
+    }
+
+    private void promptError(final String message) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Do nothing.
+                    }
+                });
+            }
+        });
+    }
+
+    private void promptErrorAndLogout(String message) {
+        showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mainInAppActivity.logout();
+            }
+        });
     }
 }

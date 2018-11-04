@@ -20,6 +20,13 @@ public interface MainInAppBackgroundTasker extends BackgroundTasker<MainInAppAct
     void submitNewTask(String task);
 
     /**
+     * Method to invoke to delete a to-do task from account
+     *
+     * @param position position of task in the list to be deleted
+     */
+    void deleteToDoTask(int position);
+
+    /**
      * Method to invoke when a user sets a task as finished
      *
      * @param position position  of the task in the list of to-do tasks that is to be set as
