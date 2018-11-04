@@ -171,11 +171,11 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     int id = data.getInt("id");
                     todoTasks.add(new IdTaskPair(id, task));
 
-                    mainInAppActivity.dismissAddTaskProgressDialog();
+                    mainInAppActivity.dismissProgressDialog();
                     mainInAppActivity.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
                 } catch (FailedToGetFieldException e) {
                     logError(e.getMessage());
-                    mainInAppActivity.dismissAddTaskProgressDialog();
+                    mainInAppActivity.dismissProgressDialog();
                     promptError(e.getMessage());
                 }
             }
@@ -185,28 +185,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
     @Override
     public void addTaskTaskFailedToPrepareJSONData(String message) {
         logError(message);
-        mainInAppActivity.dismissAddTaskProgressDialog();
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void failedAddTaskRequest(String message) {
         logError(message);
-        mainInAppActivity.dismissAddTaskProgressDialog();
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void backendUnableToAddTask(String message) {
         logError(message);
-        mainInAppActivity.dismissAddTaskProgressDialog();
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void addTaskTaskIncomplete(String message) {
         logError(message);
-        mainInAppActivity.dismissAddTaskProgressDialog();
+        mainInAppActivity.dismissProgressDialog();
         promptError(message);
     }
 
@@ -306,7 +306,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                mainInAppActivity.dismissDeleteTaskProgressDialog();
+                mainInAppActivity.dismissProgressDialog();
                 mainInAppActivity.getToDoTasksFragment().removeTask(todoTaskDeletedPosition);
                 todoTaskDeletedPosition = -1;
             }

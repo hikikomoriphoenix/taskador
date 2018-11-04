@@ -28,10 +28,8 @@
     <dimen name="activity_maininapp_header_textsize">16sp</dimen>
     <dimen name="activity_maininapp_topdivider_height">1dp</dimen>
     <dimen name="activity_maininapp_fetchingdata_progressbar_width">320dp</dimen>
-    <dimen name="activity_maininapp_addtaskprogressbar_width">160dp</dimen>
-    <dimen name="activity_maininapp_addtaskprogress_padding">18dp</dimen>
-    <dimen name="activity_maininapp_deletetaskprogressbar_width">160dp</dimen>
-    <dimen name="activity_maininapp_deletetaskprogress_padding">18dp</dimen>
+    <dimen name="activity_maininapp_progressbar_width">160dp</dimen>
+    <dimen name="activity_maininapp_progress_padding">18dp</dimen>
 
     <dimen name="fragment_todotasks_addtask_section_padding">8dp</dimen>
     <dimen name="fragment_todotasks_addtask_box_padding">4dp</dimen>
