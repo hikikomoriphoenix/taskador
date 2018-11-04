@@ -1,20 +1,26 @@
 package marabillas.loremar.taskador.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
@@ -35,6 +41,7 @@ import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSel
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TodoTasksListItemSwipeHandler;
 import marabillas.loremar.taskador.ui.motion.TopWordsListItemSwipeHandler;
+import marabillas.loremar.taskador.ui.view.PopUpCheckMark;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show
@@ -64,6 +71,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     private View selectedItemView;
     private int selectedItemPosition;
+
+    private AlertDialog progressDialog;
+    private TextView progressDialogTextView;
+    private View deleteBubbleView;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -95,6 +106,15 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         selectedItemView = null;
         selectedItemPosition = -1;
+
+        // Prepare a progress dialog which will indicate ongoing background task.
+        View progressDialogView = View.inflate(this, R.layout.activity_maininapp_progress, null);
+        progressDialog = new AlertDialog.Builder(this)
+                .setView(progressDialogView)
+                .setCancelable(false)
+                .create();
+        progressDialogTextView = progressDialogView.findViewById(R.id
+                .activity_maininapp_progress_textview);
     }
 
     @Override
@@ -170,6 +190,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onTodoTasksWindowSelected() {
+        toDoTasksFragment.showFetchingData();
         mainInAppBackgroundTasker.fetchToDoTasksList();
         setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
     }
@@ -228,9 +249,6 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
             }
         }
 
-        // Clear add-task box's text and hide add-task button
-        toDoTasksFragment.clearAddTaskBox();
-
         onAddTaskUserInput();
     }
 
@@ -239,15 +257,47 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * account.
      */
     public void onAddTaskUserInput() {
-        // Clear add-task box's text and hide add-task button
-        toDoTasksFragment.clearAddTaskBox();
-
         // If user inputted a task, trigger the onAddNewTask for handling, passing the string
         // of the new task to add.
         String task = toDoTasksFragment.getAddTaskBoxTextInput();
+
+        // Clear add-task box's text and hide add-task button
+        toDoTasksFragment.clearAddTaskBox();
         if (task != null && task.length() > 0) {
+            showProgressDialog(R.string.activity_maininapp_addtaskprogress);
             mainInAppBackgroundTasker.submitNewTask(task);
         }
+    }
+
+    /**
+     * Show a dialog displaying an indeterminate horizontal progressbar to indicate that an
+     * ongoing background task is being performed. This also disables user interaction until the
+     * task is finished and the dialog is dismissed.
+     *
+     * @param stringResId resource id of the text that describes the ongoing background task
+     */
+    public void showProgressDialog(final int stringResId) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialogTextView.setText(stringResId);
+                progressDialog.show();
+            }
+        });
+    }
+
+    /**
+     * Dismiss the progress dialog indicating ongoing background task. User interaction will also
+     * be regained.
+     */
+    public void dismissProgressDialog() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressDialogTextView.setText(null);
+                progressDialog.dismiss();
+            }
+        });
     }
 
     public void setListItemSwipeHandler(ListItemSwipeHandler listItemSwipeHandler) {
@@ -269,22 +319,24 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
             selectedItemPosition = position;
         }
 
-        // This allows the selected item to get motion events that would otherwise be stolen by the
-        // ViewPager.
-        pager.requestDisallowInterceptTouchEvent(true);
+        if (v == selectedItemView) {
+            // This allows the selected item to get motion events that would otherwise be stolen by the
+            // ViewPager.
+            pager.requestDisallowInterceptTouchEvent(true);
 
-        // Stop item when touched
-        selectedItemView.animate().cancel();
+            // Stop item when touched
+            selectedItemView.animate().cancel();
 
-        listItemSwipeHandler.handleMotionEvent(v, event);
+            listItemSwipeHandler.handleMotionEvent(selectedItemView, event);
+        }
     }
 
     /**
      * Clear selection of list item.
      */
-    public void onListItemClear() {
-        selectedItemPosition = -1;
+    public void onListItemSelectionClear() {
         selectedItemView = null;
+        selectedItemPosition = -1;
     }
 
     /**
@@ -295,6 +347,14 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      */
     public View getSelectedItemView() {
         return selectedItemView;
+    }
+
+    /**
+     * Sets the view of the item in {@link ToDoTasksFragment}'s or {@link TopWordsFragment}'s
+     * {@link android.support.v7.widget.RecyclerView} being selected.
+     */
+    public void setSelectedItemView(View itemView) {
+        selectedItemView = itemView;
     }
 
     /**
@@ -309,14 +369,84 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     }
 
     /**
-     * This method is invoked when an item in {@link ToDoTasksFragment}'s
-     * {@link android.support.v7.widget.RecyclerView} is swiped to enough distance to mark it as
-     * checked. Upon release, the selected item that is checked will be submitted as a finished
-     * task.
+     * Start setting the selected item as a finished task. Remove the item from the recycler view
+     * and submit the task to the back-end to save it as finished.
      */
-    public void onMarkTaskChecked() {
-        // TODO Update item in the data. Mark it as checked. Notify recyclerview adapter to update
-        // its view.
+    public void onTaskMarkedFinishedAction() {
+        mainInAppBackgroundTasker.submitFinishedTask(selectedItemPosition);
+
+        toDoTasksFragment.removeTask(selectedItemPosition);
+
+        // Show a pop-up checkmark.
+        float x = selectedItemView.getTranslationX();
+        int[] l = new int[2];
+        selectedItemView.getLocationOnScreen(l);
+        float y = l[1];
+        new PopUpCheckMark(this).popUp(x, y);
+    }
+
+    /**
+     * Invoked when user performs a long click on a list item in {@link ToDoTasksFragment]}.
+     *
+     * @param x                           x position of the touch event
+     * @param y                           y position of the touch event
+     * @param longClickedListItemPosition position of the long-clicked item in the list
+     */
+    public void onToDoTaskLongClicked(final float x, final float y, final int
+            longClickedListItemPosition) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // Cleat selection for swipe.
+                onListItemSelectionClear();
+
+                // Create a pop-up window displaying a message bubble with a text that says
+                // "Delete".
+                int deleteBubbleWidth = getResources().getDimensionPixelSize(R.dimen
+                        .fragment_todotasks_deletebubble_width);
+                final PopupWindow deleteBubble = new PopupWindow(deleteBubbleWidth, ViewGroup.LayoutParams
+                        .WRAP_CONTENT);
+                deleteBubbleView = View.inflate(MainInAppActivity.this, R.layout
+                        .fragment_todotasks_deletebubble, null);
+                deleteBubble.setContentView(deleteBubbleView);
+                deleteBubbleView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onListItemSelectionClear();
+                        deleteBubble.dismiss();
+
+                        showProgressDialog(R.string.activity_maininapp_deletetaskprogress);
+
+                        mainInAppBackgroundTasker.deleteToDoTask(longClickedListItemPosition);
+                    }
+                });
+                // setFocusable and setBackgroundDrawable are necessary to allow dismissing the
+                // pop-up window when user touches outside.
+                deleteBubble.setFocusable(true);
+                deleteBubble.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                deleteBubble.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    @Override
+                    public void onDismiss() {
+                        // Clear selection for swipe when dismiss allow for any future swipes.
+                        onListItemSelectionClear();
+                    }
+                });
+
+                // Show the pop-up delete bubble right above the point of touch.
+                // To center the delete bubble on the point of touch, move it(in other words,
+                // move its left property) to the left of the point of touch by half of its width.
+                // To place the delete bubble right above the point of touch, move it(in other
+                // words, move its top property) above the point of touch by equal to its height
+                // plus some extra space.
+                View screen = getWindow().getDecorView().getRootView();
+                float centerX = x - (float) deleteBubbleWidth / 2;
+                float topSpace = getResources().getDimensionPixelSize(R.dimen
+                        .fragment_todotasks_deletebubble_topallowance);
+                float topY = y - ((float) deleteBubbleWidth * 28.0f / 85.0f) - topSpace;
+                deleteBubble.showAtLocation(screen, Gravity.START | Gravity.TOP, (int) centerX,
+                        (int) topY);
+            }
+        });
     }
 
     /**

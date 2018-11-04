@@ -2,6 +2,7 @@ package marabillas.loremar.taskador.ui.motion;
 
 import android.support.animation.DynamicAnimation;
 import android.support.animation.FlingAnimation;
+import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
@@ -10,11 +11,15 @@ import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 
+import static android.support.v4.view.ViewCompat.animate;
+
 /**
  * Handles swipe motion for the list items in
  * {@link marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment}'s
  * and {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s
  * {@link android.support.v7.widget.RecyclerView}.
+ *
+ * TODO Mechanism of List Item Swipe:
  */
 public abstract class ListItemSwipeHandler {
     private float x0;
@@ -82,12 +87,14 @@ public abstract class ListItemSwipeHandler {
                     // past it.
                     if (startPosition == StartPosition.LEFT && targetItemViewTranslation < 0) {
                         v.setTranslationX(0);
+                        mainInAppActivity.onListItemSelectionClear();
                         // Allow ViewPager to scroll right.
                         mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
                         return;
                     } else if (startPosition == StartPosition.RIGHT && targetItemViewTranslation >
                             0) {
                         v.setTranslationX(0);
+                        mainInAppActivity.onListItemSelectionClear();
                         // Allow ViewPager to scroll left.
                         mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
                         return;
@@ -143,17 +150,43 @@ public abstract class ListItemSwipeHandler {
         public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
             // Check if item is flung to mark. This allows the user to fling an item to marking
             // position instead of just dragging the item towards it.
-            checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
+            boolean swipedToMark = checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
 
-            mainInAppActivity.onListItemClear();
-
-            moveItemBackToOriginalPosition();
+            if (swipedToMark) {
+                moveItemOffScreen();
+            } else {
+                moveItemBackToOriginalPosition();
+            }
         }
 
         private void moveItemBackToOriginalPosition() {
+            mainInAppActivity.onListItemSelectionClear();
             ViewPropertyAnimator animator = v.animate();
             animator.setDuration(500);
             animator.translationX(0);
+        }
+
+        private void moveItemOffScreen() {
+            int totalWidth = mainInAppActivity.getToDoTasksFragment().getRecyclerView().getWidth();
+
+            // The compat version is used since withEndAction doesn't seemed to be supported in
+            // older versions.
+            ViewPropertyAnimatorCompat animatorCompat = animate(v);
+            animatorCompat.setDuration(100);
+
+            if (startPosition == StartPosition.LEFT) {
+                animatorCompat.translationX(totalWidth);
+            } else {
+                animatorCompat.translationX(-totalWidth);
+            }
+
+            animatorCompat.withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    performActionOnMarkedItem(mainInAppActivity);
+                    mainInAppActivity.onListItemSelectionClear();
+                }
+            });
         }
     }
 
@@ -163,6 +196,10 @@ public abstract class ListItemSwipeHandler {
      *
      * @param mainInAppActivity the in-app screen's activity
      * @param translation the current value of the list item's view's translation property
+     *
+     * @return true or false
      */
-    abstract void checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation);
+    abstract boolean checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation);
+
+    abstract void performActionOnMarkedItem(MainInAppActivity mainInAppActivity);
 }

@@ -27,6 +27,9 @@
     <dimen name="activity_maininapp_helptool_rightmargin">16dp</dimen>
     <dimen name="activity_maininapp_header_textsize">16sp</dimen>
     <dimen name="activity_maininapp_topdivider_height">1dp</dimen>
+    <dimen name="activity_maininapp_fetchingdata_progressbar_width">320dp</dimen>
+    <dimen name="activity_maininapp_progressbar_width">160dp</dimen>
+    <dimen name="activity_maininapp_progress_padding">18dp</dimen>
 
     <dimen name="fragment_todotasks_addtask_section_padding">8dp</dimen>
     <dimen name="fragment_todotasks_addtask_box_padding">4dp</dimen>
@@ -39,6 +42,9 @@
     <dimen name="fragment_todotasks_listitem_textview_horizontalpadding">8dp</dimen>
     <dimen name="fragment_todotasks_listitem_textview_textsize">16sp</dimen>
     <dimen name="fragment_todotasks_listitem_divider_height">1dp</dimen>
+    <dimen name="fragment_todotasks_popup_checkmark_size">48dp</dimen>
+    <dimen name="fragment_todotasks_deletebubble_width">120dp</dimen>
+    <dimen name="fragment_todotasks_deletebubble_topallowance">32dp</dimen>
 
     <dimen name="fragment_finishedtasks_listitem_check_size">20dp</dimen>
     <dimen name="fragment_finishedtasks_listitem_textview_textsize">16sp</dimen>

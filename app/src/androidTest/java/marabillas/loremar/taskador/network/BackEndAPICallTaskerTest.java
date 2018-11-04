@@ -9,8 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
-import marabillas.loremar.taskador.network.resuilthandlers.AddTasksTest;
+import marabillas.loremar.taskador.network.resuilthandlers.AddTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.CheckUsernameAvailabilityTest;
+import marabillas.loremar.taskador.network.resuilthandlers.DeleteTaskTest;
 import marabillas.loremar.taskador.network.resuilthandlers.FinishTasksTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetExcludedWordsTest;
 import marabillas.loremar.taskador.network.resuilthandlers.GetFinishedTasksTest;
@@ -69,7 +70,7 @@ public class BackEndAPICallTaskerTest {
     }
 
     @Test
-    public void addTasks() {
+    public void addTask() {
         String username = "test1";
         String token = null;
         try {
@@ -78,13 +79,32 @@ public class BackEndAPICallTaskerTest {
             Assert.fail(e.getMessage());
         }
 
-        String[] tasks = {"task1", "task2", "task3"};
+        String task = "task1";
 
-        AddTasksTest addTasksTest = new AddTasksTest();
+        AddTaskTest addTaskTest = new AddTaskTest();
 
-        BackEndAPICallTasker.getInstance().addTasks(addTasksTest, username, token, tasks);
+        BackEndAPICallTasker.getInstance().addTask(addTaskTest, username, token, task);
 
-        addTasksTest.waitForResults();
+        addTaskTest.waitForResults();
+    }
+
+    @Test
+    public void deleteTask() {
+        String username = "test1";
+        String token = null;
+        try {
+            token = getAuthToken(username);
+        } catch (AccountUtils.GetAuthTokenException e) {
+            Assert.fail(e.getMessage());
+        }
+
+        int id = 28;
+
+        DeleteTaskTest deleteTaskTest = new DeleteTaskTest();
+
+        BackEndAPICallTasker.getInstance().deleteTask(deleteTaskTest, username, token, id);
+
+        deleteTaskTest.waitForResults();
     }
 
     @Test
@@ -115,19 +135,13 @@ public class BackEndAPICallTaskerTest {
         }
 
         IdTaskPair[] entries = new IdTaskPair[3];
-        IdTaskPair entry = new IdTaskPair();
-        entry.id = 1;
-        entry.task = "task1";
+        IdTaskPair entry = new IdTaskPair(1, "task1");
         entries[0] = entry;
 
-        entry = new IdTaskPair();
-        entry.id = 2;
-        entry.task = "task2";
+        entry = new IdTaskPair(2, "task2");
         entries[1] = entry;
 
-        entry = new IdTaskPair();
-        entry.id = 3;
-        entry.task = "task3";
+        entry = new IdTaskPair(3, "task3");
         entries[2] = entry;
 
         FinishTasksTest finishTasksTest = new FinishTasksTest();

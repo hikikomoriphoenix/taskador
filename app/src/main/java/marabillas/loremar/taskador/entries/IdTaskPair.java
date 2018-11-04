@@ -6,4 +6,9 @@ package marabillas.loremar.taskador.entries;
 public class IdTaskPair {
     public int id;
     public String task;
+
+    public IdTaskPair(int id, String task) {
+        this.id = id;
+        this.task = task;
+    }
 }

@@ -52,15 +52,12 @@
             android:imeOptions="actionDone"
             android:inputType="text" />
 
-        <ImageButton
+        <Button
             android:id="@+id/fragment_todotasks_addtask_button"
-            android:layout_width="@dimen/fragment_todotasks_addtask_button_size"
-            android:layout_height="@dimen/fragment_todotasks_addtask_button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/fragment_todotasks_addtaskbutton_contentdescription"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_add_circle_24dp"
+            android:text="@string/fragment_todotasks_addtaskbutton_text"
             android:visibility="gone" />
 
     </LinearLayout>
@@ -82,6 +79,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_topdivider2"
-        tools:listitem="@layout/fragment_todotasks_listitem" />
+        tools:listitem="@layout/fragment_todotasks_listitem">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <include
+        android:id="@+id/fragment_todotasks_fetchingdata"
+        layout="@layout/activity_maininapp_fetchingdataview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_todotasks_topdivider2" />
 
 </android.support.constraint.ConstraintLayout>

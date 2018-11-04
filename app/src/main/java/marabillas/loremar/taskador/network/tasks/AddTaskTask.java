@@ -9,27 +9,25 @@ import marabillas.loremar.taskador.json.JSONTreeException;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 
 /**
- * {@link RunnableTask} that sends POST request for adding new tasks to account. Call run to
- * execute this
- * task.
+ * {@link RunnableTask} that sends POST request for adding new to-do task to account.
  */
-public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandler> {
+public class AddTaskTask extends ReauthenticatingTask<AddTaskTask.ResultHandler> {
     private String username;
     private String token;
-    private String[] tasks;
+    private String task;
 
     /**
      * @param username account's username
      * @param token    auth token
-     * @param tasks    an array of new tasks to be added to account
+     * @param task     a new to-do task to add to account
      */
-    public AddTasksTask(String username, String token, String[] tasks) {
+    public AddTaskTask(String username, String token, String task) {
         super(username);
         this.username = username;
         this.token = token;
-        this.tasks = tasks;
+        this.task = task;
 
-        setRequestUrl(BuildConfig.backend_url + "tasks/add-tasks.php");
+        setRequestUrl(BuildConfig.backend_url + "tasks/add-task.php");
     }
 
     @Override
@@ -39,7 +37,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
             String json = new JSONTree()
                     .put("username", username)
                     .put("token", token)
-                    .put("tasks", tasks)
+                    .put("task", task)
                     .toString();
 
             // Send request
@@ -47,7 +45,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
         } catch (JSONTreeException e) {
             ResultHandler resultHandler = getResultHandler();
             if (resultHandler != null) {
-                resultHandler.addTasksTaskFailedToPrepareJSONData(e.getMessage());
+                resultHandler.addTaskTaskFailedToPrepareJSONData(e.getMessage());
             }
             BackEndAPICallTasker.getInstance().cancelTask();
         }
@@ -57,7 +55,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
     public void onStatusOK(String message, JSON data) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.newTasksSavedSuccessfully(message);
+            resultHandler.newTaskSavedSuccessfully(message, task, data);
         }
     }
 
@@ -65,7 +63,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
     public void onClientError(String message) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.backendUnableToAddTasks(message);
+            resultHandler.backendUnableToAddTask(message);
         }
     }
 
@@ -73,7 +71,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
     public void onServerError(String message) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.backendUnableToAddTasks(message);
+            resultHandler.backendUnableToAddTask(message);
         }
     }
 
@@ -81,7 +79,7 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
     public void failedRequest(String message) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.failedAddTasksRequest(message);
+            resultHandler.failedAddTaskRequest(message);
         }
     }
 
@@ -89,14 +87,14 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
     public void taskIncomplete(String message) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.addTasksTaskIncomplete(message);
+            resultHandler.addTaskTaskIncomplete(message);
         }
     }
 
     @Override
     public void onReauthenticationComplete(String newToken) {
         BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
-        tasker.addTasks(getResultHandler(), username, newToken, tasks);
+        tasker.addTask(getResultHandler(), username, newToken, task);
     }
 
     /**
@@ -104,30 +102,39 @@ public class AddTasksTask extends ReauthenticatingTask<AddTasksTask.ResultHandle
      */
     public interface ResultHandler extends RunnableTask.ResultHandler {
         /**
-         * Callback when new tasks are successfully added to account
+         * Callback when new task is successfully added to account
+         *
+         * @param task the new task that was just added
+         * @param data JSON data containing the id of the new task added.<br/>
+         *             Structure:
+         *             {@code
+         *             {
+         *             "id":'id of new task'
+         *             }
+         *             }
          */
-        void newTasksSavedSuccessfully(String message);
+        void newTaskSavedSuccessfully(String message, String task, JSON data);
 
         /**
          * Callback when unable to construct JSON data
          */
-        void addTasksTaskFailedToPrepareJSONData(String message);
+        void addTaskTaskFailedToPrepareJSONData(String message);
 
         /**
          * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
-        void failedAddTasksRequest(String message);
+        void failedAddTaskRequest(String message);
 
         /**
-         * Callback method when back-end server can't add tasks due to either client error or server
+         * Callback method when back-end server can't add task due to either client error or server
          * error.
          */
-        void backendUnableToAddTasks(String message);
+        void backendUnableToAddTask(String message);
 
         /**
          * Callback method when {@link InterruptedException} or
          * {@link java.util.concurrent.ExecutionException} is encountered.
          */
-        void addTasksTaskIncomplete(String message);
+        void addTaskTaskIncomplete(String message);
     }
 }

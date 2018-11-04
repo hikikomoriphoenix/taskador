@@ -88,23 +88,13 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
      * @param form a form to send along with the request
      */
     void postForm(Map<String, String> form) {
-        BackEndAPICallTasker tasker = null;
         try {
-            tasker = BackEndAPICallTasker.getInstance();
+            BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
             HttpClient httpClient = tasker.getHttpClient();
             BackEndResponse backEndResponse = httpClient.postForm(form, getRequestUrl());
             saveResult(backEndResponse);
         } catch (IOException e) {
-            // Check if IOException is due to lack of network connection.
-            boolean connected = checkNetworkConnection();
-
-            if (!connected) {
-                failedRequest(ResultHandler.NO_INTERNET_CONNECTION);
-            } else {
-                failedRequest(e.getMessage());
-            }
-
-            tasker.cancelTask();
+            handleIOException(e);
         }
     }
 
@@ -114,16 +104,27 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
      * @param json string representing a JSON data
      */
     void postJSON(String json) {
-        BackEndAPICallTasker tasker = null;
         try {
-            tasker = BackEndAPICallTasker.getInstance();
+            BackEndAPICallTasker tasker = BackEndAPICallTasker.getInstance();
             HttpClient httpClient = tasker.getHttpClient();
             BackEndResponse backEndResponse = httpClient.postJSON(json, getRequestUrl());
             saveResult(backEndResponse);
         } catch (IOException e) {
-            failedRequest(e.getMessage());
-            tasker.cancelTask();
+            handleIOException(e);
         }
+    }
+
+    private void handleIOException(IOException e) {
+        // Check if IOException is due to lack of network connection.
+        boolean connected = checkNetworkConnection();
+
+        if (!connected) {
+            failedRequest(ResultHandler.NO_INTERNET_CONNECTION);
+        } else {
+            failedRequest(e.getMessage());
+        }
+
+        BackEndAPICallTasker.getInstance().cancelTask();
     }
 
     /**

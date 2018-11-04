@@ -2,10 +2,8 @@ package marabillas.loremar.taskador.background;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.LoginTask;
@@ -19,6 +17,8 @@ import marabillas.loremar.taskador.ui.activity.SplashActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;
+import static marabillas.loremar.taskador.utils.AccountUtils.getCurrentAccountUsername;
+import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 
 /**
@@ -55,17 +55,13 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 // key. If no task set, then attempt to log in.
                 if (input == null) {
                     // Get current account to log in. If not set, proceed to login screen.
-                    SharedPreferences prefs = getSharedPreferences("config", 0);
-                    String currentAccountUsername = prefs.getString(ConfigKeys
-                            .CURRENT_ACCOUNT_USERNAME, null);
-                    username = currentAccountUsername;
-
-                    if (currentAccountUsername == null) {
+                    username = getCurrentAccountUsername();
+                    if (username == null) {
                         nextScreen = new Login();
                         backgroundTaskFinished();
                         nextScreen();
                     } else {
-                        connect(currentAccountUsername);
+                        connect(username);
                     }
                 } else if (input.getInt("action") == Action.SIGNUP.ordinal()) {
                     signup(input);
@@ -142,8 +138,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 splashActivity.setStatusText(text);
 
                 // Clear current account
-                SharedPreferences prefs = getSharedPreferences("config", 0);
-                prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null).apply();
+                setCurrentAccountUsername(null);
 
                 // Go to login screen
                 onTaskCompleteProceedToNextScreen(new Login());
@@ -189,8 +184,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 // Set newly created account as current account.
-                SharedPreferences prefs = splashActivity.getSharedPreferences("config", 0);
-                prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
+                setCurrentAccountUsername(username);
 
                 String status = getString(R.string.activity_splash_status_new_account_created);
                 onTaskCompleteProceedToShowStatusFirst(new InApp(), status);
@@ -296,8 +290,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
 
                 // Set the newly logged in account as the current account of this app. When the
                 // app is launched, it will automatically log in to this account.
-                SharedPreferences prefs = splashActivity.getSharedPreferences("config", 0);
-                prefs.edit().putString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, username).apply();
+                setCurrentAccountUsername(username);
 
                 updateWordsTableInAccount(new InApp(), new Login());
             }

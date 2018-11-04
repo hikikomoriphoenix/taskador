@@ -1,56 +1,46 @@
 package marabillas.loremar.taskador.ui.activity;
 
+import android.content.Intent;
+import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.rule.ServiceTestRule;
-
-import junit.framework.Assert;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
+import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
 
+import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
+
+@RunWith(AndroidJUnit4.class)
+@LargeTest
 public class MainInAppActivityTest {
     @Rule
     public ActivityTestRule<MainInAppActivity> activityTestRule = new ActivityTestRule<>
-            (MainInAppActivity.class);
-
-    @Rule
-    public ServiceTestRule serviceTestRule = new ServiceTestRule();
+            (MainInAppActivity.class, true, false);
 
     @Test
     public void test() {
+        activityTestRule.launchActivity(new Intent(App.getInstance(), MainInAppActivity.class));
         final MainInAppActivity mainInAppActivity = activityTestRule.getActivity();
 
         // Prepare the list of tasks
-        final List<String> todoTasks = new ArrayList<>();
-        String[] tasksArray = {
-                "A task",
-                "A loooooooooooooonnngggggggggggggg task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task",
-                "Another task"
-        };
-        Collections.addAll(todoTasks, tasksArray);
+        final List<IdTaskPair> todoTasks = new ArrayList<>();
+        todoTasks.add(new IdTaskPair(1, "A task"));
+        todoTasks.add(new IdTaskPair(2, "A looooooooooooooooooonnnnnnnnnnggggggggg task"));
+        for (int i = 3; i < 15; ++i) {
+            todoTasks.add(new IdTaskPair(3, "task" + i));
+        }
 
         final List<TaskDatePair> finishedTasks = new ArrayList<>();
 
@@ -75,11 +65,22 @@ public class MainInAppActivityTest {
 
             @Override
             public void fetchToDoTasksList() {
-                activity.getToDoTasksFragment().updateList(todoTasks);
+                activity.getToDoTasksFragment().showRecyclerView();
+                activity.getToDoTasksFragment().bindList(todoTasks);
             }
 
             @Override
             public void submitNewTask(String task) {
+
+            }
+
+            @Override
+            public void deleteToDoTask(int position) {
+
+            }
+
+            @Override
+            public void submitFinishedTask(int position) {
 
             }
 
@@ -118,19 +119,26 @@ public class MainInAppActivityTest {
 
         mainInAppActivity.setBackgroundTasker(new MainInAppBackgroundTaskerTest());
 
-/*        BackgroundServiceConnection conn = new BackgroundServiceConnection(mainInAppActivity);
-        Intent intent = new Intent(mainInAppActivity, MainInAppManager.class);
-        try {
-            serviceTestRule.bindService(intent, conn, Context.BIND_AUTO_CREATE);
-        } catch (TimeoutException e) {
-            Assert.fail(e.getMessage());
-        }*/
+        await();
+    }
 
+    @Test
+    public void testWithMainInAppManager() {
+        App.getInstance().setBackgroundTaskManagerSupport(true);
+
+        setCurrentAccountUsername("test1");
+
+        activityTestRule.launchActivity(new Intent(App.getInstance(), MainInAppActivity.class));
+
+        await();
+    }
+
+    private void await() {
         CountDownLatch latch = new CountDownLatch(1);
         try {
-            latch.await(1, TimeUnit.MINUTES);
+            latch.await(5, TimeUnit.MINUTES);
         } catch (InterruptedException e) {
-            Assert.fail(e.getMessage());
+            org.junit.Assert.fail(e.getMessage());
         }
     }
 }

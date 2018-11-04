@@ -89,6 +89,14 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="MainInappFetchindDataTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/activity_maininapp_fetchingdataview_textcolor</item>
+    </style>
+
+    <style name="MainInappProgressTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:textColor">@color/activity_maininapp_progress_textcolor</item>
+    </style>
+
     <style name="TodoTAsksAddTaskEditText" parent="Base.V7.Widget.AppCompat.EditText">
         <item name="android:background">@drawable/fragment_todotasks_addtask_box_background</item>
         <item name="android:textColor">@color/fragment_todotasks_addtask_textcolor</item>

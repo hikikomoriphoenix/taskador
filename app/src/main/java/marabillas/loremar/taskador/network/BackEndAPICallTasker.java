@@ -6,8 +6,9 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
-import marabillas.loremar.taskador.network.tasks.AddTasksTask;
+import marabillas.loremar.taskador.network.tasks.AddTaskTask;
 import marabillas.loremar.taskador.network.tasks.CheckUsernameAvailabilityTask;
+import marabillas.loremar.taskador.network.tasks.DeleteTaskTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetExcludedWordsTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
@@ -141,18 +142,33 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
     }
 
     /**
-     * Add new tasks to account.
+     * Add new to-do task to account.
      *
      * @param resultHandler callback for handling results
      * @param username      account username
      * @param token         auth token
-     * @param tasks         array of new tasks to be added
+     * @param task          new to-do task to add
      */
-    public void addTasks(@NonNull AddTasksTask.ResultHandler resultHandler, String username,
-                         String token, String[] tasks) {
-        AddTasksTask addTasksTask = new AddTasksTask(username, token, tasks);
-        addTasksTask.setResultHandler(resultHandler);
-        performTask(addTasksTask);
+    public void addTask(@NonNull AddTaskTask.ResultHandler resultHandler, String username,
+                        String token, String task) {
+        AddTaskTask addTaskTask = new AddTaskTask(username, token, task);
+        addTaskTask.setResultHandler(resultHandler);
+        performTask(addTaskTask);
+    }
+
+    /**
+     * Delete a to-do task in account.
+     *
+     * @param resultHandler callback for handling results
+     * @param username      account username
+     * @param token         auth token
+     * @param id            id of to-do task to delete
+     */
+    public void deleteTask(@NonNull DeleteTaskTask.ResultHandler resultHandler, String username,
+                           String token, int id) {
+        DeleteTaskTask deleteTaskTask = new DeleteTaskTask(username, token, id);
+        deleteTaskTask.setResultHandler(resultHandler);
+        performTask(deleteTaskTask);
     }
 
     /**
