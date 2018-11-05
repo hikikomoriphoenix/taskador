@@ -103,7 +103,7 @@ public class MainInAppActivityTest {
 
             @Override
             public void fetchExcludedWordsList() {
-                activity.getTopWordsFragment().updateExcludedWordsList(excludedWords);
+                activity.getTopWordsFragment().bindExcludedWordsList(excludedWords);
             }
 
             @Override

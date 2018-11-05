@@ -88,12 +88,12 @@ public class TopWordsFragment extends Fragment {
         }
     }
 
-    public void updateExcludedWordsList(final List<String> excludedWords) {
+    public void bindExcludedWordsList(final List<String> excludedWords) {
         if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
             mainInAppActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((ExcludedWordsRecyclerViewAdapter) adapter).update(excludedWords);
+                    ((ExcludedWordsRecyclerViewAdapter) adapter).bindList(excludedWords);
                 }
             });
         }

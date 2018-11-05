@@ -15,6 +15,7 @@ import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.AddTaskTask;
 import marabillas.loremar.taskador.network.tasks.DeleteTaskTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetExcludedWordsTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
@@ -33,7 +34,7 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
 public class MainInAppManager extends BackgroundTaskManager implements
         MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler,
         FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler, GetFinishedTasksTask
-        .ResultHandler, GetTopWordsTask.ResultHandler {
+        .ResultHandler, GetTopWordsTask.ResultHandler, GetExcludedWordsTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
@@ -42,6 +43,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private List<IdTaskPair> tasksToFinish;
     private List<TaskDatePair> finishedTasks;
     private List<WordCountPair> topWords;
+    private List<String> excludedWords;
 
     private int todoTaskDeletedPosition;
     private boolean submittingFinishedTasks;
@@ -77,6 +79,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
         tasksToFinish = new ArrayList<>();
         finishedTasks = new ArrayList<>();
         topWords = new ArrayList<>();
+        excludedWords = new ArrayList<>();
 
         todoTaskDeletedPosition = -1;
     }
@@ -181,7 +184,13 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void fetchExcludedWordsList() {
-        // TODO implement
+        fetch(new Runnable() {
+            @Override
+            public void run() {
+                BackEndAPICallTasker.getInstance().getExcludedWords(MainInAppManager.this,
+                        username, token);
+            }
+        });
     }
 
     private void fetch(Runnable task) {
@@ -483,6 +492,53 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void getTopWordsTaskIncomplete(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void excludedWordsObtained(String message, final JSON data) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                isFetchingData = false;
+                currentFetchTask = null;
+                excludedWords.clear();
+
+                try {
+                    JSON_Array words = data.getArray("words");
+                    for (int i = 0; i < words.getCount(); ++i) {
+                        String word = words.getString(i);
+                        excludedWords.add(word);
+                    }
+                } catch (FailedToGetFieldException e) {
+                    logError(e.getMessage());
+                    promptErrorAndLogout(e.getMessage());
+                }
+
+                mainInAppActivity.getTopWordsFragment().showRecyclerView();
+                mainInAppActivity.getTopWordsFragment().bindExcludedWordsList(excludedWords);
+            }
+        });
+    }
+
+    @Override
+    public void failedGetExcludedRequest(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void backendUnableToGiveExcludedWords(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void getExcludedWordsTaskIncomplete(String message) {
         isFetchingData = false;
         logError(message);
         promptErrorAndLogout(message);

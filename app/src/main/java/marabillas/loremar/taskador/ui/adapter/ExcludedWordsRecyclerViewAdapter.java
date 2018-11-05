@@ -49,7 +49,7 @@ public class ExcludedWordsRecyclerViewAdapter extends
         return excludedWords.size();
     }
 
-    public void update(List<String> words) {
+    public void bindList(List<String> words) {
         excludedWords = words;
         notifyDataSetChanged();
     }
