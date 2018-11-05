@@ -86,7 +86,7 @@ public class MainInAppActivityTest {
 
             @Override
             public void fetchFinishedTasksList() {
-                activity.getFinishedTasksFragment().updateList(finishedTasks);
+                activity.getFinishedTasksFragment().bindList(finishedTasks);
             }
 
             @Override

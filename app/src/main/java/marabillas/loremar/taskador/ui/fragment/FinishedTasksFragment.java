@@ -25,6 +25,8 @@ import marabillas.loremar.taskador.ui.adapter.FinishedTasksRecyclerViewAdapter;
 public class FinishedTasksFragment extends Fragment {
     private MainInAppActivity mainInAppActivity;
     private FinishedTasksRecyclerViewAdapter adapter;
+    private RecyclerView recyclerView;
+    private View fetchingDataView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,19 +39,48 @@ public class FinishedTasksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_finishedtasks, container, false);
 
-        RecyclerView recyclerView = view.findViewById(R.id.fragment_finishedtasks_recyclerview);
+        recyclerView = view.findViewById(R.id.fragment_finishedtasks_recyclerview);
         adapter = new FinishedTasksRecyclerViewAdapter(mainInAppActivity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        fetchingDataView = view.findViewById(R.id.fragment_finishedtasks_fetchingdata);
+
         return view;
     }
 
-    public void updateList(final List<TaskDatePair> tasks) {
+    public void bindList(final List<TaskDatePair> tasks) {
         mainInAppActivity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                adapter.update(tasks);
+                adapter.bindList(tasks);
+            }
+        });
+    }
+
+    /**
+     * Display indeterminate horizontal progress bar to indicate that the list of finished tasks is
+     * being fetched from the back-end server.
+     */
+    public void showFetchingData() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.setVisibility(View.GONE);
+                fetchingDataView.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    /**
+     * Hide fetching-data view and display the recycler view to show the list of finished tasks.
+     */
+    public void showRecyclerView() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fetchingDataView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
             }
         });
     }

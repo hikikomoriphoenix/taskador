@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
+import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.json.JSON_Array;
@@ -13,6 +14,7 @@ import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.AddTaskTask;
 import marabillas.loremar.taskador.network.tasks.DeleteTaskTask;
 import marabillas.loremar.taskador.network.tasks.FinishTasksTask;
+import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
@@ -27,17 +29,23 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
  * bind this service to call its methods.
  */
 public class MainInAppManager extends BackgroundTaskManager implements
-        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler, FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler {
+        MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler,
+        FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler, GetFinishedTasksTask
+        .ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
 
     private List<IdTaskPair> todoTasks;
     private List<IdTaskPair> tasksToFinish;
+    private List<TaskDatePair> finishedTasks;
 
     private int todoTaskDeletedPosition;
     private boolean submittingFinishedTasks;
     private int sizeOfFinishedTasksSubmitted;
+    private boolean isFetchingData;
+
+    private Runnable currentFetchTask;
 
     @Override
     public void bindClient(MainInAppActivity client) {
@@ -64,6 +72,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
         todoTasks = new ArrayList<>();
         tasksToFinish = new ArrayList<>();
+        finishedTasks = new ArrayList<>();
 
         todoTaskDeletedPosition = -1;
     }
@@ -75,7 +84,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void fetchToDoTasksList() {
-        getHandler().post(new Runnable() {
+        fetch(new Runnable() {
             @Override
             public void run() {
                 BackEndAPICallTasker.getInstance().getTasks(MainInAppManager.this, username,
@@ -146,7 +155,13 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void fetchFinishedTasksList() {
-        // TODO implement
+        fetch(new Runnable() {
+            @Override
+            public void run() {
+                BackEndAPICallTasker.getInstance().getFinishedTasks(MainInAppManager.this,
+                        username, token);
+            }
+        });
     }
 
     @Override
@@ -157,6 +172,16 @@ public class MainInAppManager extends BackgroundTaskManager implements
     @Override
     public void fetchExcludedWordsList() {
         // TODO implement
+    }
+
+    private void fetch(Runnable task) {
+        getHandler().removeCallbacks(currentFetchTask);
+        currentFetchTask = task;
+        if (isFetchingData) {
+            BackEndAPICallTasker.getInstance().cancelTask();
+        }
+        isFetchingData = true;
+        getHandler().post(currentFetchTask);
     }
 
     @Override
@@ -215,6 +240,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
         getHandler().post(new Runnable() {
             @Override
             public void run() {
+                isFetchingData = false;
+                currentFetchTask = null;
                 todoTasks.clear();
                 // Get all to-do tasks and its corresponding id's from the JSON data and add each
                 // pair of these values to the list as an IdTaskPair object. The UI should then be
@@ -240,18 +267,21 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void failedGetTasksRequest(String message) {
+        isFetchingData = false;
         logError(message);
         promptErrorAndLogout(message);
     }
 
     @Override
     public void backendUnableToGiveTasks(String message) {
+        isFetchingData = false;
         logError(message);
         promptErrorAndLogout(message);
     }
 
     @Override
     public void getTasksTaskIncomplete(String message) {
+        isFetchingData = false;
         logError(message);
         promptErrorAndLogout(message);
     }
@@ -339,6 +369,56 @@ public class MainInAppManager extends BackgroundTaskManager implements
         logError(message);
         mainInAppActivity.dismissProgressDialog();
         promptError(message);
+    }
+
+    @Override
+    public void finishedTasksObtained(final String message, final JSON data) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                isFetchingData = false;
+                currentFetchTask = null;
+                finishedTasks.clear();
+
+                try {
+                    JSON_Array tasks = data.getArray("tasks");
+                    for (int i = 0; i < tasks.getCount(); ++i) {
+                        JSON taskObject = tasks.getObject(i);
+                        String task = taskObject.getString("task");
+                        String dateFinished = taskObject.getString("date_finished");
+                        TaskDatePair taskDatePair = new TaskDatePair(task, dateFinished);
+                        finishedTasks.add(taskDatePair);
+                    }
+                } catch (FailedToGetFieldException e) {
+                    logError(e.getMessage());
+                    promptErrorAndLogout(e.getMessage());
+                }
+
+                mainInAppActivity.getFinishedTasksFragment().showRecyclerView();
+                mainInAppActivity.getFinishedTasksFragment().bindList(finishedTasks);
+            }
+        });
+    }
+
+    @Override
+    public void failedGetFinishedTasksRequest(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void backendUnableToGiveFinishedTasks(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void getFinishedTasksIncomplete(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
     }
 
     private void promptError(final String message) {
