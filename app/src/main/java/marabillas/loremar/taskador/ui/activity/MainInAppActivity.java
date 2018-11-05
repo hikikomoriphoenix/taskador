@@ -467,8 +467,14 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * @param numResults desired number of results for top words
      */
     public void onChangeTopWordsNumResults(int numResults) {
-        topWordsFragment.showFetchingData();
-        mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+        // When user scrolls from to-do tasks page to finished tasks page, the top words page is
+        // created as an off-screen page. This causes the onItemSelected of the spinner to be
+        // invoked. Make sure this doesn't result into fetching top words by making sure that
+        // fetching of top words is only done when top words page is selected.
+        if (pager.getCurrentItem() == 2) {
+            topWordsFragment.showFetchingData();
+            mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+        }
     }
 
     /**
