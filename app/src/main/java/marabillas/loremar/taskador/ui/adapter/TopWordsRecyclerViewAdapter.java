@@ -54,7 +54,7 @@ public class TopWordsRecyclerViewAdapter extends
         return topWords.size();
     }
 
-    public void update(List<WordCountPair> words) {
+    public void bindList(List<WordCountPair> words) {
         topWords = words;
         notifyDataSetChanged();
     }

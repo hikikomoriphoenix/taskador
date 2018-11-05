@@ -137,6 +137,17 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <include
+        android:id="@+id/fragment_topwords_fetchingdata"
+        layout="@layout/activity_maininapp_fetchingdataview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_topwords_footerdivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_topwords_columnlabel_section" />
+
     <View
         android:id="@+id/fragment_topwords_footerdivider"
         android:layout_width="0dp"

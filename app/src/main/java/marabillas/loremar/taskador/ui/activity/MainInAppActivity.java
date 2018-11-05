@@ -209,6 +209,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onTopWordsWindowSelected() {
+        topWordsFragment.showFetchingData();
         mainInAppBackgroundTasker.fetchTopWordsList(10);
         setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
     }
@@ -466,6 +467,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * @param numResults desired number of results for top words
      */
     public void onChangeTopWordsNumResults(int numResults) {
+        topWordsFragment.showFetchingData();
         mainInAppBackgroundTasker.fetchTopWordsList(numResults);
     }
 
@@ -475,6 +477,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * which, between top words list and excluded words list, to view.
      */
     public void onTopWordsViewButtonClicked() {
+        topWordsFragment.showFetchingData();
         TopWordsFragment.ViewState viewState = topWordsFragment.switchViewState();
 
         switch (viewState) {
