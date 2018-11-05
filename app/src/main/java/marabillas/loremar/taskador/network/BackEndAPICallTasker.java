@@ -93,7 +93,6 @@ public class BackEndAPICallTasker implements CookieHandledTracker {
         if (task != null) {
             task.cancel(true);
         }
-        httpClient.cancelRequest();
     }
 
     /**
