@@ -51,4 +51,13 @@ public interface MainInAppBackgroundTasker extends BackgroundTasker<MainInAppAct
      * Method to invoke when in-app screen requires the list of excluded words
      */
     void fetchExcludedWordsList();
+
+    /**
+     * Method to invoke when a word is to be set excluded or not excluded from top words.
+     *
+     * @param selectedItemPosition position of the word in the list to bet set excluded or not
+     *                             excluded.
+     * @param excluded             set to 1 if word is to be set excluded and 0 if to be set not excluded
+     */
+    void setExcluded(int selectedItemPosition, int excluded);
 }

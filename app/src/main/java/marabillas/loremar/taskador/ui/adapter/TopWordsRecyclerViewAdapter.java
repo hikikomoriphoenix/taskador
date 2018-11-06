@@ -47,6 +47,16 @@ public class TopWordsRecyclerViewAdapter extends
 
         wordView.setText(wordViewtext);
         countView.setText(topWord.count);
+
+        // Clear any changes to translation. The item view could have been moved previously and
+        // it may also be no longer bound to the same item in the list, therefore, the item view
+        // should be restored to its original position.
+        holder.itemView.setTranslationX(0);
+
+        // Update to the new item view bound to the selected word.
+        if (mainInAppActivity.getSelectedItemPosition() == position) {
+            mainInAppActivity.setSelectedItemView(holder.itemView);
+        }
     }
 
     @Override
@@ -57,6 +67,11 @@ public class TopWordsRecyclerViewAdapter extends
     public void bindList(List<WordCountPair> words) {
         topWords = words;
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        topWords.remove(position);
+        notifyItemRemoved(position);
     }
 
     class TopWordsViewHolder extends WordsRecyclerViewAdapter.WordsViewHolder {

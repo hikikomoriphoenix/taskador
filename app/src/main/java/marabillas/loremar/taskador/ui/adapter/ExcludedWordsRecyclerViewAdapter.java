@@ -54,6 +54,11 @@ public class ExcludedWordsRecyclerViewAdapter extends
         notifyDataSetChanged();
     }
 
+    public void removeItem(int position) {
+        excludedWords.remove(position);
+        notifyItemRemoved(position);
+    }
+
     class ExcludedWordsViewHolder extends WordsRecyclerViewAdapter.WordsViewHolder {
         ExcludedWordsViewHolder(View itemView) {
             super(itemView);

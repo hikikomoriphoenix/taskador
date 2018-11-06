@@ -107,6 +107,11 @@ public class MainInAppActivityTest {
             }
 
             @Override
+            public void setExcluded(int selectedItemPosition, int excluded) {
+
+            }
+
+            @Override
             public void bindClient(MainInAppActivity client) {
                 this.activity = client;
             }

@@ -19,7 +19,9 @@ import marabillas.loremar.taskador.network.tasks.GetExcludedWordsTask;
 import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
+import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;
@@ -34,7 +36,7 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
 public class MainInAppManager extends BackgroundTaskManager implements
         MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler,
         FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler, GetFinishedTasksTask
-        .ResultHandler, GetTopWordsTask.ResultHandler, GetExcludedWordsTask.ResultHandler {
+        .ResultHandler, GetTopWordsTask.ResultHandler, GetExcludedWordsTask.ResultHandler, SetExcludedTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
@@ -49,6 +51,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private boolean submittingFinishedTasks;
     private int sizeOfFinishedTasksSubmitted;
     private boolean isFetchingData;
+    private int setExcludedWordPosition;
 
     private Runnable currentFetchTask;
 
@@ -201,6 +204,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
         }
         isFetchingData = true;
         getHandler().post(currentFetchTask);
+    }
+
+    @Override
+    public void setExcluded(final int selectedItemPosition, final int excluded) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                setExcludedWordPosition = selectedItemPosition;
+                switch (excluded) {
+                    case 1:
+                        String topWord = topWords.get(selectedItemPosition).word;
+                        BackEndAPICallTasker.getInstance().setExcluded(MainInAppManager.this,
+                                username, token, topWord, excluded);
+                        break;
+                    case 0:
+                        String excludedWord = excludedWords.get(selectedItemPosition);
+                        BackEndAPICallTasker.getInstance().setExcluded(MainInAppManager.this,
+                                username, token, excludedWord, excluded);
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -542,6 +567,58 @@ public class MainInAppManager extends BackgroundTaskManager implements
         isFetchingData = false;
         logError(message);
         promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void selectedWordSetExcludedSuccessfully(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                mainInAppActivity.dismissProgressDialog();
+                TopWordsFragment.ViewState viewState = mainInAppActivity.getTopWordsFragment()
+                        .getCurrentViewState();
+                switch (viewState) {
+                    case TOP:
+                        mainInAppActivity.getTopWordsFragment().removeTopWord
+                                (setExcludedWordPosition);
+                        break;
+                    case EXCLUDED:
+                        mainInAppActivity.getTopWordsFragment().removeExcludedWord
+                                (setExcludedWordPosition);
+                        break;
+                }
+
+                setExcludedWordPosition = -1;
+            }
+        });
+    }
+
+    @Override
+    public void setExcludedFailedToPrepareJSONData(String message) {
+        logError(message);
+        mainInAppActivity.dismissProgressDialog();
+        promptError(message);
+    }
+
+    @Override
+    public void failedSetExcludedRequest(String message) {
+        logError(message);
+        mainInAppActivity.dismissProgressDialog();
+        promptError(message);
+    }
+
+    @Override
+    public void backendUnableUnableToExclude(String message) {
+        logError(message);
+        mainInAppActivity.dismissProgressDialog();
+        promptError(message);
+    }
+
+    @Override
+    public void setExcludedTaskIncomplete(String message) {
+        logError(message);
+        mainInAppActivity.dismissProgressDialog();
+        promptError(message);
     }
 
     private void promptError(final String message) {

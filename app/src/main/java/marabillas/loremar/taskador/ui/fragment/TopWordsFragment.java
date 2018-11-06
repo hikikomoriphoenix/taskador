@@ -88,6 +88,17 @@ public class TopWordsFragment extends Fragment {
         }
     }
 
+    public void removeTopWord(final int position) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter instanceof TopWordsRecyclerViewAdapter) {
+                    ((TopWordsRecyclerViewAdapter) adapter).removeItem(position);
+                }
+            }
+        });
+    }
+
     public void bindExcludedWordsList(final List<String> excludedWords) {
         if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
             mainInAppActivity.runOnUiThread(new Runnable() {
@@ -97,6 +108,17 @@ public class TopWordsFragment extends Fragment {
                 }
             });
         }
+    }
+
+    public void removeExcludedWord(final int position) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
+                    ((ExcludedWordsRecyclerViewAdapter) adapter).removeItem(position);
+                }
+            }
+        });
     }
 
     public RecyclerView getRecyclerView() {
@@ -196,5 +218,9 @@ public class TopWordsFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    public ViewState getCurrentViewState() {
+        return currentViewState;
     }
 }

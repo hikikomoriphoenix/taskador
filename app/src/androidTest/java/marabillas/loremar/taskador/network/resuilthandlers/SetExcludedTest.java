@@ -4,7 +4,7 @@ import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
 
 public class SetExcludedTest extends ResultHandlerTest implements SetExcludedTask.ResultHandler {
     @Override
-    public void selectedWordExcludedSuccessfully(String message) {
+    public void selectedWordSetExcludedSuccessfully(String message) {
         handleSuccess(message);
     }
 

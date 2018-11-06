@@ -457,7 +457,17 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * selected item to the back-end server to set it as excluded from the top words.
      */
     public void onWordSwipedToMark() {
-        // TODO implement
+        TopWordsFragment.ViewState currentViewState = topWordsFragment.getCurrentViewState();
+        switch (currentViewState) {
+            case TOP:
+                showProgressDialog(R.string.activity_maininapp_excludewordprogress);
+                mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 1);
+                break;
+            case EXCLUDED:
+                showProgressDialog(R.string.activity_maininapp_unexcludewordprogress);
+                mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 0);
+                break;
+        }
     }
 
     /**

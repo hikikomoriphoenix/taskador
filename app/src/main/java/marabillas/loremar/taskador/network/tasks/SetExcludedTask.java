@@ -21,7 +21,7 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
     /**
      * @param username account username
      * @param token    auth token
-     * @param word     word to exclude from top words
+     * @param word     word to be set excluded or not excluded from top words
      * @param excluded Set to 1 if word is to be excluded, and 0 if word is to be set as not
      *                 excluded.
      */
@@ -66,7 +66,7 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
     public void onStatusOK(String message, JSON data) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.selectedWordExcludedSuccessfully(message);
+            resultHandler.selectedWordSetExcludedSuccessfully(message);
         }
     }
 
@@ -112,7 +112,7 @@ public class SetExcludedTask extends ReauthenticatingTask<SetExcludedTask.Result
         /**
          * Callback for successfully setting a word as excluded or not excluded
          */
-        void selectedWordExcludedSuccessfully(String message);
+        void selectedWordSetExcludedSuccessfully(String message);
 
         /**
          * Callback when unable to construct JSON data
