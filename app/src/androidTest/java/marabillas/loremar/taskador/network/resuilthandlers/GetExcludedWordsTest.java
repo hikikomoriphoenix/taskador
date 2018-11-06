@@ -29,7 +29,7 @@ public class GetExcludedWordsTest extends ResultHandlerTest implements GetExclud
     }
 
     @Override
-    public void failedSetExcludedRequest(String message) {
+    public void failedGetExcludedRequest(String message) {
         handleFailure(message);
     }
 

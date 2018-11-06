@@ -94,16 +94,21 @@ public class MainInAppActivityTest {
                 switch (numResults) {
                     case 10:
                         List<WordCountPair> top10 = topWords.subList(0, 10);
-                        activity.getTopWordsFragment().updateTopWordsList(top10);
+                        activity.getTopWordsFragment().bindTopWordsList(top10);
                         break;
                     case 20:
-                        activity.getTopWordsFragment().updateTopWordsList(topWords);
+                        activity.getTopWordsFragment().bindTopWordsList(topWords);
                 }
             }
 
             @Override
             public void fetchExcludedWordsList() {
-                activity.getTopWordsFragment().updateExcludedWordsList(excludedWords);
+                activity.getTopWordsFragment().bindExcludedWordsList(excludedWords);
+            }
+
+            @Override
+            public void setExcluded(int selectedItemPosition, int excluded) {
+
             }
 
             @Override

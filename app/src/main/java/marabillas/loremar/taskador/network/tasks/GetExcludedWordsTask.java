@@ -62,7 +62,7 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
     public void failedRequest(String message) {
         ResultHandler resultHandler = getResultHandler();
         if (resultHandler != null) {
-            resultHandler.failedSetExcludedRequest(message);
+            resultHandler.failedGetExcludedRequest(message);
         }
     }
 
@@ -89,7 +89,7 @@ public class GetExcludedWordsTask extends ReauthenticatingTask<GetExcludedWordsT
         /**
          * Callback method when {@link IOException} occur while sending POST request to the back-end server.
          */
-        void failedSetExcludedRequest(String message);
+        void failedGetExcludedRequest(String message);
 
         /**
          * Callback for client or server error on getting excluded words

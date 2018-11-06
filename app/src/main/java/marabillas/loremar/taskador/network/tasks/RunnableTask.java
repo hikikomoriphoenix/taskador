@@ -115,6 +115,11 @@ public abstract class RunnableTask<RH extends RunnableTask.ResultHandler> implem
     }
 
     private void handleIOException(IOException e) {
+        if (e.getMessage().equals("thread interrupted")) {
+            BackEndAPICallTasker.getInstance().cancelTask();
+            return;
+        }
+
         // Check if IOException is due to lack of network connection.
         boolean connected = checkNetworkConnection();
 

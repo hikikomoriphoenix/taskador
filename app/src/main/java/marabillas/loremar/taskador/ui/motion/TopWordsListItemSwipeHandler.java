@@ -15,16 +15,11 @@ public class TopWordsListItemSwipeHandler extends ListItemSwipeHandler {
     @Override
     boolean checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation) {
         float totalWidth = mainInAppActivity.getTopWordsFragment().getRecyclerView().getWidth();
-        if (Math.abs(translation) > 0.50 * totalWidth) {
-            mainInAppActivity.onWordSwipedToMark();
-            return true;
-        } else {
-            return false;
-        }
+        return Math.abs(translation) > 0.50 * totalWidth;
     }
 
     @Override
     void performActionOnMarkedItem(MainInAppActivity mainInAppActivity) {
-        // TODO implement
+        mainInAppActivity.onWordSwipedToMark();
     }
 }

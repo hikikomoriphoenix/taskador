@@ -49,9 +49,14 @@ public class ExcludedWordsRecyclerViewAdapter extends
         return excludedWords.size();
     }
 
-    public void update(List<String> words) {
+    public void bindList(List<String> words) {
         excludedWords = words;
         notifyDataSetChanged();
+    }
+
+    public void removeItem(int position) {
+        excludedWords.remove(position);
+        notifyItemRemoved(position);
     }
 
     class ExcludedWordsViewHolder extends WordsRecyclerViewAdapter.WordsViewHolder {

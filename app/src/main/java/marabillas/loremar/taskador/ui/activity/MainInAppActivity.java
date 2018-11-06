@@ -209,6 +209,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onTopWordsWindowSelected() {
+        topWordsFragment.showFetchingData();
         mainInAppBackgroundTasker.fetchTopWordsList(10);
         setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
     }
@@ -456,7 +457,17 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * selected item to the back-end server to set it as excluded from the top words.
      */
     public void onWordSwipedToMark() {
-        // TODO implement
+        TopWordsFragment.ViewState currentViewState = topWordsFragment.getCurrentViewState();
+        switch (currentViewState) {
+            case TOP:
+                showProgressDialog(R.string.activity_maininapp_excludewordprogress);
+                mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 1);
+                break;
+            case EXCLUDED:
+                showProgressDialog(R.string.activity_maininapp_unexcludewordprogress);
+                mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 0);
+                break;
+        }
     }
 
     /**
@@ -466,7 +477,14 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * @param numResults desired number of results for top words
      */
     public void onChangeTopWordsNumResults(int numResults) {
-        mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+        // When user scrolls from to-do tasks page to finished tasks page, the top words page is
+        // created as an off-screen page. This causes the onItemSelected of the spinner to be
+        // invoked. Make sure this doesn't result into fetching top words by making sure that
+        // fetching of top words is only done when top words page is selected.
+        if (pager.getCurrentItem() == 2) {
+            topWordsFragment.showFetchingData();
+            mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+        }
     }
 
     /**
@@ -475,6 +493,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * which, between top words list and excluded words list, to view.
      */
     public void onTopWordsViewButtonClicked() {
+        topWordsFragment.showFetchingData();
         TopWordsFragment.ViewState viewState = topWordsFragment.switchViewState();
 
         switch (viewState) {

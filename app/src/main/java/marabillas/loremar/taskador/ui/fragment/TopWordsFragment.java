@@ -33,6 +33,7 @@ public class TopWordsFragment extends Fragment {
     private RecyclerView recyclerView;
     private WordsRecyclerViewAdapter adapter;
     private ViewState currentViewState;
+    private View fetchingDataView;
 
     public enum ViewState {TOP, EXCLUDED}
 
@@ -71,33 +72,77 @@ public class TopWordsFragment extends Fragment {
         Button viewButton = view.findViewById(R.id.fragment_topwords_viewbutton);
         viewButton.setOnClickListener(mainInAppActivity.getOnClickListener());
 
+        fetchingDataView = view.findViewById(R.id.fragment_topwords_fetchingdata);
+
         return view;
     }
 
-    public void updateTopWordsList(final List<WordCountPair> topWords) {
+    public void bindTopWordsList(final List<WordCountPair> topWords) {
         if (adapter instanceof TopWordsRecyclerViewAdapter) {
             mainInAppActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((TopWordsRecyclerViewAdapter) adapter).update(topWords);
+                    ((TopWordsRecyclerViewAdapter) adapter).bindList(topWords);
                 }
             });
         }
     }
 
-    public void updateExcludedWordsList(final List<String> excludedWords) {
+    public void removeTopWord(final int position) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter instanceof TopWordsRecyclerViewAdapter) {
+                    ((TopWordsRecyclerViewAdapter) adapter).removeItem(position);
+                }
+            }
+        });
+    }
+
+    public void bindExcludedWordsList(final List<String> excludedWords) {
         if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
             mainInAppActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((ExcludedWordsRecyclerViewAdapter) adapter).update(excludedWords);
+                    ((ExcludedWordsRecyclerViewAdapter) adapter).bindList(excludedWords);
                 }
             });
         }
     }
 
+    public void removeExcludedWord(final int position) {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
+                    ((ExcludedWordsRecyclerViewAdapter) adapter).removeItem(position);
+                }
+            }
+        });
+    }
+
     public RecyclerView getRecyclerView() {
         return recyclerView;
+    }
+
+    public void showFetchingData() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.setVisibility(View.GONE);
+                fetchingDataView.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void showRecyclerView() {
+        mainInAppActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                fetchingDataView.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     /**
@@ -107,7 +152,6 @@ public class TopWordsFragment extends Fragment {
      * @return the {@link ViewState} indicating the new current list being displayed
      */
     public ViewState switchViewState() {
-
         mainInAppActivity.runOnUiThread(new SwitchViewStateRunnable());
 
         return currentViewState;
@@ -174,5 +218,9 @@ public class TopWordsFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    public ViewState getCurrentViewState() {
+        return currentViewState;
     }
 }
