@@ -197,6 +197,9 @@ public class MainInAppManager extends BackgroundTaskManager implements
     }
 
     private void fetch(Runnable task) {
+        // Make sure list items are swipable after this fetch.
+        mainInAppActivity.onListItemSelectionClear();
+
         getHandler().removeCallbacks(currentFetchTask);
         currentFetchTask = task;
         if (isFetchingData) {
