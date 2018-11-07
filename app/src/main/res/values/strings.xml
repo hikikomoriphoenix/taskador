@@ -41,7 +41,10 @@
         empty</string>
     <string name="activity_login_noinputwarning_ok">OK</string>
 
+    <string name="activity_maininapp_reloadtool"><u>Reload</u></string>
     <string name="activity_maininapp_helptool"><u>Help</u></string>
+    <string name="activity_maininapp_abouttool"><u>About</u></string>
+    <string name="activity_maininapp_logouttool"><u>Logout</u></string>
     <string name="activity_maininapp_fetchingdata">Fetching data…</string>
     <string name="activity_maininapp_addtaskprogress">Adding new task…</string>
     <string name="activity_maininapp_deletetaskprogress">Deleting task…</string>
