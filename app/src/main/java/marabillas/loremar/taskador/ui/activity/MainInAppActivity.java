@@ -514,7 +514,8 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         switch (viewState) {
             case TOP:
-                mainInAppBackgroundTasker.fetchTopWordsList(10);
+                int numResults = topWordsFragment.getNumResults();
+                mainInAppBackgroundTasker.fetchTopWordsList(numResults);
                 break;
 
             case EXCLUDED:
