@@ -2,8 +2,12 @@ package marabillas.loremar.taskador.background;
 
 import android.content.DialogInterface;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
@@ -429,14 +433,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
                 try {
                     JSON_Array tasks = data.getArray("tasks");
+
+                    SimpleDateFormat sourceDateFormat = new SimpleDateFormat("yyyy-MM-dd " +
+                            "HH:ms:ss", Locale.getDefault());
+                    SimpleDateFormat targetDateFormat = new SimpleDateFormat("EEE, MMM dd", Locale
+                            .getDefault());
+
                     for (int i = 0; i < tasks.getCount(); ++i) {
                         JSON taskObject = tasks.getObject(i);
                         String task = taskObject.getString("task");
                         String dateFinished = taskObject.getString("date_finished");
+
+                        // Format date finished to desired format.
+                        Date date = sourceDateFormat.parse(dateFinished);
+                        dateFinished = targetDateFormat.format(date);
+
                         TaskDatePair taskDatePair = new TaskDatePair(task, dateFinished);
                         finishedTasks.add(taskDatePair);
                     }
                 } catch (FailedToGetFieldException e) {
+                    logError(e.getMessage());
+                    promptErrorAndLogout(e.getMessage());
+                } catch (ParseException e) {
                     logError(e.getMessage());
                     promptErrorAndLogout(e.getMessage());
                 }
