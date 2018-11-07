@@ -1,6 +1,7 @@
 package marabillas.loremar.taskador.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -23,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
@@ -81,6 +83,13 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maininapp);
+
+        // Show the user currently logged in on the top.
+        TextView userView = findViewById(R.id.activity_maininapp_user);
+        SharedPreferences prefs = getSharedPreferences("config", 0);
+        String username = prefs.getString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null);
+        String loggedInAsUser = "Logged in as " + username;
+        userView.setText(loggedInAsUser);
 
         toDoTasksFragment = new ToDoTasksFragment();
         finishedTasksFragment = new FinishedTasksFragment();
