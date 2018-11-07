@@ -25,6 +25,9 @@ public class MainInAppOnClickListener implements View.OnClickListener {
             case R.id.fragment_topwords_viewbutton:
                 mainInAppActivity.onTopWordsViewButtonClicked();
                 break;
+            case R.id.activtiy_maininapp_reloadtool:
+                mainInAppActivity.onReloadClicked();
+                break;
         }
     }
 }

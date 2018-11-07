@@ -124,6 +124,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
                 .create();
         progressDialogTextView = progressDialogView.findViewById(R.id
                 .activity_maininapp_progress_textview);
+
+        // Get tools for views and set onClickListener
+        TextView reload = findViewById(R.id.activtiy_maininapp_reloadtool);
+
+        reload.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -512,6 +517,38 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
             case EXCLUDED:
                 mainInAppBackgroundTasker.fetchExcludedWordsList();
+                break;
+        }
+    }
+
+    /**
+     * Invoked when the reload tool is clicked. This should re-fetch the current page's list.
+     */
+    public void onReloadClicked() {
+        int currentItem = pager.getCurrentItem();
+        switch (currentItem) {
+            case 0:
+                onListItemSelectionClear();
+                toDoTasksFragment.showFetchingData();
+                mainInAppBackgroundTasker.fetchToDoTasksList();
+                break;
+            case 1:
+                finishedTasksFragment.showFetchingData();
+                mainInAppBackgroundTasker.fetchFinishedTasksList();
+                break;
+            case 2:
+                onListItemSelectionClear();
+                topWordsFragment.showFetchingData();
+                TopWordsFragment.ViewState viewState = topWordsFragment.getCurrentViewState();
+                switch (viewState) {
+                    case TOP:
+                        int numResults = topWordsFragment.getNumResults();
+                        mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+                        break;
+                    case EXCLUDED:
+                        mainInAppBackgroundTasker.fetchExcludedWordsList();
+                        break;
+                }
                 break;
         }
     }
