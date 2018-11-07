@@ -127,8 +127,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         // Get tools for views and set onClickListener
         TextView reload = findViewById(R.id.activtiy_maininapp_reloadtool);
+        TextView logout = findViewById(R.id.activity_maininapp_logouttool);
 
         reload.setOnClickListener(onClickListener);
+        logout.setOnClickListener(onClickListener);
     }
 
     @Override

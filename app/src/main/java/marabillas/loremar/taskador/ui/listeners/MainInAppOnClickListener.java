@@ -28,6 +28,9 @@ public class MainInAppOnClickListener implements View.OnClickListener {
             case R.id.activtiy_maininapp_reloadtool:
                 mainInAppActivity.onReloadClicked();
                 break;
+            case R.id.activity_maininapp_logouttool:
+                mainInAppActivity.logout();
+                break;
         }
     }
 }
