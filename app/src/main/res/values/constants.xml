@@ -12,4 +12,9 @@
     <integer name="fragment_todotasks_popupcheckmark_translationxby">-40</integer>
     <integer name="fragment_todotasks_popupcheckmark_translationyby">-60</integer>
     <integer name="fragment_todotasks_popupcheckmark_fadeoutduration">500</integer>
+
+    <integer name="expandingdialogview_duration">800</integer>
+    <integer name="expandingdialogview_margin">60</integer>
+    <integer name="expandingdialogview_topmargin">120</integer>
+    <integer name="expandingdialogview_elevation">20</integer>
 </resources>

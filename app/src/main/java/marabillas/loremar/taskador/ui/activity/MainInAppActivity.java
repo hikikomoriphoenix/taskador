@@ -31,6 +31,8 @@ import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppManager;
 import marabillas.loremar.taskador.background.SplashBackgroundTasker;
+import marabillas.loremar.taskador.ui.OnBackPressedInvoker;
+import marabillas.loremar.taskador.ui.OnBackPressedListener;
 import marabillas.loremar.taskador.ui.adapter.MainInappViewPagerAdapter;
 import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment;
@@ -56,7 +58,7 @@ import marabillas.loremar.taskador.ui.view.PopUpCheckMark;
  * 3. Updates the views of components in the in-app screen
  */
 public class MainInAppActivity extends BaseAppCompatActivity implements ViewTreeObserver
-        .OnGlobalLayoutListener {
+        .OnGlobalLayoutListener, OnBackPressedInvoker {
     private ToDoTasksFragment toDoTasksFragment;
     private FinishedTasksFragment finishedTasksFragment;
     private TopWordsFragment topWordsFragment;
@@ -70,6 +72,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private TextView.OnEditorActionListener addTaskOnEditorActionListener;
     private TextWatcher addTaskBoxTextWatcher;
     private AdapterView.OnItemSelectedListener topWordsNumResultsSpinnerItemSelectedListener;
+    private OnBackPressedListener onBackPressedListener;
 
     private View selectedItemView;
     private int selectedItemPosition;
@@ -127,9 +130,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         // Get tools for views and set onClickListener
         TextView reload = findViewById(R.id.activtiy_maininapp_reloadtool);
+        TextView about = findViewById(R.id.activity_maininapp_abouttool);
         TextView logout = findViewById(R.id.activity_maininapp_logouttool);
 
         reload.setOnClickListener(onClickListener);
+        about.setOnClickListener(onClickListener);
         logout.setOnClickListener(onClickListener);
     }
 
@@ -566,5 +571,19 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
             input.putInt("action", SplashBackgroundTasker.Action.LOGOUT.ordinal());
             switchScreen(SplashActivity.class, (BackgroundTaskManager) mainInAppBackgroundTasker, input);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedListener != null) {
+            onBackPressedListener.onBackPressed(this);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
     }
 }
