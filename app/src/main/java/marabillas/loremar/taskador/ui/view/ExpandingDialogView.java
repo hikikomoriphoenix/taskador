@@ -146,6 +146,9 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         textView.setMovementMethod(new ScrollingMovementMethod());
         Spanned text = Html.fromHtml(context.getString(textResId));
         textView.setText(text);
+        int padding = getResources().getDimensionPixelSize(R.dimen
+                .activity_maininapp_expandingdialog_textpadding);
+        textView.setPadding(padding, padding, padding, padding);
         addView(textView);
 
         // Add close button
