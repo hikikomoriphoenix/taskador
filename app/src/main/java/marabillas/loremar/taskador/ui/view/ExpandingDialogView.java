@@ -7,6 +7,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
@@ -142,7 +144,8 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         textView.setVerticalScrollBarEnabled(true);
         textView.setMaxLines(500);
         textView.setMovementMethod(new ScrollingMovementMethod());
-        textView.setText(textResId);
+        Spanned text = Html.fromHtml(context.getString(textResId));
+        textView.setText(text);
         addView(textView);
 
         // Add close button
