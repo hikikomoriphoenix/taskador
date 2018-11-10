@@ -79,7 +79,27 @@
     <string name="fragment_topwords_excludedwords_lisitem_defaulttext">-</string>
 
     <string name="about_contents">Place text for About here…</string>
-    <string name="todotasks_help_contents">To-do tasks help text…</string>
-    <string name="finishedtasks_help_contents">Finished tasks help text…</string>
-    <string name="topwords_help_contents">Top words help text…</string>
+    <string name="todotasks_help_contents">
+        <p>This page displays your to-do list.</p>
+        <p>Press "Add New Task" to input a new task in your list.</p>
+        <p>Swipe a task to the right to set the task as finished. This will be removed from your
+        to-do list and will be added to your finished tasks list.</p>
+        <p>To delete a task, press and hold a task. When a pop-up bubble appears, press delete.</p>
+        <p>Scroll to the right to view "Finished Tasks" page</p>
+    </string>
+    <string name="finishedtasks_help_contents">
+        <p>This page displays this week\'s finished tasks.</p>
+        <p>Scroll to the left to view "To-Do Tasks" page.</p>
+        <p>Scroll to the right to view "Top Words" page.</p>
+    </string>
+    <string name="topwords_help_contents">
+        <p>This page displays a list of the topmost frequently used words in your task. It also
+            displays the number of times each word is used, under the column named COUNT.</p>
+        <p>Use the drop-down box to select the number of top words to display.</p>
+        <p>Swipe a word to the left to exclude it from top words list.</p>
+        <p>Press the VIEW EXCLUDED button to view the list of words excluded from the top words
+            list.</p>
+        <P>Press the VIEW TOP button to go back viewing top words.</P>
+        <p>Scroll the left to view "Finished Tasks" page.</p>
+    </string>
 </resources>
