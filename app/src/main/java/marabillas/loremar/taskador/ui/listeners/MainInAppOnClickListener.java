@@ -24,16 +24,40 @@ public class MainInAppOnClickListener implements View.OnClickListener {
             case R.id.fragment_todotasks_addtask_button:
                 mainInAppActivity.onAddTaskButtonClicked();
                 break;
+
             case R.id.fragment_topwords_viewbutton:
                 mainInAppActivity.onTopWordsViewButtonClicked();
                 break;
+
             case R.id.activtiy_maininapp_reloadtool:
                 mainInAppActivity.onReloadClicked();
                 break;
+
+            case R.id.activity_maininapp_helptool:
+                int page = mainInAppActivity.getPager().getCurrentItem();
+                switch (page) {
+                    case 0: // To-do tasks page is the current page.
+                        int todoTasksHelpText = R.string.todotasks_help_contents;
+                        showExpandingDialog(v, todoTasksHelpText);
+                        break;
+
+                    case 1: // Finished tasks page is the current page.
+                        int finishedTasksHelpText = R.string.finishedtasks_help_contents;
+                        showExpandingDialog(v, finishedTasksHelpText);
+                        break;
+
+                    case 2: // Top words page is the current page.
+                        int topWordsHelpText = R.string.topwords_help_contents;
+                        showExpandingDialog(v, topWordsHelpText);
+                        break;
+                }
+                break;
+
             case R.id.activity_maininapp_abouttool:
-                int texResId = R.string.activity_maininapp_about_contents;
+                int texResId = R.string.about_contents;
                 showExpandingDialog(v, texResId);
                 break;
+
             case R.id.activity_maininapp_logouttool:
                 mainInAppActivity.logout();
                 break;

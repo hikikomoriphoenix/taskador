@@ -51,7 +51,6 @@
     <string name="activity_maininapp_excludewordprogress">Excluding word…</string>
     <string name="activity_maininapp_unexcludewordprogress">Unexcluding word…</string>
     <string name="activity_maininapp_expandingDialogClose">CLOSE</string>
-    <string name="activity_maininapp_about_contents">Place text for About here…</string>
     <string name="fragment_todotasks_header">To-Do Tasks</string>
     <string name="fragment_finishedtasks_header">Finished Tasks</string>
     <string name="fragment_topwords_header">Top Words</string>
@@ -78,4 +77,9 @@
     <string name="fragment_topwords_listitem_word_defaulttext">\u0020\u0020\u0020-</string>
     <string name="fragment_topwords_listitem_count_defaulttext">0</string>
     <string name="fragment_topwords_excludedwords_lisitem_defaulttext">-</string>
+
+    <string name="about_contents">Place text for About here…</string>
+    <string name="todotasks_help_contents">To-do tasks help text…</string>
+    <string name="finishedtasks_help_contents">Finished tasks help text…</string>
+    <string name="topwords_help_contents">Top words help text…</string>
 </resources>
