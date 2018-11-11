@@ -41,12 +41,16 @@
         empty</string>
     <string name="activity_login_noinputwarning_ok">OK</string>
 
+    <string name="activity_maininapp_reloadtool"><u>Reload</u></string>
     <string name="activity_maininapp_helptool"><u>Help</u></string>
+    <string name="activity_maininapp_abouttool"><u>About</u></string>
+    <string name="activity_maininapp_logouttool"><u>Logout</u></string>
     <string name="activity_maininapp_fetchingdata">Fetching data…</string>
     <string name="activity_maininapp_addtaskprogress">Adding new task…</string>
     <string name="activity_maininapp_deletetaskprogress">Deleting task…</string>
     <string name="activity_maininapp_excludewordprogress">Excluding word…</string>
     <string name="activity_maininapp_unexcludewordprogress">Unexcluding word…</string>
+    <string name="activity_maininapp_expandingDialogClose">CLOSE</string>
     <string name="fragment_todotasks_header">To-Do Tasks</string>
     <string name="fragment_finishedtasks_header">Finished Tasks</string>
     <string name="fragment_topwords_header">Top Words</string>
@@ -73,4 +77,55 @@
     <string name="fragment_topwords_listitem_word_defaulttext">\u0020\u0020\u0020-</string>
     <string name="fragment_topwords_listitem_count_defaulttext">0</string>
     <string name="fragment_topwords_excludedwords_lisitem_defaulttext">-</string>
+
+    <!-- Tools dialog contents -->
+    <string name="about_contents">
+        <![CDATA[
+        <p>taskador is a to-do list app with online service.</p>
+        <p>Copyright 2018 Loremar Marabillas</p>
+        <p>
+            Licensed under the Apache License, Version 2.0 (the "License");
+            you may not use this file except in compliance with the License.
+            You may obtain a copy of the License at
+        </p>
+        <p>http://www.apache.org/licenses/LICENSE-2.0</p>
+        <p>
+            Unless required by applicable law or agreed to in writing, software
+            distributed under the License is distributed on an "AS IS" BASIS,
+            WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            See the License for the specific language governing permissions and
+            limitations under the License.
+        </p>
+        ]]>
+    </string>
+    <string name="todotasks_help_contents">
+        <![CDATA[
+        <p>This page displays your to-do list.</p>
+        <p>Press "Add New Task" to input a new task in your list.</p>
+        <p>Swipe a task to the right to set the task as finished. This will be removed from your
+        to-do list and will be added to your finished tasks list.</p>
+        <p>To delete a task, press and hold a task. When a pop-up bubble appears, press delete.</p>
+        <p>Scroll to the right to view "Finished Tasks" page</p>
+        ]]>
+    </string>
+    <string name="finishedtasks_help_contents">
+        <![CDATA[
+        <p>This page displays this week\'s finished tasks.</p>
+        <p>Scroll to the left to view "To-Do Tasks" page.</p>
+        <p>Scroll to the right to view "Top Words" page.</p>
+        ]]>
+    </string>
+    <string name="topwords_help_contents">
+        <![CDATA[
+        <p>This page displays a list of the topmost frequently used words in your tasks. It also
+            displays the number of times each word is used, under the column named COUNT.</p>
+        <p>Use the drop-down box to select the number of top words to display.</p>
+        <p>Swipe a word to the left to exclude it from top words list.</p>
+        <p>Press the VIEW EXCLUDED button to view the list of words excluded from the top words
+            list.</p>
+        <p>Swipe an excluded word to the left to unexclude it from top words list.</p>
+        <P>Press the VIEW TOP button to go back viewing top words.</P>
+        <p>Scroll to the left to view "Finished Tasks" page.</p>
+        ]]>
+    </string>
 </resources>

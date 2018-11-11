@@ -16,31 +16,75 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/activity_maininapp_logo"
-                android:layout_width="@dimen/activity_maininapp_logo_width"
+            <TextView
+                android:id="@+id/activity_maininapp_user"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/app_name"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_logo"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textAppearance="@style/MainInAppUserTextAppearance"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/activtiy_maininapp_reloadtool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_maininapp_tool_verticalmargin"
+                android:layout_marginEnd="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginRight="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginBottom="@dimen/activity_maininapp_tool_verticalmargin"
+                android:drawableTop="@drawable/ic_reload"
+                android:gravity="center"
+                android:text="@string/activity_maininapp_reloadtool"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/activity_maininapp_helptool"
+                app:layout_constraintTop_toBottomOf="@+id/activity_maininapp_user" />
 
             <TextView
                 android:id="@+id/activity_maininapp_helptool"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/activity_maininapp_helptool_rightmargin"
-                android:layout_marginRight="@dimen/activity_maininapp_helptool_rightmargin"
-                android:drawableLeft="@drawable/ic_help_outline_24dp"
-                android:drawablePadding="@dimen/activity_maininapp_helpicon_padding"
-                android:drawableStart="@drawable/ic_help_outline_24dp"
+                android:layout_marginTop="@dimen/activity_maininapp_tool_verticalmargin"
+                android:layout_marginEnd="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginRight="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginBottom="@dimen/activity_maininapp_tool_verticalmargin"
+                android:drawableTop="@drawable/ic_help_outline"
                 android:gravity="center"
                 android:text="@string/activity_maininapp_helptool"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toStartOf="@id/activity_maininapp_abouttool"
+                app:layout_constraintTop_toBottomOf="@+id/activity_maininapp_user" />
+
+            <TextView
+                android:id="@+id/activity_maininapp_abouttool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_maininapp_tool_verticalmargin"
+                android:layout_marginEnd="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginRight="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginBottom="@dimen/activity_maininapp_tool_verticalmargin"
+                android:drawableTop="@drawable/ic_info"
+                android:gravity="center"
+                android:text="@string/activity_maininapp_abouttool"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/activity_maininapp_logouttool"
+                app:layout_constraintTop_toBottomOf="@+id/activity_maininapp_user" />
+
+            <TextView
+                android:id="@+id/activity_maininapp_logouttool"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_maininapp_tool_verticalmargin"
+                android:layout_marginEnd="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginRight="@dimen/activity_maininapp_tool_rightmargin"
+                android:layout_marginBottom="@dimen/activity_maininapp_tool_verticalmargin"
+                android:drawableTop="@drawable/ic_power"
+                android:gravity="center"
+                android:text="@string/activity_maininapp_logouttool"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/activity_maininapp_user" />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.Toolbar>
 
@@ -48,6 +92,7 @@
         android:id="@+id/activity_maininapp_viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/activity_maininapp_page_background"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

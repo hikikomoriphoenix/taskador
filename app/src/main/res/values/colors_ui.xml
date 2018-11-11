@@ -29,6 +29,8 @@
     <color name="activity_maininapp_fetchingdataview_textcolor">@android:color/black</color>
     <color name="activity_maininapp_progress_background">@android:color/white</color>
     <color name="activity_maininapp_progress_textcolor">@android:color/black</color>
+    <color name="acitvity_maininapp_expandingdialogview_background">@color/lightblack</color>
+    <color name="activity_maininapp_page_background">@color/lighterblack</color>
 
     <color name="fragment_todotasks_addtask_section_background">@android:color/white</color>
     <color name="fragment_todotasks_addtask_textcolor">@android:color/black</color>

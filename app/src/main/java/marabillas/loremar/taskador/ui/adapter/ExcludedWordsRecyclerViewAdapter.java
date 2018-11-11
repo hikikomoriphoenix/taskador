@@ -42,6 +42,16 @@ public class ExcludedWordsRecyclerViewAdapter extends
         TextView textView = holder.itemView.findViewById(R.id
                 .fragment_topwords_excludedwords_listitem_textview);
         textView.setText(excludedWords.get(position));
+
+        // Clear any changes to translation. The item view could have been moved previously and
+        // it may also be no longer bound to the same item in the list, therefore, the item view
+        // should be restored to its original position.
+        holder.itemView.setTranslationX(0);
+
+        // Update to the new item view bound to the selected word.
+        if (mainInAppActivity.getSelectedItemPosition() == position) {
+            mainInAppActivity.setSelectedItemView(holder.itemView);
+        }
     }
 
     @Override

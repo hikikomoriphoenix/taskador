@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
@@ -70,6 +70,7 @@
     <style name="MainScreenHeaderTextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/main_screen_header_text_color</item>
         <item name="android:textSize">@dimen/main_screen_header_text_size</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">monospace</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -81,6 +82,10 @@
 
     <style name="MainInAppTheme" parent="AppTheme">
         <item name="android:dropDownSpinnerStyle">@android:style/Widget.Spinner.DropDown</item>
+    </style>
+
+    <style name="MainInAppUserTextAppearance" parent="Base.TextAppearance.AppCompat">
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-thin</item>
     </style>
 
     <style name="MainInAppHeaderTextAppearance" parent="@android:style/TextAppearance">
@@ -109,6 +114,7 @@
     <style name="TodoTasksListItemTextViewTextAppearance" parent="Base.TextAppearance.AppCompat">
         <item name="android:textColor">@color/fragment_todotasks_listitem_textview_textcolor</item>
         <item name="android:textSize">@dimen/fragment_todotasks_listitem_textview_textsize</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
     </style>
 
     <style name="FinishedTasksListItemTextViewTextAppearance" parent="Base.TextAppearance.AppCompat">
@@ -116,6 +122,7 @@
         </item>
         <item name="android:textSize">@dimen/fragment_finishedtasks_listitem_textview_textsize
         </item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
     </style>
 
     <style name="FinishedTasksListItemDateFinishedTextAppearance" parent="Base.TextAppearance.AppCompat">
@@ -138,10 +145,12 @@
 
     <style name="TopWordsListItemWordTextAppearance" parent="Base.TextAppearance.AppCompat">
         <item name="android:textColor">@color/fragment_topwords_listitem_word_textcolor</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
     </style>
 
     <style name="TopWordsListItemCountTextAppearance" parent="Base.TextAppearance.AppCompat">
         <item name="android:textColor">@color/fragment_topwords_listitem_count_textcolor</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
     </style>
 
     <style name="TopWordsNumResultsSpinnerListItemTextAppearance" parent="Base.TextAppearance.AppCompat">
@@ -153,5 +162,6 @@
     <style name="ExcludedWordsTextAppearance" parent="Base.TextAppearance.AppCompat">
         <item name="android:textColor">@color/fragment_topwords_excludedwords_listitem_textcolor
         </item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
     </style>
 </resources>

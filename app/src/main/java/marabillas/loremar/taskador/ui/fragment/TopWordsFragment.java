@@ -157,6 +157,23 @@ public class TopWordsFragment extends Fragment {
         return currentViewState;
     }
 
+    /**
+     * Get the value of the spinner representing the number of results for top words.
+     *
+     * @return number of results for top words.
+     */
+    public int getNumResults() {
+        View view = getView();
+        Spinner spinner;
+        if (view != null) {
+            spinner = getView().findViewById(R.id.fragment_topwords_numresults_spinner);
+            String item = spinner.getSelectedItem().toString();
+            return Integer.parseInt(item);
+        } else {
+            throw new IllegalStateException("View containing the spinner does not exist.");
+        }
+    }
+
     private class SwitchViewStateRunnable implements Runnable {
         @Override
         public void run() {

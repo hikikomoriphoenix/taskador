@@ -1,6 +1,7 @@
 package marabillas.loremar.taskador.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -23,12 +24,15 @@ import android.widget.AdapterView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.background.MainInAppManager;
 import marabillas.loremar.taskador.background.SplashBackgroundTasker;
+import marabillas.loremar.taskador.ui.OnBackPressedInvoker;
+import marabillas.loremar.taskador.ui.OnBackPressedListener;
 import marabillas.loremar.taskador.ui.adapter.MainInappViewPagerAdapter;
 import marabillas.loremar.taskador.ui.fragment.FinishedTasksFragment;
 import marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment;
@@ -54,7 +58,7 @@ import marabillas.loremar.taskador.ui.view.PopUpCheckMark;
  * 3. Updates the views of components in the in-app screen
  */
 public class MainInAppActivity extends BaseAppCompatActivity implements ViewTreeObserver
-        .OnGlobalLayoutListener {
+        .OnGlobalLayoutListener, OnBackPressedInvoker {
     private ToDoTasksFragment toDoTasksFragment;
     private FinishedTasksFragment finishedTasksFragment;
     private TopWordsFragment topWordsFragment;
@@ -68,6 +72,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private TextView.OnEditorActionListener addTaskOnEditorActionListener;
     private TextWatcher addTaskBoxTextWatcher;
     private AdapterView.OnItemSelectedListener topWordsNumResultsSpinnerItemSelectedListener;
+    private OnBackPressedListener onBackPressedListener;
 
     private View selectedItemView;
     private int selectedItemPosition;
@@ -81,6 +86,13 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maininapp);
+
+        // Show the user currently logged in on the top.
+        TextView userView = findViewById(R.id.activity_maininapp_user);
+        SharedPreferences prefs = getSharedPreferences("config", 0);
+        String username = prefs.getString(ConfigKeys.CURRENT_ACCOUNT_USERNAME, null);
+        String loggedInAsUser = "Logged in as " + username;
+        userView.setText(loggedInAsUser);
 
         toDoTasksFragment = new ToDoTasksFragment();
         finishedTasksFragment = new FinishedTasksFragment();
@@ -115,6 +127,17 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
                 .create();
         progressDialogTextView = progressDialogView.findViewById(R.id
                 .activity_maininapp_progress_textview);
+
+        // Get tools for views and set onClickListener
+        TextView reload = findViewById(R.id.activtiy_maininapp_reloadtool);
+        TextView help = findViewById(R.id.activity_maininapp_helptool);
+        TextView about = findViewById(R.id.activity_maininapp_abouttool);
+        TextView logout = findViewById(R.id.activity_maininapp_logouttool);
+
+        reload.setOnClickListener(onClickListener);
+        help.setOnClickListener(onClickListener);
+        about.setOnClickListener(onClickListener);
+        logout.setOnClickListener(onClickListener);
     }
 
     @Override
@@ -498,11 +521,44 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
         switch (viewState) {
             case TOP:
-                mainInAppBackgroundTasker.fetchTopWordsList(10);
+                int numResults = topWordsFragment.getNumResults();
+                mainInAppBackgroundTasker.fetchTopWordsList(numResults);
                 break;
 
             case EXCLUDED:
                 mainInAppBackgroundTasker.fetchExcludedWordsList();
+                break;
+        }
+    }
+
+    /**
+     * Invoked when the reload tool is clicked. This should re-fetch the current page's list.
+     */
+    public void onReloadClicked() {
+        int currentItem = pager.getCurrentItem();
+        switch (currentItem) {
+            case 0:
+                onListItemSelectionClear();
+                toDoTasksFragment.showFetchingData();
+                mainInAppBackgroundTasker.fetchToDoTasksList();
+                break;
+            case 1:
+                finishedTasksFragment.showFetchingData();
+                mainInAppBackgroundTasker.fetchFinishedTasksList();
+                break;
+            case 2:
+                onListItemSelectionClear();
+                topWordsFragment.showFetchingData();
+                TopWordsFragment.ViewState viewState = topWordsFragment.getCurrentViewState();
+                switch (viewState) {
+                    case TOP:
+                        int numResults = topWordsFragment.getNumResults();
+                        mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+                        break;
+                    case EXCLUDED:
+                        mainInAppBackgroundTasker.fetchExcludedWordsList();
+                        break;
+                }
                 break;
         }
     }
@@ -517,5 +573,19 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
             input.putInt("action", SplashBackgroundTasker.Action.LOGOUT.ordinal());
             switchScreen(SplashActivity.class, (BackgroundTaskManager) mainInAppBackgroundTasker, input);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedListener != null) {
+            onBackPressedListener.onBackPressed(this);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void setOnBackPressedListener(OnBackPressedListener onBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener;
     }
 }
