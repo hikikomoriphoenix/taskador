@@ -1,7 +1,11 @@
 package marabillas.loremar.taskador.ui.listeners;
 
+import android.text.Html;
+import android.text.Spanned;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
@@ -54,8 +58,17 @@ public class MainInAppOnClickListener implements View.OnClickListener {
                 break;
 
             case R.id.activity_maininapp_abouttool:
-                int texResId = R.string.about_contents;
-                showExpandingDialog(v, texResId);
+                View content = View.inflate(mainInAppActivity, R.layout
+                        .activity_maininapp_about_content, null);
+
+                TextView textView = content.findViewById(R.id.activity_maininapp_about_content_text);
+                Spanned text = Html.fromHtml(mainInAppActivity.getString(R.string.about_contents));
+                textView.setText(text);
+                textView.setVerticalScrollBarEnabled(true);
+                textView.setMaxLines(500);
+                textView.setMovementMethod(new ScrollingMovementMethod());
+
+                showExpandingDialog(v, content);
                 break;
 
             case R.id.activity_maininapp_logouttool:
@@ -65,16 +78,27 @@ public class MainInAppOnClickListener implements View.OnClickListener {
     }
 
     private void showExpandingDialog(View v, int textResId) {
+        TextView textView = new TextView(mainInAppActivity);
+        textView.setVerticalScrollBarEnabled(true);
+        textView.setMaxLines(500);
+        textView.setMovementMethod(new ScrollingMovementMethod());
+        Spanned text = Html.fromHtml(mainInAppActivity.getString(textResId));
+        textView.setText(text);
+
+        showExpandingDialog(v, textView);
+    }
+
+    private void showExpandingDialog(View tool, View content) {
         ViewGroup parent = (ViewGroup) mainInAppActivity.getWindow().getDecorView()
                 .getRootView();
 
         // Get the center of the tool that will serve as the starting point of the expanding dialog.
-        int startX = v.getLeft() + v.getWidth() / 2;
-        int startY = v.getTop() + v.getHeight() / 2;
+        int startX = tool.getLeft() + tool.getWidth() / 2;
+        int startY = tool.getTop() + tool.getHeight() / 2;
 
         ExpandingDialogView dialogView = new ExpandingDialogView(mainInAppActivity,
                 parent);
         mainInAppActivity.setOnBackPressedListener(dialogView);
-        dialogView.show(startX, startY, textResId);
+        dialogView.show(startX, startY, content);
     }
 }

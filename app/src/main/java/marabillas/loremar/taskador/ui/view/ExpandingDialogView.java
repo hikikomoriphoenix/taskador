@@ -7,16 +7,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.text.Html;
-import android.text.Spanned;
-import android.text.method.ScrollingMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.ui.OnBackPressedInvoker;
@@ -29,7 +25,7 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         .OnClickListener, OnBackPressedListener {
     private Context context;
     private FrameLayout backgroundView;
-    private int textResId;
+    private View content;
     private Button closeButton;
 
     /**
@@ -65,8 +61,8 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         super(context);
     }
 
-    public void show(int startX, int startY, int textResId) {
-        this.textResId = textResId;
+    public void show(int startX, int startY, View content) {
+        this.content = content;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int elevation = getResources().getInteger(R.integer.expandingdialogview_elevation);
@@ -135,25 +131,19 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         params.bottomMargin = margin;
 
 
-        // Add text view
-        TextView textView = new TextView(context);
-        LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams
+        // Add content for dialog
+        LayoutParams contentParams = new LayoutParams(ViewGroup.LayoutParams
                 .MATCH_PARENT, 0);
-        textParams.weight = 1;
-        textView.setLayoutParams(textParams);
-        textView.setVerticalScrollBarEnabled(true);
-        textView.setMaxLines(500);
-        textView.setMovementMethod(new ScrollingMovementMethod());
-        Spanned text = Html.fromHtml(context.getString(textResId));
-        textView.setText(text);
-        int padding = getResources().getDimensionPixelSize(R.dimen
+        contentParams.weight = 1;
+        content.setLayoutParams(contentParams);
+        int padding = context.getResources().getDimensionPixelSize(R.dimen
                 .activity_maininapp_expandingdialog_textpadding);
-        textView.setPadding(padding, padding, padding, padding);
-        addView(textView);
+        content.setPadding(padding, padding, padding, padding);
+        addView(content);
 
         // Add close button
         closeButton = new Button(context);
-        LinearLayout.LayoutParams buttonParams = new LinearLayout.LayoutParams(ViewGroup
+        LayoutParams buttonParams = new LayoutParams(ViewGroup
                 .LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         closeButton.setLayoutParams(buttonParams);
         closeButton.setText(R.string.activity_maininapp_expandingDialogClose);
