@@ -56,6 +56,7 @@ import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.ui.listeners.AddTaskBoxTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.AddTaskOnEditorActionListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppOnClickListener;
+import marabillas.loremar.taskador.ui.listeners.MainInAppRecyclerViewOnScrollChangedListener;
 import marabillas.loremar.taskador.ui.listeners.MainInAppViewPagerOnPageChangeListener;
 import marabillas.loremar.taskador.ui.listeners.TopWordsNumResultsSpinnerItemSelectedListener;
 import marabillas.loremar.taskador.ui.motion.ListItemSwipeHandler;
@@ -89,6 +90,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     private TextWatcher addTaskBoxTextWatcher;
     private AdapterView.OnItemSelectedListener topWordsNumResultsSpinnerItemSelectedListener;
     private OnBackPressedListener onBackPressedListener;
+    private MainInAppRecyclerViewOnScrollChangedListener recyclerViewOnScrollListener;
 
     private View selectedItemView;
     private int selectedItemPosition;
@@ -131,6 +133,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         addTaskBoxTextWatcher = new AddTaskBoxTextWatcher(this);
         topWordsNumResultsSpinnerItemSelectedListener = new
                 TopWordsNumResultsSpinnerItemSelectedListener(this);
+        recyclerViewOnScrollListener = new MainInAppRecyclerViewOnScrollChangedListener(this);
 
         selectedItemView = null;
         selectedItemPosition = -1;
@@ -206,6 +209,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
 
     public AdapterView.OnItemSelectedListener getTopWordsNumResultsSpinnerItemSelectedListener() {
         return topWordsNumResultsSpinnerItemSelectedListener;
+    }
+
+    public MainInAppRecyclerViewOnScrollChangedListener getRecyclerViewOnScrollListener() {
+        return recyclerViewOnScrollListener;
     }
 
     @Override

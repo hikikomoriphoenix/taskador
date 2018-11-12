@@ -63,6 +63,7 @@ public class ToDoTasksFragment extends Fragment {
         adapter = new TodoTasksRecyclerViewAdapter(mainInAppActivity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
+        recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
 
         addTaskBox = view.findViewById(R.id.fragment_todotasks_addtask_box);
         addTaskButton = view.findViewById(R.id.fragment_todotasks_addtask_button);

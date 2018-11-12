@@ -158,6 +158,7 @@ public abstract class ListItemSwipeHandler {
                 flingAnimation.setFriction(0.1f);
             }
 
+            mainInAppActivity.getRecyclerViewOnScrollListener().setKeepingSelection(true);
             flingAnimation.addEndListener(this);
             flingAnimation.start();
         }
@@ -173,6 +174,8 @@ public abstract class ListItemSwipeHandler {
             } else {
                 moveItemBackToOriginalPosition();
             }
+
+            mainInAppActivity.getRecyclerViewOnScrollListener().setKeepingSelection(false);
         }
 
         private void moveItemBackToOriginalPosition() {
