@@ -84,6 +84,7 @@ public class TopWordsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.fragment_topwords_recyclerview);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
+        recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
 
         Button viewButton = view.findViewById(R.id.fragment_topwords_viewbutton);
         viewButton.setOnClickListener(mainInAppActivity.getOnClickListener());
