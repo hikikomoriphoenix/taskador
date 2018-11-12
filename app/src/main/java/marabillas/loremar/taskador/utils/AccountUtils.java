@@ -28,6 +28,8 @@ import java.io.IOException;
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.ConfigKeys;
 
+import static marabillas.loremar.taskador.utils.LogUtils.logError;
+
 /**
  * Account-related helper methods
  */
@@ -65,8 +67,9 @@ public final class AccountUtils {
         try {
             token = am.blockingGetAuthToken(account, "full_access", true);
         } catch (OperationCanceledException e) {
-            throw new GetAuthTokenException("OperationCanceledException on getting auth token: " +
-                    e.getMessage());
+            logError("OperationCanceledException on getting auth token. Try again.");
+            // A second try wouldn't hurt.
+            token = getAuthToken(username);
         } catch (IOException e) {
             throw new GetAuthTokenException("IOException on getting auth token: " + e.getMessage());
         } catch (AuthenticatorException e) {
