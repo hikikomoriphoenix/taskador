@@ -65,11 +65,13 @@ public final class AccountUtils {
         try {
             token = am.blockingGetAuthToken(account, "full_access", true);
         } catch (OperationCanceledException e) {
-            throw new GetAuthTokenException(e.getMessage());
+            throw new GetAuthTokenException("OperationCanceledException on getting auth token: " +
+                    e.getMessage());
         } catch (IOException e) {
-            throw new GetAuthTokenException(e.getMessage());
+            throw new GetAuthTokenException("IOException on getting auth token: " + e.getMessage());
         } catch (AuthenticatorException e) {
-            throw new GetAuthTokenException(e.getMessage());
+            throw new GetAuthTokenException("AuthenticatorException on getting auth token: " + e
+                    .getMessage());
         }
 
         return token;
