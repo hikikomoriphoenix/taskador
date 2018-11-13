@@ -34,7 +34,9 @@
             <TextView
                 android:id="@+id/activity_maininapp_user"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/activity_maininapp_user_textsize"
+                android:paddingTop="@dimen/activity_maininapp_user_verticalpadding"
+                android:paddingBottom="@dimen/activity_maininapp_user_verticalpadding"
                 android:textAppearance="@style/MainInAppUserTextAppearance"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

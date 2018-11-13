@@ -47,6 +47,8 @@
     <dimen name="activity_maininapp_expandingdialog_textpadding">32dp</dimen>
     <dimen name="activity_maininapp_about_logowidth">120dp</dimen>
     <dimen name="activity_maininapp_about_logotext_margin">32dp</dimen>
+    <dimen name="activity_maininapp_user_textsize">32dp</dimen>
+    <dimen name="activity_maininapp_user_verticalpadding">8dp</dimen>
 
     <dimen name="fragment_todotasks_addtask_section_padding">8dp</dimen>
     <dimen name="fragment_todotasks_addtask_box_padding">4dp</dimen>
