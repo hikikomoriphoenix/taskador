@@ -43,19 +43,13 @@ public class ToDoTasksFragment extends Fragment {
     private TodoTasksRecyclerViewAdapter adapter;
     private EditText addTaskBox;
     private Button addTaskButton;
-    private MainInAppActivity mainInAppActivity;
     private RecyclerView recyclerView;
     private View fetchingDataView;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mainInAppActivity = (MainInAppActivity) getActivity();
-    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_todotasks, container, false);
 
         // Setup RecyclerView
@@ -63,7 +57,9 @@ public class ToDoTasksFragment extends Fragment {
         adapter = new TodoTasksRecyclerViewAdapter(mainInAppActivity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
-        recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+        if (mainInAppActivity != null) {
+            recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+        }
 
         addTaskBox = view.findViewById(R.id.fragment_todotasks_addtask_box);
         addTaskButton = view.findViewById(R.id.fragment_todotasks_addtask_button);
@@ -74,10 +70,13 @@ public class ToDoTasksFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        addTaskBox.setOnEditorActionListener(mainInAppActivity.getAddTaskOnEditorActionListener());
-        addTaskBox.addTextChangedListener(mainInAppActivity.getAddTaskBoxTextWatcher());
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            addTaskBox.setOnEditorActionListener(mainInAppActivity.getAddTaskOnEditorActionListener());
+            addTaskBox.addTextChangedListener(mainInAppActivity.getAddTaskBoxTextWatcher());
 
-        addTaskButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+            addTaskButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+        }
     }
 
     /**
@@ -87,12 +86,15 @@ public class ToDoTasksFragment extends Fragment {
      * @param tasks list of to-do tasks
      */
     public void bindList(final List<IdTaskPair> tasks) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.bindList(tasks);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.bindList(tasks);
+                }
+            });
+        }
     }
 
     /**
@@ -101,51 +103,66 @@ public class ToDoTasksFragment extends Fragment {
      * @param position position of the new task in the list
      */
     public void notifyTaskAdded(final int position) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyItemInserted(position);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyItemInserted(position);
+                }
+            });
+        }
     }
 
     public void removeTask(final int position) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.removeItem(position);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.removeItem(position);
+                }
+            });
+        }
     }
 
     public void showAddTaskButton() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                addTaskButton.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    addTaskButton.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     public void hideAddTaskButton() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                addTaskButton.setVisibility(View.GONE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    addTaskButton.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     /**
      * Clear the text in {@link ToDoTasksFragment}'s {@link EditText} for adding new tasks.
      */
     public void clearAddTaskBox() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                addTaskBox.setText("");
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    addTaskBox.setText("");
+                }
+            });
+        }
     }
 
     /**
@@ -166,25 +183,31 @@ public class ToDoTasksFragment extends Fragment {
      * being fetched from the back-end server.
      */
     public void showFetchingData() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.setVisibility(View.GONE);
-                fetchingDataView.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.setVisibility(View.GONE);
+                    fetchingDataView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     /**
      * Hide fetching-data view and display the recycler view to show the list of to-do tasks.
      */
     public void showRecyclerView() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                fetchingDataView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fetchingDataView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 }
