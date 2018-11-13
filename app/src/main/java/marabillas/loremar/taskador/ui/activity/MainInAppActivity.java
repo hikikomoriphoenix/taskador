@@ -112,17 +112,7 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         String loggedInAsUser = "Logged in as " + username;
         userView.setText(loggedInAsUser);
 
-        toDoTasksFragment = new ToDoTasksFragment();
-        finishedTasksFragment = new FinishedTasksFragment();
-        topWordsFragment = new TopWordsFragment();
-
-        // Set up ViewPager
-        pager = findViewById(R.id.activity_maininapp_viewpager);
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment[] fragments = {toDoTasksFragment, finishedTasksFragment, topWordsFragment};
-        MainInappViewPagerAdapter adapter = new MainInappViewPagerAdapter(fm, fragments);
-        pager.setAdapter(adapter);
-        pager.addOnPageChangeListener(new MainInAppViewPagerOnPageChangeListener(this));
+        setupViewPager();
 
         contentView = findViewById(android.R.id.content);
         contentView.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -159,6 +149,48 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         logout.setOnClickListener(onClickListener);
     }
 
+    private void setupViewPager() {
+        FragmentManager fm = getSupportFragmentManager();
+        pager = findViewById(R.id.activity_maininapp_viewpager);
+
+        // Instantiate fragments
+        toDoTasksFragment = new ToDoTasksFragment();
+        finishedTasksFragment = new FinishedTasksFragment();
+        topWordsFragment = new TopWordsFragment();
+
+        // Add ToDoTasksFragment if it does not exist.
+        Fragment fragment = fm.findFragmentByTag("TODO_TASKS");
+        if (fragment != null) {
+            toDoTasksFragment = (ToDoTasksFragment) fragment;
+        } else {
+            fm.beginTransaction().add(pager.getId(), toDoTasksFragment, "TODO_TASKS").commit();
+        }
+
+        // Add FinishedTasksFragment if it does not exist.
+        fragment = fm.findFragmentByTag("FINISHED_TASKS");
+        if (fragment != null) {
+            finishedTasksFragment = (FinishedTasksFragment) fragment;
+        } else {
+            fm.beginTransaction().add(pager.getId(), finishedTasksFragment, "FINISHED_TASKS")
+                    .commit();
+        }
+
+        // Add TopWordsFragment if it does not exist.
+        fragment = fm.findFragmentByTag("TOP_WORDS");
+        if (fragment != null) {
+            topWordsFragment = (TopWordsFragment) fragment;
+        } else {
+            fm.beginTransaction().add(pager.getId(), topWordsFragment, "TOP_WORDS").commit();
+        }
+
+        // Finalize setup with an adapter referencing the fragments and OnPagerChangeListener for
+        // listening to pager events.
+        Fragment[] fragments = {toDoTasksFragment, finishedTasksFragment, topWordsFragment};
+        MainInappViewPagerAdapter adapter = new MainInappViewPagerAdapter(fragments);
+        pager.setAdapter(adapter);
+        pager.addOnPageChangeListener(new MainInAppViewPagerOnPageChangeListener(this));
+    }
+
     @Override
     public void onSetupBackgroundService() {
         pager.setCurrentItem(0);
@@ -176,7 +208,18 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
         mainInAppBackgroundTasker = (MainInAppBackgroundTasker) backgroundTaskManager;
         mainInAppBackgroundTasker.bindClient(this);
-        onTodoTasksWindowSelected();
+
+        switch (pager.getCurrentItem()) {
+            case 0:
+                onTodoTasksWindowSelected();
+                break;
+            case 1:
+                onFinishedTasksWindowSelected();
+                break;
+            case 2:
+                onTopWordsWindowSelected();
+                break;
+        }
     }
 
     public ToDoTasksFragment getToDoTasksFragment() {
@@ -236,9 +279,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onTodoTasksWindowSelected() {
-        toDoTasksFragment.showFetchingData();
-        mainInAppBackgroundTasker.fetchToDoTasksList();
-        setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
+        if (mainInAppBackgroundTasker != null) {
+            toDoTasksFragment.showFetchingData();
+            mainInAppBackgroundTasker.fetchToDoTasksList();
+            setListItemSwipeHandler(new TodoTasksListItemSwipeHandler(this));
+        }
     }
 
     /**
@@ -246,8 +291,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onFinishedTasksWindowSelected() {
-        finishedTasksFragment.showFetchingData();
-        mainInAppBackgroundTasker.fetchFinishedTasksList();
+        if (mainInAppBackgroundTasker != null) {
+            finishedTasksFragment.showFetchingData();
+            mainInAppBackgroundTasker.fetchFinishedTasksList();
+        }
     }
 
     /**
@@ -255,9 +302,11 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
      * screen's {@link ViewPager}.
      */
     public void onTopWordsWindowSelected() {
-        topWordsFragment.showFetchingData();
-        mainInAppBackgroundTasker.fetchTopWordsList(10);
-        setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
+        if (mainInAppBackgroundTasker != null) {
+            topWordsFragment.showFetchingData();
+            mainInAppBackgroundTasker.fetchTopWordsList(10);
+            setListItemSwipeHandler(new TopWordsListItemSwipeHandler(this));
+        }
     }
 
     /**
@@ -528,8 +577,10 @@ public class MainInAppActivity extends BaseAppCompatActivity implements ViewTree
         // invoked. Make sure this doesn't result into fetching top words by making sure that
         // fetching of top words is only done when top words page is selected.
         if (pager.getCurrentItem() == 2) {
-            topWordsFragment.showFetchingData();
-            mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+            if (mainInAppBackgroundTasker != null) {
+                topWordsFragment.showFetchingData();
+                mainInAppBackgroundTasker.fetchTopWordsList(numResults);
+            }
         }
     }
 
