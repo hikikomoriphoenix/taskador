@@ -35,6 +35,7 @@ import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
+import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
 
@@ -87,12 +88,15 @@ public class MainInAppActivityTest {
 
             @Override
             public void submitNewTask(String task) {
-
+                activity.dismissProgressDialog();
+                todoTasks.add(new IdTaskPair(0, task));
+                activity.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
             }
 
             @Override
             public void deleteToDoTask(int position) {
-
+                activity.dismissProgressDialog();
+                activity.getToDoTasksFragment().removeTask(position);
             }
 
             @Override
@@ -102,6 +106,7 @@ public class MainInAppActivityTest {
 
             @Override
             public void fetchFinishedTasksList() {
+                activity.getFinishedTasksFragment().showRecyclerView();
                 activity.getFinishedTasksFragment().bindList(finishedTasks);
             }
 
@@ -109,22 +114,36 @@ public class MainInAppActivityTest {
             public void fetchTopWordsList(int numResults) {
                 switch (numResults) {
                     case 10:
+                        activity.getTopWordsFragment().showRecyclerView();
                         List<WordCountPair> top10 = topWords.subList(0, 10);
                         activity.getTopWordsFragment().bindTopWordsList(top10);
                         break;
                     case 20:
+                        activity.getTopWordsFragment().showRecyclerView();
                         activity.getTopWordsFragment().bindTopWordsList(topWords);
+                        break;
                 }
             }
 
             @Override
             public void fetchExcludedWordsList() {
+                activity.getTopWordsFragment().showRecyclerView();
                 activity.getTopWordsFragment().bindExcludedWordsList(excludedWords);
             }
 
             @Override
             public void setExcluded(int selectedItemPosition, int excluded) {
-
+                activity.dismissProgressDialog();
+                TopWordsFragment.ViewState viewState = activity.getTopWordsFragment()
+                        .getCurrentViewState();
+                switch (viewState) {
+                    case TOP:
+                        activity.getTopWordsFragment().removeTopWord(selectedItemPosition);
+                        break;
+                    case EXCLUDED:
+                        activity.getTopWordsFragment().removeExcludedWord(selectedItemPosition);
+                        break;
+                }
             }
 
             @Override
