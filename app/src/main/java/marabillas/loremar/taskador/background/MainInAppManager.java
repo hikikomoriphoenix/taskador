@@ -40,6 +40,7 @@ import marabillas.loremar.taskador.network.tasks.GetFinishedTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
 import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
+import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.utils.AccountUtils;
@@ -56,7 +57,7 @@ import static marabillas.loremar.taskador.utils.PopUpUtils.showErrorPopUp;
 public class MainInAppManager extends BackgroundTaskManager implements
         MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler,
         FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler, GetFinishedTasksTask
-        .ResultHandler, GetTopWordsTask.ResultHandler, GetExcludedWordsTask.ResultHandler, SetExcludedTask.ResultHandler {
+        .ResultHandler, GetTopWordsTask.ResultHandler, GetExcludedWordsTask.ResultHandler, SetExcludedTask.ResultHandler, UpdateTaskWordsTask.ResultHandler {
     private MainInAppActivity mainInAppActivity;
     private String username;
     private String token;
@@ -72,6 +73,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private int sizeOfFinishedTasksSubmitted;
     private boolean isFetchingData;
     private int setExcludedWordPosition;
+    private int topWordsNumResults;
 
     private Runnable currentFetchTask;
 
@@ -196,11 +198,12 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     @Override
     public void fetchTopWordsList(final int numResults) {
-        fetch(new Runnable() {
+        getHandler().post(new Runnable() {
             @Override
             public void run() {
-                BackEndAPICallTasker.getInstance().getTopWords(MainInAppManager.this, username,
-                        token, numResults);
+                topWordsNumResults = numResults;
+                BackEndAPICallTasker.getInstance().updateTaskWords(MainInAppManager.this,
+                        username, token);
             }
         });
     }
@@ -656,6 +659,43 @@ public class MainInAppManager extends BackgroundTaskManager implements
         logError(message);
         mainInAppActivity.dismissProgressDialog();
         promptError(message);
+    }
+
+    @Override
+    public void wordsUpdatedSuccessfully(String message) {
+        getHandler().post(new Runnable() {
+            @Override
+            public void run() {
+                fetch(new Runnable() {
+                    @Override
+                    public void run() {
+                        BackEndAPICallTasker.getInstance().getTopWords(MainInAppManager
+                                .this, username, token, topWordsNumResults);
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void failedUpdateTaskWordsRequest(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void backendUnableToUpdateTaskWords(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
+    }
+
+    @Override
+    public void updateTaskWordsTaskIncomplete(String message) {
+        isFetchingData = false;
+        logError(message);
+        promptErrorAndLogout(message);
     }
 
     private void promptError(final String message) {
