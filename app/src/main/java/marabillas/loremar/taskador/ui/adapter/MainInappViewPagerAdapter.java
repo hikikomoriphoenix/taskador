@@ -16,31 +16,42 @@
 
 package marabillas.loremar.taskador.ui.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * Adapter to put fragments into the {@link android.support.v4.view.ViewPager} in in-app
  * screen. Each fragment represents a window for displaying each feature for the in-app screen.
  */
-public class MainInappViewPagerAdapter extends FragmentStatePagerAdapter {
+public class MainInappViewPagerAdapter extends PagerAdapter {
     private Fragment[] fragments;
 
-    public MainInappViewPagerAdapter(FragmentManager fm, Fragment[] fragments) {
-        super(fm);
+    public MainInappViewPagerAdapter(Fragment[] fragments) {
         this.fragments = fragments;
     }
 
+    @NonNull
     @Override
-    public Fragment getItem(int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        // Fragments are already created. Return the fragment of the current page.
         return fragments[position];
     }
 
     @Override
     public int getCount() {
-        return fragments.length;
+        return 3;
     }
 
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        // Do not destroy.
+    }
 
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return ((Fragment) object).getView() == view;
+    }
 }

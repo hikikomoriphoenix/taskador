@@ -45,7 +45,6 @@ import marabillas.loremar.taskador.ui.adapter.WordsRecyclerViewAdapter;
  * pertains to the number of times the word is used in tasks.
  */
 public class TopWordsFragment extends Fragment {
-    private MainInAppActivity mainInAppActivity;
     private RecyclerView recyclerView;
     private WordsRecyclerViewAdapter adapter;
     private ViewState currentViewState;
@@ -53,41 +52,39 @@ public class TopWordsFragment extends Fragment {
 
     public enum ViewState {TOP, EXCLUDED}
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mainInAppActivity = (MainInAppActivity) getActivity();
-
-        // Set this fragment to display list of top words by default
-        adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
-        currentViewState = ViewState.TOP;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_topwords, container, false);
 
         // Setup the spinner for number of results
         Spinner numResultsSpinner = view.findViewById(R.id.fragment_topwords_numresults_spinner);
         String[] array = getResources().getStringArray(R.array
                 .activity_main_topwords_numresults_selection);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mainInAppActivity, R.layout
-                .fragment_topwords_numresultsspinner_listitem, R.id
-                .fragment_topwords_numresultsspinner_listitem_textview,
-                array);
-        numResultsSpinner.setAdapter(arrayAdapter);
-        numResultsSpinner.setOnItemSelectedListener(mainInAppActivity
-                .getTopWordsNumResultsSpinnerItemSelectedListener());
 
-        // Setup recycler view.
-        recyclerView = view.findViewById(R.id.fragment_topwords_recyclerview);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
-        recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+        if (mainInAppActivity != null) {
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(mainInAppActivity, R.layout
+                    .fragment_topwords_numresultsspinner_listitem, R.id
+                    .fragment_topwords_numresultsspinner_listitem_textview,
+                    array);
+            numResultsSpinner.setAdapter(arrayAdapter);
+            numResultsSpinner.setOnItemSelectedListener(mainInAppActivity
+                    .getTopWordsNumResultsSpinnerItemSelectedListener());
 
-        Button viewButton = view.findViewById(R.id.fragment_topwords_viewbutton);
-        viewButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+            // Set this fragment to display list of top words by default
+            adapter = new TopWordsRecyclerViewAdapter(mainInAppActivity);
+            currentViewState = ViewState.TOP;
+
+            // Setup recycler view.
+            recyclerView = view.findViewById(R.id.fragment_topwords_recyclerview);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
+            recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+
+            Button viewButton = view.findViewById(R.id.fragment_topwords_viewbutton);
+            viewButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+        }
 
         fetchingDataView = view.findViewById(R.id.fragment_topwords_fetchingdata);
 
@@ -95,47 +92,59 @@ public class TopWordsFragment extends Fragment {
     }
 
     public void bindTopWordsList(final List<WordCountPair> topWords) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
         if (adapter instanceof TopWordsRecyclerViewAdapter) {
-            mainInAppActivity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ((TopWordsRecyclerViewAdapter) adapter).bindList(topWords);
-                }
-            });
+            if (mainInAppActivity != null) {
+                mainInAppActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TopWordsRecyclerViewAdapter) adapter).bindList(topWords);
+                    }
+                });
+            }
         }
     }
 
     public void removeTopWord(final int position) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (adapter instanceof TopWordsRecyclerViewAdapter) {
-                    ((TopWordsRecyclerViewAdapter) adapter).removeItem(position);
-                }
-            }
-        });
-    }
-
-    public void bindExcludedWordsList(final List<String> excludedWords) {
-        if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
             mainInAppActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ((ExcludedWordsRecyclerViewAdapter) adapter).bindList(excludedWords);
+                    if (adapter instanceof TopWordsRecyclerViewAdapter) {
+                        ((TopWordsRecyclerViewAdapter) adapter).removeItem(position);
+                    }
                 }
             });
         }
     }
 
-    public void removeExcludedWord(final int position) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
-                    ((ExcludedWordsRecyclerViewAdapter) adapter).removeItem(position);
-                }
+    public void bindExcludedWordsList(final List<String> excludedWords) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
+            if (mainInAppActivity != null) {
+                mainInAppActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((ExcludedWordsRecyclerViewAdapter) adapter).bindList(excludedWords);
+                    }
+                });
             }
-        });
+        }
+    }
+
+    public void removeExcludedWord(final int position) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (adapter instanceof ExcludedWordsRecyclerViewAdapter) {
+                        ((ExcludedWordsRecyclerViewAdapter) adapter).removeItem(position);
+                    }
+                }
+            });
+        }
     }
 
     public RecyclerView getRecyclerView() {
@@ -143,23 +152,29 @@ public class TopWordsFragment extends Fragment {
     }
 
     public void showFetchingData() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.setVisibility(View.GONE);
-                fetchingDataView.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.setVisibility(View.GONE);
+                    fetchingDataView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     public void showRecyclerView() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                fetchingDataView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fetchingDataView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     /**
@@ -169,7 +184,10 @@ public class TopWordsFragment extends Fragment {
      * @return the {@link ViewState} indicating the new current list being displayed
      */
     public ViewState switchViewState() {
-        mainInAppActivity.runOnUiThread(new SwitchViewStateRunnable());
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new SwitchViewStateRunnable());
+        }
 
         return currentViewState;
     }
@@ -205,6 +223,8 @@ public class TopWordsFragment extends Fragment {
                 columnLabelSection = getView().findViewById(R.id.fragment_topwords_columnlabel_section);
                 viewButton = getView().findViewById(R.id.fragment_topwords_viewbutton);
             }
+
+            MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
 
             switch (currentViewState) {
                 case TOP:

@@ -39,27 +39,23 @@ import marabillas.loremar.taskador.ui.adapter.FinishedTasksRecyclerViewAdapter;
  * finished.
  */
 public class FinishedTasksFragment extends Fragment {
-    private MainInAppActivity mainInAppActivity;
     private FinishedTasksRecyclerViewAdapter adapter;
     private RecyclerView recyclerView;
     private View fetchingDataView;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mainInAppActivity = (MainInAppActivity) getActivity();
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
         View view = inflater.inflate(R.layout.fragment_finishedtasks, container, false);
 
         recyclerView = view.findViewById(R.id.fragment_finishedtasks_recyclerview);
         adapter = new FinishedTasksRecyclerViewAdapter(mainInAppActivity);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+        if (mainInAppActivity != null) {
+            recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+        }
 
         fetchingDataView = view.findViewById(R.id.fragment_finishedtasks_fetchingdata);
 
@@ -67,12 +63,15 @@ public class FinishedTasksFragment extends Fragment {
     }
 
     public void bindList(final List<TaskDatePair> tasks) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.bindList(tasks);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.bindList(tasks);
+                }
+            });
+        }
     }
 
     /**
@@ -80,25 +79,31 @@ public class FinishedTasksFragment extends Fragment {
      * being fetched from the back-end server.
      */
     public void showFetchingData() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                recyclerView.setVisibility(View.GONE);
-                fetchingDataView.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerView.setVisibility(View.GONE);
+                    fetchingDataView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 
     /**
      * Hide fetching-data view and display the recycler view to show the list of finished tasks.
      */
     public void showRecyclerView() {
-        mainInAppActivity.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                fetchingDataView.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-        });
+        MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
+        if (mainInAppActivity != null) {
+            mainInAppActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fetchingDataView.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
+            });
+        }
     }
 }
