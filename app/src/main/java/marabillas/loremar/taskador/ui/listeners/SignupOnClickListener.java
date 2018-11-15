@@ -19,7 +19,7 @@ package marabillas.loremar.taskador.ui.listeners;
 import android.view.View;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.ui.SignupInterface;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 /**
  * Listens to click events in signup screen.

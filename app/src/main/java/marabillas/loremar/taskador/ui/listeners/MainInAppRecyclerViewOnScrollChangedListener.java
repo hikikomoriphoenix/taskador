@@ -18,7 +18,7 @@ package marabillas.loremar.taskador.ui.listeners;
 
 import android.support.v7.widget.RecyclerView;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * Listener for scroll events in recycler view. List item selection in the in-app screen needs to

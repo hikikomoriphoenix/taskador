@@ -34,7 +34,7 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
 import marabillas.loremar.taskador.background.SignupManager;
-import marabillas.loremar.taskador.ui.SignupInterface;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 import marabillas.loremar.taskador.ui.listeners.SignupConfirmPasswordTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupOnClickListener;
 import marabillas.loremar.taskador.ui.listeners.SignupPasswordBoxTextWatcher;

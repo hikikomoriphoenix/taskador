@@ -16,8 +16,8 @@
 
 package marabillas.loremar.taskador.background;
 
-import marabillas.loremar.taskador.ui.LoginInterface;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
+import marabillas.loremar.taskador.ui.components.LoginInterface;
 
 /**
  * Handles background tasks for login screen.

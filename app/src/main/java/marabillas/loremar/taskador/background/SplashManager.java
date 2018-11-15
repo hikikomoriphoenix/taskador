@@ -26,10 +26,10 @@ import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
 import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
-import marabillas.loremar.taskador.ui.SplashInterface;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
+import marabillas.loremar.taskador.ui.components.SplashInterface;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;

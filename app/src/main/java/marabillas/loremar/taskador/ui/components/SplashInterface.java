@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.ui;
+package marabillas.loremar.taskador.ui.components;
 
 import android.app.Activity;
 import android.content.Context;

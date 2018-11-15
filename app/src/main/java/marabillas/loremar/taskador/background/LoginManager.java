@@ -18,9 +18,9 @@ package marabillas.loremar.taskador.background;
 
 import android.os.Bundle;
 
-import marabillas.loremar.taskador.ui.LoginInterface;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
+import marabillas.loremar.taskador.ui.components.LoginInterface;
 
 /**
  * Service that handles background tasks for login screen.

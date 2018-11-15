@@ -27,7 +27,7 @@ import android.support.v7.app.AppCompatActivity;
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
-import marabillas.loremar.taskador.ui.ActivityCompatInterface;
+import marabillas.loremar.taskador.ui.components.ActivityCompatInterface;
 
 /**
  * Base class for taskador's activities. It allows binding a {@link BackgroundTaskManager}

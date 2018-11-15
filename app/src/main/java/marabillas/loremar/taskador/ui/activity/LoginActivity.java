@@ -33,7 +33,7 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
 import marabillas.loremar.taskador.background.LoginManager;
-import marabillas.loremar.taskador.ui.LoginInterface;
+import marabillas.loremar.taskador.ui.components.LoginInterface;
 
 /**
  * Activity facilitating login screen. The login screen is shown when:

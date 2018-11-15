@@ -22,8 +22,8 @@ import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.CheckUsernameAvailabilityTask;
-import marabillas.loremar.taskador.ui.SignupInterface;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 

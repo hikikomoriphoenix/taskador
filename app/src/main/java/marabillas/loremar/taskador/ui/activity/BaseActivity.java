@@ -26,7 +26,7 @@ import android.support.annotation.Nullable;
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
-import marabillas.loremar.taskador.ui.ActivityInterface;
+import marabillas.loremar.taskador.ui.components.ActivityInterface;
 
 /**
  * Base class for taskador's activities. It allows binding a {@link BackgroundTaskManager}

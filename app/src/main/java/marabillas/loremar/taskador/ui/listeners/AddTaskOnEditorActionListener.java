@@ -20,7 +20,7 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * Listen's for editor action events while user is using the soft keyboard to input new task.

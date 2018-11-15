@@ -19,7 +19,7 @@ package marabillas.loremar.taskador.ui.listeners;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import marabillas.loremar.taskador.ui.SignupInterface;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 /**
  * Listens to text events in signup screen's password box.

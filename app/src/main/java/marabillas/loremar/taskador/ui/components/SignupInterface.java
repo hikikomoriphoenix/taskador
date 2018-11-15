@@ -14,21 +14,31 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.ui;
+package marabillas.loremar.taskador.ui.components;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.view.View;
 
 import marabillas.loremar.taskador.background.BackgroundServiceClient;
 import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 
-public interface LoginInterface extends BackgroundServiceClient,
-        BackgroundServiceConnection.OnServiceConnectedListener, View
-                .OnClickListener {
+public interface SignupInterface extends BackgroundServiceClient,
+        BackgroundServiceConnection.OnServiceConnectedListener {
+    void onConfirmPasswordBoxTextChanged(final String text);
+
+    void onSubmit();
+
+    void onPasswordBoxTextChanged(final String text);
+
+    void onUsernameBoxTextChanged(final String text);
+
+    void onUsernameIsAvailable();
+
+    void onUsernameNotAvailable();
+
     void switchToAnotherScreen(@NonNull Class<? extends Activity> activityClass, @NonNull
             BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input);
 }

@@ -41,7 +41,7 @@ import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
 import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
 import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.utils.AccountUtils;
 

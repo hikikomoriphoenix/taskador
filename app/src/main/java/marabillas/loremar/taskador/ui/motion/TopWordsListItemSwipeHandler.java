@@ -16,7 +16,7 @@
 
 package marabillas.loremar.taskador.ui.motion;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * Handles swipe motion for the list items in

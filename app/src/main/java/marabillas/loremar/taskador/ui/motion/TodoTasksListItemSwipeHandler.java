@@ -22,7 +22,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * Handles swipe motion for the list items in

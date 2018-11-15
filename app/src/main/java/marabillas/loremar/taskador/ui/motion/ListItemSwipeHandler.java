@@ -26,7 +26,7 @@ import android.view.ViewPropertyAnimator;
 
 import java.util.concurrent.TimeUnit;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 import static android.support.v4.view.ViewCompat.animate;
 

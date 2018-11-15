@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.ui;
+package marabillas.loremar.taskador.ui.components;
 
 public interface ActivityCompatInterface extends ActivityInterface {
     android.support.v4.app.FragmentManager getSupportFragmentManager();

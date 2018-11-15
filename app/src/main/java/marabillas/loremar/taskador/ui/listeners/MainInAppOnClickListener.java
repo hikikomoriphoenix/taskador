@@ -25,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 import marabillas.loremar.taskador.ui.view.ExpandingDialogView;
 
 /**

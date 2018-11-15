@@ -35,7 +35,8 @@ import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
-import marabillas.loremar.taskador.ui.MainInApp;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
+import marabillas.loremar.taskador.ui.components.MainInApp;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
@@ -81,7 +82,7 @@ public class MainInAppActivityTest {
         MainInApp mainInApp = new MainInApp(mainInAppActivity);
 
         class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
-            private MainInApp mainInApp;
+            private InAppInterface mainInApp;
 
             @Override
             public void fetchToDoTasksList() {
@@ -150,12 +151,12 @@ public class MainInAppActivityTest {
             }
 
             @Override
-            public void bindClient(MainInApp client) {
+            public void bindClient(InAppInterface client) {
                 this.mainInApp = client;
             }
 
             @Override
-            public MainInApp getClient() {
+            public InAppInterface getClient() {
                 return mainInApp;
             }
         }

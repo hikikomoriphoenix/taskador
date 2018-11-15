@@ -32,7 +32,7 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SplashBackgroundTasker;
 import marabillas.loremar.taskador.background.SplashManager;
-import marabillas.loremar.taskador.ui.SplashInterface;
+import marabillas.loremar.taskador.ui.components.SplashInterface;
 import marabillas.loremar.taskador.ui.view.WaitingDotsView;
 
 /**

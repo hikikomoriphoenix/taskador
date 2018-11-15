@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.ui;
+package marabillas.loremar.taskador.ui.components;
 
 /**
  * Interface that notifies an {@link OnBackPressedListener} that back button is pressed.

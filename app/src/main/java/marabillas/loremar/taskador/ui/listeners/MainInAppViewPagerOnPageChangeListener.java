@@ -18,7 +18,7 @@ package marabillas.loremar.taskador.ui.listeners;
 
 import android.support.v4.view.ViewPager;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * Listens to events in in-app screen's {@link ViewPager}.

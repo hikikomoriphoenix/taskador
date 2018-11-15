@@ -16,7 +16,7 @@
 
 package marabillas.loremar.taskador.background;
 
-import marabillas.loremar.taskador.ui.SignupInterface;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 /**
  * Handles background tasks for signup screen.

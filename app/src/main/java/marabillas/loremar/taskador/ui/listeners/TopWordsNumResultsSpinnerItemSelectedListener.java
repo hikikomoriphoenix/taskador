@@ -19,7 +19,7 @@ package marabillas.loremar.taskador.ui.listeners;
 import android.view.View;
 import android.widget.AdapterView;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * Listens to events in {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s

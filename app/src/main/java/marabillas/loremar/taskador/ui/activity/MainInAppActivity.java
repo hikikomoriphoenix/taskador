@@ -29,7 +29,7 @@ import android.widget.TextView;
 import marabillas.loremar.taskador.ConfigKeys;
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.background.MainInAppManager;
-import marabillas.loremar.taskador.ui.MainInApp;
+import marabillas.loremar.taskador.ui.components.MainInApp;
 
 /**
  * Activity for main in-app screen. This screen allows the user to list to-do tasks, show

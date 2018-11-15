@@ -16,7 +16,7 @@
 
 package marabillas.loremar.taskador.background;
 
-import marabillas.loremar.taskador.ui.InAppInterface;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 
 /**
  * This interface contains methods which are to be invoked to execute background tasks for the
