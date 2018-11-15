@@ -42,6 +42,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         return this;
     }
 
+    @Override
     public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass,
                                        BackgroundServiceConnection.OnServiceConnectedListener
                                                onServiceConnectedListener) {
@@ -75,6 +76,7 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
      */
     public abstract void onSetupBackgroundService();
 
+    @Override
     public void switchScreen(@NonNull Class<? extends Activity> activityClass, @NonNull
             BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
         // Prepare intent

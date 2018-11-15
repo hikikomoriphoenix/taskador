@@ -212,42 +212,52 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         activityInterface.runOnUiThread(runnable);
     }
 
+    @Override
     public ToDoTasksFragment getToDoTasksFragment() {
         return toDoTasksFragment;
     }
 
+    @Override
     public FinishedTasksFragment getFinishedTasksFragment() {
         return finishedTasksFragment;
     }
 
+    @Override
     public TopWordsFragment getTopWordsFragment() {
         return topWordsFragment;
     }
 
+    @Override
     public ViewPager getPager() {
         return pager;
     }
 
+    @Override
     public View.OnClickListener getOnClickListener() {
         return onClickListener;
     }
 
+    @Override
     public TextView.OnEditorActionListener getAddTaskOnEditorActionListener() {
         return addTaskOnEditorActionListener;
     }
 
+    @Override
     public TextWatcher getAddTaskBoxTextWatcher() {
         return addTaskBoxTextWatcher;
     }
 
+    @Override
     public AdapterView.OnItemSelectedListener getTopWordsNumResultsSpinnerItemSelectedListener() {
         return topWordsNumResultsSpinnerItemSelectedListener;
     }
 
+    @Override
     public MainInAppRecyclerViewOnScrollChangedListener getRecyclerViewOnScrollListener() {
         return recyclerViewOnScrollListener;
     }
 
+    @Override
     public void onTodoTasksWindowSelected() {
         if (mainInAppBackgroundTasker != null) {
             toDoTasksFragment.showFetchingData();
@@ -256,6 +266,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onFinishedTasksWindowSelected() {
         if (mainInAppBackgroundTasker != null) {
             finishedTasksFragment.showFetchingData();
@@ -263,6 +274,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onTopWordsWindowSelected() {
         if (mainInAppBackgroundTasker != null) {
             topWordsFragment.showFetchingData();
@@ -271,6 +283,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onAddTaskBoxTextChanged(Editable s) {
         // Show the Add Tasks button when user types an input text for the Add Task Box.
         // Otherwise, hide the button when text is cleared.
@@ -281,6 +294,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onAddTaskButtonClicked() {
         // Close soft keyboard
         if (activityInterface.getCurrentFocus() != null) {
@@ -300,6 +314,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         onAddTaskUserInput();
     }
 
+    @Override
     public void onAddTaskUserInput() {
         // If user inputted a task, trigger the onAddNewTask for handling, passing the string
         // of the new task to add.
@@ -313,6 +328,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void showProgressDialog(final int stringResId) {
         activityInterface.runOnUiThread(new Runnable() {
             @Override
@@ -323,6 +339,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         });
     }
 
+    @Override
     public void dismissProgressDialog() {
         activityInterface.runOnUiThread(new Runnable() {
             @Override
@@ -333,10 +350,12 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         });
     }
 
+    @Override
     public void setListItemSwipeHandler(ListItemSwipeHandler listItemSwipeHandler) {
         this.listItemSwipeHandler = listItemSwipeHandler;
     }
 
+    @Override
     public void onListItemTouch(View v, MotionEvent event, int position) {
         //If no list item has been selected yet, select this item.
         if (selectedItemView == null) {
@@ -356,23 +375,28 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onListItemSelectionClear() {
         selectedItemView = null;
         selectedItemPosition = -1;
     }
 
+    @Override
     public View getSelectedItemView() {
         return selectedItemView;
     }
 
+    @Override
     public void setSelectedItemView(View itemView) {
         selectedItemView = itemView;
     }
 
+    @Override
     public int getSelectedItemPosition() {
         return selectedItemPosition;
     }
 
+    @Override
     public void onTaskMarkedFinishedAction() {
         mainInAppBackgroundTasker.submitFinishedTask(selectedItemPosition);
 
@@ -386,6 +410,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         new PopUpCheckMark(getContext()).popUp(x, y);
     }
 
+    @Override
     public void onToDoTaskLongClicked(final float x, final float y, final int
             longClickedListItemPosition) {
         activityInterface.runOnUiThread(new Runnable() {
@@ -443,6 +468,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         });
     }
 
+    @Override
     public void onWordSwipedToMark() {
         TopWordsFragment.ViewState currentViewState = topWordsFragment.getCurrentViewState();
         switch (currentViewState) {
@@ -457,6 +483,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onChangeTopWordsNumResults(int numResults) {
         // When user scrolls from to-do tasks page to finished tasks page, the top words page is
         // created as an off-screen page. This causes the onItemSelected of the spinner to be
@@ -470,6 +497,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onTopWordsViewButtonClicked() {
         topWordsFragment.showFetchingData();
         TopWordsFragment.ViewState viewState = topWordsFragment.switchViewState();
@@ -486,6 +514,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void onReloadClicked() {
         int currentItem = pager.getCurrentItem();
         switch (currentItem) {
@@ -515,6 +544,7 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         }
     }
 
+    @Override
     public void logout() {
         if (mainInAppBackgroundTasker instanceof MainInAppManager) {
             Bundle input = new Bundle();

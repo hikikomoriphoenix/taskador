@@ -127,6 +127,7 @@ public class SplashActivity extends BaseActivity implements SplashInterface {
         });
     }
 
+    @Override
     public void onShowStatusFirst(final String status) {
         runOnUiThread(new Runnable() {
             @Override

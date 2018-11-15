@@ -119,6 +119,7 @@ public class SignupActivity extends BaseActivity implements SignupInterface {
         signupBackgroundTasker.bindClient(this);
     }
 
+    @Override
     public void onUsernameBoxTextChanged(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -187,6 +188,7 @@ public class SignupActivity extends BaseActivity implements SignupInterface {
         }
     }
 
+    @Override
     public void onUsernameIsAvailable() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -199,6 +201,7 @@ public class SignupActivity extends BaseActivity implements SignupInterface {
         });
     }
 
+    @Override
     public void onUsernameNotAvailable() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -215,6 +218,7 @@ public class SignupActivity extends BaseActivity implements SignupInterface {
         });
     }
 
+    @Override
     public void onPasswordBoxTextChanged(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -224,6 +228,7 @@ public class SignupActivity extends BaseActivity implements SignupInterface {
         });
     }
 
+    @Override
     public void onConfirmPasswordBoxTextChanged(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -287,10 +292,7 @@ public class SignupActivity extends BaseActivity implements SignupInterface {
         }
     }
 
-    /**
-     * Method invoked when inputs need to be submitted to register new account. Inputs are first
-     * checked if they are valid before submitting.
-     */
+    @Override
     public void onSubmit() {
         runOnUiThread(new Runnable() {
             @Override

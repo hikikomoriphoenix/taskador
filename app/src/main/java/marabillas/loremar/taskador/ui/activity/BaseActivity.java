@@ -72,6 +72,7 @@ public abstract class BaseActivity extends Activity implements ActivityInterface
      */
     public abstract void onSetupBackgroundService();
 
+    @Override
     public void switchScreen(@NonNull Class<? extends Activity> activityClass, @NonNull
             BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
         // Prepare intent

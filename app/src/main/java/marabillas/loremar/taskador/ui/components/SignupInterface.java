@@ -29,6 +29,10 @@ public interface SignupInterface extends BackgroundServiceClient,
         BackgroundServiceConnection.OnServiceConnectedListener {
     void onConfirmPasswordBoxTextChanged(final String text);
 
+    /**
+     * Method invoked when inputs need to be submitted to register new account. Inputs are first
+     * checked if they are valid before submitting.
+     */
     void onSubmit();
 
     void onPasswordBoxTextChanged(final String text);
