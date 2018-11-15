@@ -16,13 +16,13 @@
 
 package marabillas.loremar.taskador.background;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * This interface contains methods which are to be invoked to execute background tasks for the
  * in-app screen.
  */
-public interface MainInAppBackgroundTasker extends BackgroundTasker<MainInAppActivity> {
+public interface MainInAppBackgroundTasker extends BackgroundTasker<InAppInterface> {
     /**
      * Method to invoke when in-app screen requires a list of to-do tasks
      */

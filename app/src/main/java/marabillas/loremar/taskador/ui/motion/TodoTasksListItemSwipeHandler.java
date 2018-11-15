@@ -16,12 +16,13 @@
 
 package marabillas.loremar.taskador.ui.motion;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Handles swipe motion for the list items in
@@ -29,28 +30,29 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  * {@link android.support.v7.widget.RecyclerView}.
  */
 public class TodoTasksListItemSwipeHandler extends ListItemSwipeHandler {
-    public TodoTasksListItemSwipeHandler(MainInAppActivity mainInAppActivity) {
-        super(mainInAppActivity, StartPosition.LEFT);
+    public TodoTasksListItemSwipeHandler(InAppInterface mainInApp) {
+        super(mainInApp, StartPosition.LEFT);
     }
 
     @Override
-    boolean checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation) {
-        float totalWidth = mainInAppActivity.getToDoTasksFragment().getRecyclerView().getWidth();
-        View selectedItemView = mainInAppActivity.getSelectedItemView();
+    boolean checkIfSwipedToMark(InAppInterface mainInApp, float translation) {
+        float totalWidth = mainInApp.getToDoTasksFragment().getRecyclerView().getWidth();
+        View selectedItemView = mainInApp.getSelectedItemView();
         ImageView check = null;
         if (selectedItemView != null) {
             check = selectedItemView.findViewById(R.id.fragment_todotasks_listitem_check);
         }
 
+        Context context = mainInApp.getContext();
         if (Math.abs(translation) > 0.50 * totalWidth) {
             if (check != null) {
-                Drawable checkDrawable = mainInAppActivity.getResources().getDrawable(R.drawable.ic_checked);
+                Drawable checkDrawable = context.getResources().getDrawable(R.drawable.ic_checked);
                 check.setImageDrawable(checkDrawable);
             }
             return true;
         } else {
             if (check != null) {
-                Drawable notCheckedDrawable = mainInAppActivity.getResources().getDrawable(R.drawable
+                Drawable notCheckedDrawable = context.getResources().getDrawable(R.drawable
                         .ic_notchecked);
                 check.setImageDrawable(notCheckedDrawable);
             }
@@ -59,11 +61,12 @@ public class TodoTasksListItemSwipeHandler extends ListItemSwipeHandler {
     }
 
     @Override
-    void performActionOnMarkedItem(MainInAppActivity mainInAppActivity) {
-        mainInAppActivity.onTaskMarkedFinishedAction();
-        View selectedItemView = mainInAppActivity.getSelectedItemView();
+    void performActionOnMarkedItem(InAppInterface mainInApp) {
+        mainInApp.onTaskMarkedFinishedAction();
+        View selectedItemView = mainInApp.getSelectedItemView();
         ImageView check = selectedItemView.findViewById(R.id.fragment_todotasks_listitem_check);
-        Drawable notCheckedDrawable = mainInAppActivity.getResources().getDrawable(R.drawable
+        Context context = mainInApp.getContext();
+        Drawable notCheckedDrawable = context.getResources().getDrawable(R.drawable
                 .ic_notchecked);
         check.setImageDrawable(notCheckedDrawable);
     }

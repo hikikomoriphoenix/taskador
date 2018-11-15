@@ -70,8 +70,8 @@ public class TopWordsRecyclerViewAdapter extends
         holder.itemView.setTranslationX(0);
 
         // Update to the new item view bound to the selected word.
-        if (mainInAppActivity.getSelectedItemPosition() == position) {
-            mainInAppActivity.setSelectedItemView(holder.itemView);
+        if (mainInAppActivity.getMainInApp().getSelectedItemPosition() == position) {
+            mainInAppActivity.getMainInApp().setSelectedItemView(holder.itemView);
         }
     }
 

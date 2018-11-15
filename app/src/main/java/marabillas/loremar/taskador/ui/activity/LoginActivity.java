@@ -27,6 +27,8 @@ import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.account.DirectLogin;
+import marabillas.loremar.taskador.background.BackgroundServiceClient;
+import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
@@ -47,7 +49,9 @@ import marabillas.loremar.taskador.background.LoginManager;
  * You can also click 'Create New Account' at the bottom to go to signup screen to register a new
  * taskador account.
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements BackgroundServiceClient,
+        BackgroundServiceConnection.OnServiceConnectedListener, View
+                .OnClickListener {
     private LoginBackgroundTasker loginBackgroundTasker;
     private EditText usernameBox;
     private EditText passwordBox;
@@ -72,6 +76,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onSetupBackgroundService() {
         setupBackgroundService(LoginManager.class);
+    }
+
+    @Override
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
+        setupBackgroundService(serviceClass, this);
     }
 
     @Override

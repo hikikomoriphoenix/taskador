@@ -16,14 +16,6 @@
 
 package marabillas.loremar.taskador.ui;
 
-/**
- * Interface that notifies an {@link OnBackPressedListener} that back button is pressed.
- */
-public interface OnBackPressedInvoker {
-    /**
-     * Set the listener that will be notified of back button press events.
-     */
-    void setOnBackPressedListener(OnBackPressedListener onBackPressedListener);
-
-    boolean onBackPressed();
+public interface ActivityCompatInterface extends ActivityInterface {
+    android.support.v4.app.FragmentManager getSupportFragmentManager();
 }

@@ -20,22 +20,22 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Listen's for editor action events while user is using the soft keyboard to input new task.
  */
 public class AddTaskOnEditorActionListener implements TextView.OnEditorActionListener {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
 
-    public AddTaskOnEditorActionListener(MainInAppActivity mainInAppActivity) {
-        this.mainInAppActivity = mainInAppActivity;
+    public AddTaskOnEditorActionListener(InAppInterface mainInApp) {
+        this.mainInApp = mainInApp;
     }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            mainInAppActivity.onAddTaskUserInput();
+            mainInApp.onAddTaskUserInput();
         }
 
         return false;

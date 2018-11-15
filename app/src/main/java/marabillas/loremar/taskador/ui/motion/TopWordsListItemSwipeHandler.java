@@ -16,7 +16,7 @@
 
 package marabillas.loremar.taskador.ui.motion;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Handles swipe motion for the list items in
@@ -24,18 +24,18 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  * {@link android.support.v7.widget.RecyclerView}.
  */
 public class TopWordsListItemSwipeHandler extends ListItemSwipeHandler {
-    public TopWordsListItemSwipeHandler(MainInAppActivity mainInAppActivity) {
-        super(mainInAppActivity, StartPosition.RIGHT);
+    public TopWordsListItemSwipeHandler(InAppInterface mainInApp) {
+        super(mainInApp, StartPosition.RIGHT);
     }
 
     @Override
-    boolean checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation) {
-        float totalWidth = mainInAppActivity.getTopWordsFragment().getRecyclerView().getWidth();
+    boolean checkIfSwipedToMark(InAppInterface mainInApp, float translation) {
+        float totalWidth = mainInApp.getTopWordsFragment().getRecyclerView().getWidth();
         return Math.abs(translation) > 0.50 * totalWidth;
     }
 
     @Override
-    void performActionOnMarkedItem(MainInAppActivity mainInAppActivity) {
-        mainInAppActivity.onWordSwipedToMark();
+    void performActionOnMarkedItem(InAppInterface mainInApp) {
+        mainInApp.onWordSwipedToMark();
     }
 }

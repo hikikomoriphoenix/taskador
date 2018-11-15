@@ -19,27 +19,27 @@ package marabillas.loremar.taskador.ui.listeners;
 import android.view.View;
 import android.widget.AdapterView;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Listens to events in {@link marabillas.loremar.taskador.ui.fragment.TopWordsFragment}'s
  * {@link android.widget.Spinner} which is used for selecting number of results for top words list.
  */
 public class TopWordsNumResultsSpinnerItemSelectedListener implements AdapterView.OnItemSelectedListener {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
 
-    public TopWordsNumResultsSpinnerItemSelectedListener(MainInAppActivity mainInAppActivity) {
-        this.mainInAppActivity = mainInAppActivity;
+    public TopWordsNumResultsSpinnerItemSelectedListener(InAppInterface mainInApp) {
+        this.mainInApp = mainInApp;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (position) {
             case 0:
-                mainInAppActivity.onChangeTopWordsNumResults(10);
+                mainInApp.onChangeTopWordsNumResults(10);
                 break;
             case 1:
-                mainInAppActivity.onChangeTopWordsNumResults(20);
+                mainInApp.onChangeTopWordsNumResults(20);
                 break;
         }
     }

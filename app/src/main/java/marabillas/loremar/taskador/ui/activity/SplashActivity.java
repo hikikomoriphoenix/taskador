@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.background.BackgroundServiceClient;
+import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SplashBackgroundTasker;
@@ -35,7 +37,8 @@ import marabillas.loremar.taskador.ui.view.WaitingDotsView;
  * This is taskador's main launcher activity. It displays a splash screen while taskador is
  * logging in to the server or making transitions from one screen to another.
  */
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements BackgroundServiceClient,
+        BackgroundServiceConnection.OnServiceConnectedListener {
     private Bundle input;
     private SplashBackgroundTasker splashBackgroundTasker;
     private NextScreenTimer nextScreenTimer;
@@ -71,6 +74,16 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
+        setupBackgroundService(serviceClass, this);
+    }
+
+    @Override
+    public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -89,11 +102,6 @@ public class SplashActivity extends BaseActivity {
 
         dotsView.stopAnimation();
         dotsView.setVisibility(View.INVISIBLE);
-    }
-
-    @Override
-    public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
-
     }
 
     @Override

@@ -58,7 +58,8 @@ public class ToDoTasksFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
         if (mainInAppActivity != null) {
-            recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+            recyclerView.addOnScrollListener(mainInAppActivity.getMainInApp()
+                    .getRecyclerViewOnScrollListener());
         }
 
         addTaskBox = view.findViewById(R.id.fragment_todotasks_addtask_box);
@@ -72,10 +73,12 @@ public class ToDoTasksFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
         if (mainInAppActivity != null) {
-            addTaskBox.setOnEditorActionListener(mainInAppActivity.getAddTaskOnEditorActionListener());
-            addTaskBox.addTextChangedListener(mainInAppActivity.getAddTaskBoxTextWatcher());
+            addTaskBox.setOnEditorActionListener
+                    (mainInAppActivity.getMainInApp().getAddTaskOnEditorActionListener());
+            addTaskBox.addTextChangedListener(mainInAppActivity.getMainInApp()
+                    .getAddTaskBoxTextWatcher());
 
-            addTaskButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+            addTaskButton.setOnClickListener(mainInAppActivity.getMainInApp().getOnClickListener());
         }
     }
 

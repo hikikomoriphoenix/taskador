@@ -16,6 +16,7 @@
 
 package marabillas.loremar.taskador.ui.motion;
 
+import android.content.Context;
 import android.support.animation.DynamicAnimation;
 import android.support.animation.FlingAnimation;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
@@ -25,7 +26,7 @@ import android.view.ViewPropertyAnimator;
 
 import java.util.concurrent.TimeUnit;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 import static android.support.v4.view.ViewCompat.animate;
 
@@ -43,16 +44,16 @@ public abstract class ListItemSwipeHandler {
     private float velocity;
 
     private StartPosition startPosition;
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
 
     /**
      * A list item's initial position indicating from which position the swipe motion starts from.
      */
     public enum StartPosition {LEFT, RIGHT}
 
-    ListItemSwipeHandler(MainInAppActivity mainInAppActivity, StartPosition startPosition) {
+    ListItemSwipeHandler(InAppInterface mainInApp, StartPosition startPosition) {
         this.startPosition = startPosition;
-        this.mainInAppActivity = mainInAppActivity;
+        this.mainInApp = mainInApp;
     }
 
     /**
@@ -63,7 +64,7 @@ public abstract class ListItemSwipeHandler {
      * {@link android.view.View.OnTouchListener}.
      */
     public void handleMotionEvent(View v, MotionEvent motionEvent) {
-        mainInAppActivity.runOnUiThread(new HandleMotionEventRunnable(v, motionEvent));
+        mainInApp.runOnUiThread(new HandleMotionEventRunnable(v, motionEvent));
     }
 
     private class HandleMotionEventRunnable implements Runnable, DynamicAnimation.OnAnimationEndListener {
@@ -103,23 +104,23 @@ public abstract class ListItemSwipeHandler {
                     // past it.
                     if (startPosition == StartPosition.LEFT && targetItemViewTranslation < 0) {
                         v.setTranslationX(0);
-                        mainInAppActivity.onListItemSelectionClear();
+                        mainInApp.onListItemSelectionClear();
                         // Allow ViewPager to scroll right.
-                        mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
+                        mainInApp.getPager().requestDisallowInterceptTouchEvent(false);
                         return;
                     } else if (startPosition == StartPosition.RIGHT && targetItemViewTranslation >
                             0) {
                         v.setTranslationX(0);
-                        mainInAppActivity.onListItemSelectionClear();
+                        mainInApp.onListItemSelectionClear();
                         // Allow ViewPager to scroll left.
-                        mainInAppActivity.getPager().requestDisallowInterceptTouchEvent(false);
+                        mainInApp.getPager().requestDisallowInterceptTouchEvent(false);
                         return;
                     }
 
                     // Move item to final position.
                     v.setTranslationX(targetItemViewTranslation);
 
-                    checkIfSwipedToMark(mainInAppActivity, targetItemViewTranslation);
+                    checkIfSwipedToMark(mainInApp, targetItemViewTranslation);
                     break;
                 case MotionEvent.ACTION_UP:
                     if (v.getTranslationX() != 0) {
@@ -137,7 +138,8 @@ public abstract class ListItemSwipeHandler {
          * End the swipe motion with some fling animation.
          */
         private void finishSwipe() {
-            int screenWidth = mainInAppActivity.getResources().getDisplayMetrics().widthPixels;
+            Context context = mainInApp.getContext();
+            int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
             float velocityInPixelsPerSecond = velocity * TimeUnit.SECONDS.toNanos(1);
             FlingAnimation flingAnimation = new FlingAnimation(v, DynamicAnimation.TRANSLATION_X)
                     .setStartVelocity(velocityInPixelsPerSecond);
@@ -158,7 +160,7 @@ public abstract class ListItemSwipeHandler {
                 flingAnimation.setFriction(0.1f);
             }
 
-            mainInAppActivity.getRecyclerViewOnScrollListener().setKeepingSelection(true);
+            mainInApp.getRecyclerViewOnScrollListener().setKeepingSelection(true);
             flingAnimation.addEndListener(this);
             flingAnimation.start();
         }
@@ -167,7 +169,7 @@ public abstract class ListItemSwipeHandler {
         public void onAnimationEnd(DynamicAnimation animation, boolean canceled, float value, float velocity) {
             // Check if item is flung to mark. This allows the user to fling an item to marking
             // position instead of just dragging the item towards it.
-            boolean swipedToMark = checkIfSwipedToMark(mainInAppActivity, v.getTranslationX());
+            boolean swipedToMark = checkIfSwipedToMark(mainInApp, v.getTranslationX());
 
             if (swipedToMark) {
                 moveItemOffScreen();
@@ -175,18 +177,18 @@ public abstract class ListItemSwipeHandler {
                 moveItemBackToOriginalPosition();
             }
 
-            mainInAppActivity.getRecyclerViewOnScrollListener().setKeepingSelection(false);
+            mainInApp.getRecyclerViewOnScrollListener().setKeepingSelection(false);
         }
 
         private void moveItemBackToOriginalPosition() {
-            mainInAppActivity.onListItemSelectionClear();
+            mainInApp.onListItemSelectionClear();
             ViewPropertyAnimator animator = v.animate();
             animator.setDuration(500);
             animator.translationX(0);
         }
 
         private void moveItemOffScreen() {
-            int totalWidth = mainInAppActivity.getToDoTasksFragment().getRecyclerView().getWidth();
+            int totalWidth = mainInApp.getToDoTasksFragment().getRecyclerView().getWidth();
 
             // The compat version is used since withEndAction doesn't seemed to be supported in
             // older versions.
@@ -202,8 +204,8 @@ public abstract class ListItemSwipeHandler {
             animatorCompat.withEndAction(new Runnable() {
                 @Override
                 public void run() {
-                    performActionOnMarkedItem(mainInAppActivity);
-                    mainInAppActivity.onListItemSelectionClear();
+                    performActionOnMarkedItem(mainInApp);
+                    mainInApp.onListItemSelectionClear();
                 }
             });
         }
@@ -213,12 +215,12 @@ public abstract class ListItemSwipeHandler {
      * Check if the list item is swiped to a certain enough distance. If it is, then the item is
      * marked for action.
      *
-     * @param mainInAppActivity the in-app screen's activity
+     * @param mainInApp in-app screen's interface
      * @param translation the current value of the list item's view's translation property
      *
      * @return true or false
      */
-    abstract boolean checkIfSwipedToMark(MainInAppActivity mainInAppActivity, float translation);
+    abstract boolean checkIfSwipedToMark(InAppInterface mainInApp, float translation);
 
-    abstract void performActionOnMarkedItem(MainInAppActivity mainInAppActivity);
+    abstract void performActionOnMarkedItem(InAppInterface mainInApp);
 }

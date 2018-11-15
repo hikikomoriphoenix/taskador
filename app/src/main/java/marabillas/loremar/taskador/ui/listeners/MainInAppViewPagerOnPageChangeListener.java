@@ -18,16 +18,16 @@ package marabillas.loremar.taskador.ui.listeners;
 
 import android.support.v4.view.ViewPager;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Listens to events in in-app screen's {@link ViewPager}.
  */
 public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageChangeListener {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
 
-    public MainInAppViewPagerOnPageChangeListener(MainInAppActivity mainInAppActivity) {
-        this.mainInAppActivity = mainInAppActivity;
+    public MainInAppViewPagerOnPageChangeListener(InAppInterface mainInApp) {
+        this.mainInApp = mainInApp;
     }
 
     @Override
@@ -37,16 +37,16 @@ public class MainInAppViewPagerOnPageChangeListener implements ViewPager.OnPageC
 
     @Override
     public void onPageSelected(int position) {
-        mainInAppActivity.onListItemSelectionClear();
+        mainInApp.onListItemSelectionClear();
         switch (position) {
             case 0:
-                mainInAppActivity.onTodoTasksWindowSelected();
+                mainInApp.onTodoTasksWindowSelected();
                 break;
             case 1:
-                mainInAppActivity.onFinishedTasksWindowSelected();
+                mainInApp.onFinishedTasksWindowSelected();
                 break;
             case 2:
-                mainInAppActivity.onTopWordsWindowSelected();
+                mainInApp.onTopWordsWindowSelected();
                 break;
         }
     }

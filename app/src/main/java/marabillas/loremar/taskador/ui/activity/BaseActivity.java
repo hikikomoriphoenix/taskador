@@ -24,21 +24,27 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import marabillas.loremar.taskador.App;
-import marabillas.loremar.taskador.background.BackgroundServiceClient;
 import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
+import marabillas.loremar.taskador.ui.ActivityInterface;
 
 /**
  * Base class for taskador's activities. It allows binding a {@link BackgroundTaskManager}
  * service to handle background tasks for the particular activity.
  */
-public abstract class BaseActivity extends Activity implements BackgroundServiceClient,
-        BackgroundServiceConnection.OnServiceConnectedListener {
+public abstract class BaseActivity extends Activity implements ActivityInterface {
     private BackgroundServiceConnection backgroundServiceConnection;
 
     @Override
-    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
-        backgroundServiceConnection = new BackgroundServiceConnection(this);
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass,
+                                       BackgroundServiceConnection.OnServiceConnectedListener
+                                               onServiceConnectedListener) {
+        backgroundServiceConnection = new BackgroundServiceConnection(onServiceConnectedListener);
         Intent serviceIntent = new Intent(this, serviceClass);
         startService(serviceIntent);
         bindService(serviceIntent, backgroundServiceConnection, Context.BIND_AUTO_CREATE);
@@ -66,12 +72,6 @@ public abstract class BaseActivity extends Activity implements BackgroundService
      */
     public abstract void onSetupBackgroundService();
 
-    /**
-     * Switch to another activity.
-     *
-     * @param activityClass         class of the target activity.
-     * @param backgroundTaskManager this activity's background service that needs to stop
-     */
     public void switchScreen(@NonNull Class<? extends Activity> activityClass, @NonNull
             BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
         // Prepare intent

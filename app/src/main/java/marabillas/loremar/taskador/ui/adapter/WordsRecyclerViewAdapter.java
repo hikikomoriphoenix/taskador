@@ -44,7 +44,7 @@ public abstract class WordsRecyclerViewAdapter<VH extends WordsRecyclerViewAdapt
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-            mainInAppActivity.onListItemTouch(v, event, getAdapterPosition());
+            mainInAppActivity.getMainInApp().onListItemTouch(v, event, getAdapterPosition());
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 v.performClick();

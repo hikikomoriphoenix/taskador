@@ -41,7 +41,7 @@ import marabillas.loremar.taskador.network.tasks.GetTasksTask;
 import marabillas.loremar.taskador.network.tasks.GetTopWordsTask;
 import marabillas.loremar.taskador.network.tasks.SetExcludedTask;
 import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
@@ -58,7 +58,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
         MainInAppBackgroundTasker, AddTaskTask.ResultHandler, GetTasksTask.ResultHandler,
         FinishTasksTask.ResultHandler, DeleteTaskTask.ResultHandler, GetFinishedTasksTask
         .ResultHandler, GetTopWordsTask.ResultHandler, GetExcludedWordsTask.ResultHandler, SetExcludedTask.ResultHandler, UpdateTaskWordsTask.ResultHandler {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
     private String username;
     private String token;
 
@@ -78,8 +78,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
     private Runnable currentFetchTask;
 
     @Override
-    public void bindClient(MainInAppActivity client) {
-        mainInAppActivity = client;
+    public void bindClient(InAppInterface client) {
+        mainInApp = client;
 
         // Get current account and its associated token.
         username = getCurrentAccountUsername();
@@ -110,8 +110,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
     }
 
     @Override
-    public MainInAppActivity getClient() {
-        return mainInAppActivity;
+    public InAppInterface getClient() {
+        return mainInApp;
     }
 
     @Override
@@ -221,7 +221,7 @@ public class MainInAppManager extends BackgroundTaskManager implements
 
     private void fetch(Runnable task) {
         // Make sure list items are swipable after this fetch.
-        mainInAppActivity.onListItemSelectionClear();
+        mainInApp.onListItemSelectionClear();
 
         getHandler().removeCallbacks(currentFetchTask);
         currentFetchTask = task;
@@ -266,11 +266,11 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     int id = data.getInt("id");
                     todoTasks.add(new IdTaskPair(id, task));
 
-                    mainInAppActivity.dismissProgressDialog();
-                    mainInAppActivity.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
+                    mainInApp.dismissProgressDialog();
+                    mainInApp.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
                 } catch (FailedToGetFieldException e) {
                     logError(e.getMessage());
-                    mainInAppActivity.dismissProgressDialog();
+                    mainInApp.dismissProgressDialog();
                     promptError(e.getMessage());
                 }
             }
@@ -280,28 +280,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
     @Override
     public void addTaskTaskFailedToPrepareJSONData(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void failedAddTaskRequest(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void backendUnableToAddTask(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void addTaskTaskIncomplete(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
@@ -329,8 +329,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     logError(e.getMessage());
                     promptErrorAndLogout(e.getMessage());
                 }
-                mainInAppActivity.getToDoTasksFragment().showRecyclerView();
-                mainInAppActivity.getToDoTasksFragment().bindList(todoTasks);
+                mainInApp.getToDoTasksFragment().showRecyclerView();
+                mainInApp.getToDoTasksFragment().bindList(todoTasks);
             }
         });
     }
@@ -406,8 +406,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                mainInAppActivity.dismissProgressDialog();
-                mainInAppActivity.getToDoTasksFragment().removeTask(todoTaskDeletedPosition);
+                mainInApp.dismissProgressDialog();
+                mainInApp.getToDoTasksFragment().removeTask(todoTaskDeletedPosition);
                 todoTaskDeletedPosition = -1;
             }
         });
@@ -416,28 +416,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
     @Override
     public void deleteTaskTaskFailedToPrepareJSONData(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void failedDeleteTaskRequest(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void backendUnableToDeleteTask(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void deleteTaskTaskIncomplete(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
@@ -478,8 +478,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     promptErrorAndLogout(e.getMessage());
                 }
 
-                mainInAppActivity.getFinishedTasksFragment().showRecyclerView();
-                mainInAppActivity.getFinishedTasksFragment().bindList(finishedTasks);
+                mainInApp.getFinishedTasksFragment().showRecyclerView();
+                mainInApp.getFinishedTasksFragment().bindList(finishedTasks);
             }
         });
     }
@@ -528,8 +528,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     promptErrorAndLogout(e.getMessage());
                 }
 
-                mainInAppActivity.getTopWordsFragment().showRecyclerView();
-                mainInAppActivity.getTopWordsFragment().bindTopWordsList(topWords);
+                mainInApp.getTopWordsFragment().showRecyclerView();
+                mainInApp.getTopWordsFragment().bindTopWordsList(topWords);
             }
         });
     }
@@ -582,8 +582,8 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     promptErrorAndLogout(e.getMessage());
                 }
 
-                mainInAppActivity.getTopWordsFragment().showRecyclerView();
-                mainInAppActivity.getTopWordsFragment().bindExcludedWordsList(excludedWords);
+                mainInApp.getTopWordsFragment().showRecyclerView();
+                mainInApp.getTopWordsFragment().bindExcludedWordsList(excludedWords);
             }
         });
     }
@@ -614,16 +614,16 @@ public class MainInAppManager extends BackgroundTaskManager implements
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                mainInAppActivity.dismissProgressDialog();
-                TopWordsFragment.ViewState viewState = mainInAppActivity.getTopWordsFragment()
+                mainInApp.dismissProgressDialog();
+                TopWordsFragment.ViewState viewState = mainInApp.getTopWordsFragment()
                         .getCurrentViewState();
                 switch (viewState) {
                     case TOP:
-                        mainInAppActivity.getTopWordsFragment().removeTopWord
+                        mainInApp.getTopWordsFragment().removeTopWord
                                 (setExcludedWordPosition);
                         break;
                     case EXCLUDED:
-                        mainInAppActivity.getTopWordsFragment().removeExcludedWord
+                        mainInApp.getTopWordsFragment().removeExcludedWord
                                 (setExcludedWordPosition);
                         break;
                 }
@@ -636,28 +636,28 @@ public class MainInAppManager extends BackgroundTaskManager implements
     @Override
     public void setExcludedFailedToPrepareJSONData(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void failedSetExcludedRequest(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void backendUnableUnableToExclude(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
     @Override
     public void setExcludedTaskIncomplete(String message) {
         logError(message);
-        mainInAppActivity.dismissProgressDialog();
+        mainInApp.dismissProgressDialog();
         promptError(message);
     }
 
@@ -699,10 +699,10 @@ public class MainInAppManager extends BackgroundTaskManager implements
     }
 
     private void promptError(final String message) {
-        mainInAppActivity.runOnUiThread(new Runnable() {
+        mainInApp.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
+                showErrorPopUp(mainInApp.getContext(), message, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing.
@@ -713,10 +713,10 @@ public class MainInAppManager extends BackgroundTaskManager implements
     }
 
     private void promptErrorAndLogout(String message) {
-        showErrorPopUp(mainInAppActivity, message, new DialogInterface.OnClickListener() {
+        showErrorPopUp(mainInApp.getContext(), message, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mainInAppActivity.logout();
+                mainInApp.logout();
             }
         });
     }

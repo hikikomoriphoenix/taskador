@@ -35,6 +35,7 @@ import marabillas.loremar.taskador.background.MainInAppBackgroundTasker;
 import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
+import marabillas.loremar.taskador.ui.MainInApp;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
@@ -77,26 +78,28 @@ public class MainInAppActivityTest {
             excludedWords.add("excludedWord" + i);
         }
 
+        MainInApp mainInApp = new MainInApp(mainInAppActivity);
+
         class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
-            private MainInAppActivity activity;
+            private MainInApp mainInApp;
 
             @Override
             public void fetchToDoTasksList() {
-                activity.getToDoTasksFragment().showRecyclerView();
-                activity.getToDoTasksFragment().bindList(todoTasks);
+                mainInApp.getToDoTasksFragment().showRecyclerView();
+                mainInApp.getToDoTasksFragment().bindList(todoTasks);
             }
 
             @Override
             public void submitNewTask(String task) {
-                activity.dismissProgressDialog();
+                mainInApp.dismissProgressDialog();
                 todoTasks.add(new IdTaskPair(0, task));
-                activity.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
+                mainInApp.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
             }
 
             @Override
             public void deleteToDoTask(int position) {
-                activity.dismissProgressDialog();
-                activity.getToDoTasksFragment().removeTask(position);
+                mainInApp.dismissProgressDialog();
+                mainInApp.getToDoTasksFragment().removeTask(position);
             }
 
             @Override
@@ -106,58 +109,58 @@ public class MainInAppActivityTest {
 
             @Override
             public void fetchFinishedTasksList() {
-                activity.getFinishedTasksFragment().showRecyclerView();
-                activity.getFinishedTasksFragment().bindList(finishedTasks);
+                mainInApp.getFinishedTasksFragment().showRecyclerView();
+                mainInApp.getFinishedTasksFragment().bindList(finishedTasks);
             }
 
             @Override
             public void fetchTopWordsList(int numResults) {
                 switch (numResults) {
                     case 10:
-                        activity.getTopWordsFragment().showRecyclerView();
+                        mainInApp.getTopWordsFragment().showRecyclerView();
                         List<WordCountPair> top10 = topWords.subList(0, 10);
-                        activity.getTopWordsFragment().bindTopWordsList(top10);
+                        mainInApp.getTopWordsFragment().bindTopWordsList(top10);
                         break;
                     case 20:
-                        activity.getTopWordsFragment().showRecyclerView();
-                        activity.getTopWordsFragment().bindTopWordsList(topWords);
+                        mainInApp.getTopWordsFragment().showRecyclerView();
+                        mainInApp.getTopWordsFragment().bindTopWordsList(topWords);
                         break;
                 }
             }
 
             @Override
             public void fetchExcludedWordsList() {
-                activity.getTopWordsFragment().showRecyclerView();
-                activity.getTopWordsFragment().bindExcludedWordsList(excludedWords);
+                mainInApp.getTopWordsFragment().showRecyclerView();
+                mainInApp.getTopWordsFragment().bindExcludedWordsList(excludedWords);
             }
 
             @Override
             public void setExcluded(int selectedItemPosition, int excluded) {
-                activity.dismissProgressDialog();
-                TopWordsFragment.ViewState viewState = activity.getTopWordsFragment()
+                mainInApp.dismissProgressDialog();
+                TopWordsFragment.ViewState viewState = mainInApp.getTopWordsFragment()
                         .getCurrentViewState();
                 switch (viewState) {
                     case TOP:
-                        activity.getTopWordsFragment().removeTopWord(selectedItemPosition);
+                        mainInApp.getTopWordsFragment().removeTopWord(selectedItemPosition);
                         break;
                     case EXCLUDED:
-                        activity.getTopWordsFragment().removeExcludedWord(selectedItemPosition);
+                        mainInApp.getTopWordsFragment().removeExcludedWord(selectedItemPosition);
                         break;
                 }
             }
 
             @Override
-            public void bindClient(MainInAppActivity client) {
-                this.activity = client;
+            public void bindClient(MainInApp client) {
+                this.mainInApp = client;
             }
 
             @Override
-            public MainInAppActivity getClient() {
-                return activity;
+            public MainInApp getClient() {
+                return mainInApp;
             }
         }
 
-        mainInAppActivity.setBackgroundTasker(new MainInAppBackgroundTaskerTest());
+        mainInApp.setBackgroundTasker(new MainInAppBackgroundTaskerTest());
 
         await();
     }

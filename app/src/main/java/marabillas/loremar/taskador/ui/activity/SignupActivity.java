@@ -28,6 +28,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
+import marabillas.loremar.taskador.background.BackgroundServiceClient;
+import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
@@ -44,7 +46,8 @@ import static marabillas.loremar.taskador.utils.RegexUtils.validateUsername;
  * This activity displays the signup screen where user can submit and register a new taskador
  * account.
  */
-public class SignupActivity extends BaseActivity {
+public class SignupActivity extends BaseActivity implements BackgroundServiceClient,
+        BackgroundServiceConnection.OnServiceConnectedListener {
     private SignupBackgroundTasker signupBackgroundTasker;
 
     private View usernameInvalid;
@@ -97,6 +100,11 @@ public class SignupActivity extends BaseActivity {
     @Override
     public void onSetupBackgroundService() {
         setupBackgroundService(SignupManager.class);
+    }
+
+    @Override
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
+        setupBackgroundService(serviceClass, this);
     }
 
     @Override

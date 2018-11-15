@@ -18,7 +18,7 @@ package marabillas.loremar.taskador.ui.listeners;
 
 import android.support.v7.widget.RecyclerView;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Listener for scroll events in recycler view. List item selection in the in-app screen needs to
@@ -26,17 +26,17 @@ import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
  * except for the last selected item prior to scrolling.
  */
 public class MainInAppRecyclerViewOnScrollChangedListener extends RecyclerView.OnScrollListener {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
     private boolean isKeepingSelection;
 
-    public MainInAppRecyclerViewOnScrollChangedListener(MainInAppActivity mainInAppActivity) {
-        this.mainInAppActivity = mainInAppActivity;
+    public MainInAppRecyclerViewOnScrollChangedListener(InAppInterface mainInApp) {
+        this.mainInApp = mainInApp;
     }
 
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         if (!isKeepingSelection) {
-            mainInAppActivity.onListItemSelectionClear();
+            mainInApp.onListItemSelectionClear();
         }
 
         super.onScrollStateChanged(recyclerView, newState);
@@ -45,7 +45,7 @@ public class MainInAppRecyclerViewOnScrollChangedListener extends RecyclerView.O
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         if (!isKeepingSelection) {
-            mainInAppActivity.onListItemSelectionClear();
+            mainInApp.onListItemSelectionClear();
         }
 
         super.onScrolled(recyclerView, dx, dy);

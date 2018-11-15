@@ -69,7 +69,7 @@ public class TopWordsFragment extends Fragment {
                     .fragment_topwords_numresultsspinner_listitem_textview,
                     array);
             numResultsSpinner.setAdapter(arrayAdapter);
-            numResultsSpinner.setOnItemSelectedListener(mainInAppActivity
+            numResultsSpinner.setOnItemSelectedListener(mainInAppActivity.getMainInApp()
                     .getTopWordsNumResultsSpinnerItemSelectedListener());
 
             // Set this fragment to display list of top words by default
@@ -80,10 +80,11 @@ public class TopWordsFragment extends Fragment {
             recyclerView = view.findViewById(R.id.fragment_topwords_recyclerview);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(mainInAppActivity));
-            recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+            recyclerView.addOnScrollListener(mainInAppActivity
+                    .getMainInApp().getRecyclerViewOnScrollListener());
 
             Button viewButton = view.findViewById(R.id.fragment_topwords_viewbutton);
-            viewButton.setOnClickListener(mainInAppActivity.getOnClickListener());
+            viewButton.setOnClickListener(mainInAppActivity.getMainInApp().getOnClickListener());
         }
 
         fetchingDataView = view.findViewById(R.id.fragment_topwords_fetchingdata);

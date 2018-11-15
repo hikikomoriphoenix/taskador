@@ -19,17 +19,17 @@ package marabillas.loremar.taskador.ui.listeners;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.InAppInterface;
 
 /**
  * Listens to events in {@link marabillas.loremar.taskador.ui.fragment.ToDoTasksFragment}'s
  * {@link android.widget.EditText} which is for inputting new tasks.
  */
 public class AddTaskBoxTextWatcher implements TextWatcher {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
 
-    public AddTaskBoxTextWatcher(MainInAppActivity mainInAppActivity) {
-        this.mainInAppActivity = mainInAppActivity;
+    public AddTaskBoxTextWatcher(InAppInterface mainInApp) {
+        this.mainInApp = mainInApp;
     }
 
     @Override
@@ -44,6 +44,6 @@ public class AddTaskBoxTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        mainInAppActivity.onAddTaskBoxTextChanged(s);
+        mainInApp.onAddTaskBoxTextChanged(s);
     }
 }
