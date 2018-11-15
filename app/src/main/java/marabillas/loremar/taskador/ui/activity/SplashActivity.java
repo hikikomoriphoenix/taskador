@@ -16,8 +16,11 @@
 
 package marabillas.loremar.taskador.ui.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -29,13 +32,14 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SplashBackgroundTasker;
 import marabillas.loremar.taskador.background.SplashManager;
+import marabillas.loremar.taskador.ui.components.SplashInterface;
 import marabillas.loremar.taskador.ui.view.WaitingDotsView;
 
 /**
  * This is taskador's main launcher activity. It displays a splash screen while taskador is
  * logging in to the server or making transitions from one screen to another.
  */
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements SplashInterface {
     private Bundle input;
     private SplashBackgroundTasker splashBackgroundTasker;
     private NextScreenTimer nextScreenTimer;
@@ -71,6 +75,16 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
+        setupBackgroundService(serviceClass, this);
+    }
+
+    @Override
+    public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -92,16 +106,16 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
-
-    }
-
-    @Override
     public void onServiceConnected(BackgroundTaskManager backgroundTaskManager) {
         splashBackgroundTasker = (SplashBackgroundTasker) backgroundTaskManager;
         splashBackgroundTasker.bindClient(this);
 
         splashBackgroundTasker.startSplashBackground(input);
+    }
+
+    @Override
+    public Context getSplashContext() {
+        return this;
     }
 
     public void setStatusText(final String text) {
@@ -113,6 +127,7 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    @Override
     public void onShowStatusFirst(final String status) {
         runOnUiThread(new Runnable() {
             @Override
@@ -134,6 +149,16 @@ public class SplashActivity extends BaseActivity {
                 });
             }
         });
+    }
+
+    @Override
+    public void switchToAnotherScreen(@NonNull Class<? extends Activity> activityClass, @NonNull BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
+        switchScreen(activityClass, backgroundTaskManager, input);
+    }
+
+    @Override
+    public void finishSplash() {
+        finish();
     }
 
     private class NextScreenTimer extends CountDownTimer {

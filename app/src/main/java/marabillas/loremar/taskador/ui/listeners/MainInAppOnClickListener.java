@@ -16,6 +16,7 @@
 
 package marabillas.loremar.taskador.ui.listeners;
 
+import android.content.Context;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.ScrollingMovementMethod;
@@ -24,7 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
+import marabillas.loremar.taskador.ui.components.InAppInterface;
 import marabillas.loremar.taskador.ui.view.ExpandingDialogView;
 
 /**
@@ -32,29 +33,29 @@ import marabillas.loremar.taskador.ui.view.ExpandingDialogView;
  * listeners.
  */
 public class MainInAppOnClickListener implements View.OnClickListener {
-    private MainInAppActivity mainInAppActivity;
+    private InAppInterface mainInApp;
 
-    public MainInAppOnClickListener(MainInAppActivity mainInAppActivity) {
-        this.mainInAppActivity = mainInAppActivity;
+    public MainInAppOnClickListener(InAppInterface mainInApp) {
+        this.mainInApp = mainInApp;
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fragment_todotasks_addtask_button:
-                mainInAppActivity.onAddTaskButtonClicked();
+                mainInApp.onAddTaskButtonClicked();
                 break;
 
             case R.id.fragment_topwords_viewbutton:
-                mainInAppActivity.onTopWordsViewButtonClicked();
+                mainInApp.onTopWordsViewButtonClicked();
                 break;
 
             case R.id.activtiy_maininapp_reloadtool:
-                mainInAppActivity.onReloadClicked();
+                mainInApp.onReloadClicked();
                 break;
 
             case R.id.activity_maininapp_helptool:
-                int page = mainInAppActivity.getPager().getCurrentItem();
+                int page = mainInApp.getPager().getCurrentItem();
                 switch (page) {
                     case 0: // To-do tasks page is the current page.
                         int todoTasksHelpText = R.string.todotasks_help_contents;
@@ -74,11 +75,12 @@ public class MainInAppOnClickListener implements View.OnClickListener {
                 break;
 
             case R.id.activity_maininapp_abouttool:
-                View content = View.inflate(mainInAppActivity, R.layout
+                Context context = mainInApp.getContext();
+                View content = View.inflate(context, R.layout
                         .activity_maininapp_about_content, null);
 
                 TextView textView = content.findViewById(R.id.activity_maininapp_about_content_text);
-                Spanned text = Html.fromHtml(mainInAppActivity.getString(R.string.about_contents));
+                Spanned text = Html.fromHtml(context.getString(R.string.about_contents));
                 textView.setText(text);
                 textView.setVerticalScrollBarEnabled(true);
                 textView.setMaxLines(500);
@@ -88,33 +90,34 @@ public class MainInAppOnClickListener implements View.OnClickListener {
                 break;
 
             case R.id.activity_maininapp_logouttool:
-                mainInAppActivity.logout();
+                mainInApp.logout();
                 break;
         }
     }
 
     private void showExpandingDialog(View v, int textResId) {
-        TextView textView = new TextView(mainInAppActivity);
+        Context context = mainInApp.getContext();
+        TextView textView = new TextView(context);
         textView.setVerticalScrollBarEnabled(true);
         textView.setMaxLines(500);
         textView.setMovementMethod(new ScrollingMovementMethod());
-        Spanned text = Html.fromHtml(mainInAppActivity.getString(textResId));
+        Spanned text = Html.fromHtml(context.getString(textResId));
         textView.setText(text);
 
         showExpandingDialog(v, textView);
     }
 
     private void showExpandingDialog(View tool, View content) {
-        ViewGroup parent = (ViewGroup) mainInAppActivity.getWindow().getDecorView()
+        ViewGroup parent = (ViewGroup) mainInApp.getWindow().getDecorView()
                 .getRootView();
 
         // Get the center of the tool that will serve as the starting point of the expanding dialog.
         int startX = tool.getLeft() + tool.getWidth() / 2;
         int startY = tool.getTop() + tool.getHeight() / 2;
 
-        ExpandingDialogView dialogView = new ExpandingDialogView(mainInAppActivity,
+        ExpandingDialogView dialogView = new ExpandingDialogView(mainInApp.getContext(),
                 parent);
-        mainInAppActivity.setOnBackPressedListener(dialogView);
+        mainInApp.setOnBackPressedListener(dialogView);
         dialogView.show(startX, startY, content);
     }
 }

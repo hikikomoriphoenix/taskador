@@ -31,8 +31,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import marabillas.loremar.taskador.R;
-import marabillas.loremar.taskador.ui.OnBackPressedInvoker;
-import marabillas.loremar.taskador.ui.OnBackPressedListener;
+import marabillas.loremar.taskador.ui.components.OnBackPressedInvoker;
+import marabillas.loremar.taskador.ui.components.OnBackPressedListener;
 
 /**
  * A dialog that pops up from a choosen point in the screen and expands.

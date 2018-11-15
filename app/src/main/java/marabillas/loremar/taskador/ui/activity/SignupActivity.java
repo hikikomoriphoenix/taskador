@@ -16,8 +16,10 @@
 
 package marabillas.loremar.taskador.ui.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -32,6 +34,7 @@ import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
 import marabillas.loremar.taskador.background.SignupManager;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 import marabillas.loremar.taskador.ui.listeners.SignupConfirmPasswordTextWatcher;
 import marabillas.loremar.taskador.ui.listeners.SignupOnClickListener;
 import marabillas.loremar.taskador.ui.listeners.SignupPasswordBoxTextWatcher;
@@ -44,7 +47,7 @@ import static marabillas.loremar.taskador.utils.RegexUtils.validateUsername;
  * This activity displays the signup screen where user can submit and register a new taskador
  * account.
  */
-public class SignupActivity extends BaseActivity {
+public class SignupActivity extends BaseActivity implements SignupInterface {
     private SignupBackgroundTasker signupBackgroundTasker;
 
     private View usernameInvalid;
@@ -100,6 +103,11 @@ public class SignupActivity extends BaseActivity {
     }
 
     @Override
+    public void setupBackgroundService(Class<? extends BackgroundTaskManager> serviceClass) {
+        setupBackgroundService(serviceClass, this);
+    }
+
+    @Override
     public void setBackgroundTasker(BackgroundTasker backgroundTasker) {
         signupBackgroundTasker = (SignupBackgroundTasker) backgroundTasker;
         signupBackgroundTasker.bindClient(this);
@@ -111,6 +119,7 @@ public class SignupActivity extends BaseActivity {
         signupBackgroundTasker.bindClient(this);
     }
 
+    @Override
     public void onUsernameBoxTextChanged(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -179,6 +188,7 @@ public class SignupActivity extends BaseActivity {
         }
     }
 
+    @Override
     public void onUsernameIsAvailable() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -191,6 +201,7 @@ public class SignupActivity extends BaseActivity {
         });
     }
 
+    @Override
     public void onUsernameNotAvailable() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -207,6 +218,7 @@ public class SignupActivity extends BaseActivity {
         });
     }
 
+    @Override
     public void onPasswordBoxTextChanged(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -216,6 +228,7 @@ public class SignupActivity extends BaseActivity {
         });
     }
 
+    @Override
     public void onConfirmPasswordBoxTextChanged(final String text) {
         runOnUiThread(new Runnable() {
             @Override
@@ -279,10 +292,7 @@ public class SignupActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Method invoked when inputs need to be submitted to register new account. Inputs are first
-     * checked if they are valid before submitting.
-     */
+    @Override
     public void onSubmit() {
         runOnUiThread(new Runnable() {
             @Override
@@ -316,5 +326,10 @@ public class SignupActivity extends BaseActivity {
         if (signupBackgroundTasker instanceof SignupManager) {
             switchScreen(LoginActivity.class, (SignupManager) signupBackgroundTasker, null);
         }
+    }
+
+    @Override
+    public void switchToAnotherScreen(@NonNull Class<? extends Activity> activityClass, @NonNull BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
+        switchScreen(activityClass, backgroundTaskManager, input);
     }
 }

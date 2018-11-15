@@ -14,15 +14,16 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.ui;
+package marabillas.loremar.taskador.ui.components;
 
 /**
- * Interface for object that is notified of back button press events and in turn notifies an
- * {@link OnBackPressedListener}.
+ * Interface that notifies an {@link OnBackPressedListener} that back button is pressed.
  */
 public interface OnBackPressedInvoker {
     /**
      * Set the listener that will be notified of back button press events.
      */
     void setOnBackPressedListener(OnBackPressedListener onBackPressedListener);
+
+    boolean onBackPressed();
 }

@@ -16,12 +16,12 @@
 
 package marabillas.loremar.taskador.background;
 
-import marabillas.loremar.taskador.ui.activity.SignupActivity;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 /**
  * Handles background tasks for signup screen.
  */
-public interface SignupBackgroundTasker extends BackgroundTasker<SignupActivity> {
+public interface SignupBackgroundTasker extends BackgroundTasker<SignupInterface> {
     /**
      * Check if username is unique and can be used for creating new account.
      *

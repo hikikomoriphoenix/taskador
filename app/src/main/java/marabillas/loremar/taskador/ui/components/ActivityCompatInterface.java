@@ -14,25 +14,8 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.background;
+package marabillas.loremar.taskador.ui.components;
 
-import marabillas.loremar.taskador.ui.activity.SignupActivity;
-import marabillas.loremar.taskador.ui.components.LoginInterface;
-
-/**
- * Handles background tasks for login screen.
- */
-public interface LoginBackgroundTasker extends BackgroundTasker<LoginInterface> {
-    /**
-     * Log in to account using credentials inputted by user.
-     *
-     * @param username username of account
-     * @param password password to account
-     */
-    void login(String username, String password);
-
-    /**
-     * Start {@link SignupActivity}
-     */
-    void switchToSignupScreen();
+public interface ActivityCompatInterface extends ActivityInterface {
+    android.support.v4.app.FragmentManager getSupportFragmentManager();
 }

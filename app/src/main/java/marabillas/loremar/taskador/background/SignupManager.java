@@ -22,13 +22,13 @@ import marabillas.loremar.taskador.json.FailedToGetFieldException;
 import marabillas.loremar.taskador.json.JSON;
 import marabillas.loremar.taskador.network.BackEndAPICallTasker;
 import marabillas.loremar.taskador.network.tasks.CheckUsernameAvailabilityTask;
-import marabillas.loremar.taskador.ui.activity.SignupActivity;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 import static marabillas.loremar.taskador.utils.LogUtils.logError;
 
 public class SignupManager extends BackgroundTaskManager implements SignupBackgroundTasker, CheckUsernameAvailabilityTask.ResultHandler {
-    private SignupActivity signupActivity;
+    private SignupInterface signup;
 
     @Override
     public void checkUsernameAvailability(final String username) {
@@ -57,17 +57,17 @@ public class SignupManager extends BackgroundTaskManager implements SignupBackgr
         input.putInt("action", SplashBackgroundTasker.Action.SIGNUP.ordinal());
         input.putString("username", username);
         input.putString("password", password);
-        signupActivity.switchScreen(SplashActivity.class, this, input);
+        signup.switchToAnotherScreen(SplashActivity.class, this, input);
     }
 
     @Override
-    public void bindClient(SignupActivity client) {
-        signupActivity = client;
+    public void bindClient(SignupInterface client) {
+        signup = client;
     }
 
     @Override
-    public SignupActivity getClient() {
-        return signupActivity;
+    public SignupInterface getClient() {
+        return signup;
     }
 
     @Override
@@ -78,9 +78,9 @@ public class SignupManager extends BackgroundTaskManager implements SignupBackgr
                 try {
                     boolean available = data.getBoolean("available");
                     if (available) {
-                        signupActivity.onUsernameIsAvailable();
+                        signup.onUsernameIsAvailable();
                     } else {
-                        signupActivity.onUsernameNotAvailable();
+                        signup.onUsernameNotAvailable();
                     }
                 } catch (FailedToGetFieldException e) {
                     logError(e.getMessage());

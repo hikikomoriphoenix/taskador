@@ -54,7 +54,7 @@ public class FinishedTasksFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (mainInAppActivity != null) {
-            recyclerView.addOnScrollListener(mainInAppActivity.getRecyclerViewOnScrollListener());
+            recyclerView.addOnScrollListener(mainInAppActivity.getMainInApp().getRecyclerViewOnScrollListener());
         }
 
         fetchingDataView = view.findViewById(R.id.fragment_finishedtasks_fetchingdata);

@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package marabillas.loremar.taskador.ui;
+package marabillas.loremar.taskador.ui.components;
 
 /**
  * Listener that should be notified for back button press events.

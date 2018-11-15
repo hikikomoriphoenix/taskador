@@ -66,8 +66,8 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         holder.itemView.setTranslationX(0);
 
         // Update to the new item view bound to the selected task.
-        if (mainInAppActivity.getSelectedItemPosition() == position) {
-            mainInAppActivity.setSelectedItemView(holder.itemView);
+        if (mainInAppActivity.getMainInApp().getSelectedItemPosition() == position) {
+            mainInAppActivity.getMainInApp().setSelectedItemView(holder.itemView);
         }
     }
 
@@ -100,7 +100,7 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         public boolean onTouch(View v, MotionEvent event) {
             touchX = event.getRawX();
             touchY = event.getRawY();
-            mainInAppActivity.onListItemTouch(v, event, getAdapterPosition());
+            mainInAppActivity.getMainInApp().onListItemTouch(v, event, getAdapterPosition());
 
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 v.performClick();
@@ -111,7 +111,8 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
 
         @Override
         public boolean onLongClick(View v) {
-            mainInAppActivity.onToDoTaskLongClicked(touchX, touchY, getAdapterPosition());
+            mainInAppActivity.getMainInApp().onToDoTaskLongClicked(touchX, touchY,
+                    getAdapterPosition());
             return false;
         }
     }
