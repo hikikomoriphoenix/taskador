@@ -18,7 +18,7 @@ package marabillas.loremar.taskador.background;
 
 import android.os.Bundle;
 
-import marabillas.loremar.taskador.ui.activity.LoginActivity;
+import marabillas.loremar.taskador.ui.LoginInterface;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
 
@@ -26,7 +26,7 @@ import marabillas.loremar.taskador.ui.activity.SplashActivity;
  * Service that handles background tasks for login screen.
  */
 public class LoginManager extends BackgroundTaskManager implements LoginBackgroundTasker {
-    private LoginActivity loginActivity;
+    private LoginInterface login;
 
     @Override
     public void login(final String username, final String password) {
@@ -39,23 +39,23 @@ public class LoginManager extends BackgroundTaskManager implements LoginBackgrou
                 input.putInt("action", SplashBackgroundTasker.Action.LOGIN.ordinal());
                 input.putString("username", username);
                 input.putString("password", password);
-                loginActivity.switchScreen(SplashActivity.class, LoginManager.this, input);
+                login.switchToAnotherScreen(SplashActivity.class, LoginManager.this, input);
             }
         });
     }
 
     @Override
     public void switchToSignupScreen() {
-        loginActivity.switchScreen(SignupActivity.class, this, null);
+        login.switchToAnotherScreen(SignupActivity.class, this, null);
     }
 
     @Override
-    public void bindClient(LoginActivity client) {
-        loginActivity = client;
+    public void bindClient(LoginInterface client) {
+        login = client;
     }
 
     @Override
-    public LoginActivity getClient() {
-        return loginActivity;
+    public LoginInterface getClient() {
+        return login;
     }
 }

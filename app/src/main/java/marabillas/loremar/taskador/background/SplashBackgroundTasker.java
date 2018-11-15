@@ -18,12 +18,13 @@ package marabillas.loremar.taskador.background;
 
 import android.os.Bundle;
 
+import marabillas.loremar.taskador.ui.SplashInterface;
 import marabillas.loremar.taskador.ui.activity.SplashActivity;
 
 /**
  * Handles background tasks for splash screen.
  */
-public interface SplashBackgroundTasker extends BackgroundTasker<SplashActivity> {
+public interface SplashBackgroundTasker extends BackgroundTasker<SplashInterface> {
     /**
      * Start performing task in the background.
      *

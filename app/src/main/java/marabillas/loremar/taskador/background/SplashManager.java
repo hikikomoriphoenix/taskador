@@ -26,10 +26,10 @@ import marabillas.loremar.taskador.network.tasks.LoginTask;
 import marabillas.loremar.taskador.network.tasks.SignupTask;
 import marabillas.loremar.taskador.network.tasks.UpdateTaskWordsTask;
 import marabillas.loremar.taskador.network.tasks.VerifyTokenTask;
+import marabillas.loremar.taskador.ui.SplashInterface;
 import marabillas.loremar.taskador.ui.activity.LoginActivity;
 import marabillas.loremar.taskador.ui.activity.MainInAppActivity;
 import marabillas.loremar.taskador.ui.activity.SignupActivity;
-import marabillas.loremar.taskador.ui.activity.SplashActivity;
 import marabillas.loremar.taskador.utils.AccountUtils;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.getAuthToken;
@@ -42,7 +42,7 @@ import static marabillas.loremar.taskador.utils.LogUtils.log;
  */
 public class SplashManager extends BackgroundTaskManager implements SplashBackgroundTasker,
         SignupTask.ResultHandler, VerifyTokenTask.ResultHandler, LoginTask.ResultHandler, UpdateTaskWordsTask.ResultHandler {
-    private SplashActivity splashActivity;
+    private SplashInterface splash;
     private Runnable nextScreen;
 
     private boolean nextScreenTimerFinished;
@@ -53,13 +53,13 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private String username;
 
     @Override
-    public void bindClient(SplashActivity client) {
-        splashActivity = client;
+    public void bindClient(SplashInterface client) {
+        splash = client;
     }
 
     @Override
-    public SplashActivity getClient() {
-        return splashActivity;
+    public SplashInterface getClient() {
+        return splash;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 String text = getString(R.string.activity_splash_status_creating_new_account);
-                splashActivity.setStatusText(text);
+                splash.setStatusText(text);
 
                 // Prepare values for signup task
                 String username = input.getString("username");
@@ -118,7 +118,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 String text = getString(R.string.activity_splash_status_connecting);
-                splashActivity.setStatusText(text);
+                splash.setStatusText(text);
 
                 try {
                     String token = getAuthToken(username);
@@ -135,7 +135,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 String text = getString(R.string.activity_splash_status_logging_in);
-                splashActivity.setStatusText(text);
+                splash.setStatusText(text);
 
                 String username = input.getString("username");
                 String password = input.getString("password");
@@ -151,7 +151,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 String text = getString(R.string.activity_splash_status_logging_out);
-                splashActivity.setStatusText(text);
+                splash.setStatusText(text);
 
                 // Clear current account
                 setCurrentAccountUsername(null);
@@ -184,7 +184,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             if (!showStatusFirst) {
                 getHandler().post(nextScreen);
             } else {
-                splashActivity.onShowStatusFirst(status);
+                splash.onShowStatusFirst(status);
             }
         }
     }
@@ -265,7 +265,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             @Override
             public void run() {
                 // Try to automatically login using a stored password.
-                AccountManager am = AccountManager.get(splashActivity);
+                AccountManager am = AccountManager.get(splash.getSplashContext());
                 String password = am.getPassword(new Account(username, getPackageName()));
                 if (password != null && !password.isEmpty()) {
                     BackEndAPICallTasker.getInstance().login(SplashManager.this, username,
@@ -407,7 +407,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
             String token = getAuthToken(username);
 
             String text = getString(R.string.activity_splash_status_updating);
-            splashActivity.setStatusText(text);
+            splash.setStatusText(text);
 
             this.nextScreen = nextScreen;
 
@@ -424,7 +424,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class Login implements Runnable {
         @Override
         public void run() {
-            splashActivity.switchScreen(LoginActivity.class, SplashManager.this, null);
+            splash.switchToAnotherScreen(LoginActivity.class, SplashManager.this, null);
         }
     }
 
@@ -434,7 +434,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class InApp implements Runnable {
         @Override
         public void run() {
-            splashActivity.switchScreen(MainInAppActivity.class, SplashManager.this, null);
+            splash.switchToAnotherScreen(MainInAppActivity.class, SplashManager.this, null);
         }
     }
 
@@ -444,7 +444,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class Signup implements Runnable {
         @Override
         public void run() {
-            splashActivity.switchScreen(SignupActivity.class, SplashManager.this, null);
+            splash.switchToAnotherScreen(SignupActivity.class, SplashManager.this, null);
         }
     }
 
@@ -454,7 +454,7 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
     private class Exit implements Runnable {
         @Override
         public void run() {
-            splashActivity.finish();
+            splash.finishSplash();
             System.exit(0);
         }
     }

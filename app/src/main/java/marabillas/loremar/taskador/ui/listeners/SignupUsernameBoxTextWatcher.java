@@ -19,16 +19,16 @@ package marabillas.loremar.taskador.ui.listeners;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import marabillas.loremar.taskador.ui.activity.SignupActivity;
+import marabillas.loremar.taskador.ui.SignupInterface;
 
 /**
  * Listen to text events in signup screen's username box.
  */
 public class SignupUsernameBoxTextWatcher implements TextWatcher {
-    private SignupActivity signupActivity;
+    private SignupInterface signup;
 
-    public SignupUsernameBoxTextWatcher(SignupActivity signupActivity) {
-        this.signupActivity = signupActivity;
+    public SignupUsernameBoxTextWatcher(SignupInterface signup) {
+        this.signup = signup;
     }
 
     @Override
@@ -43,6 +43,6 @@ public class SignupUsernameBoxTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-        signupActivity.onUsernameBoxTextChanged(String.valueOf(s));
+        signup.onUsernameBoxTextChanged(String.valueOf(s));
     }
 }

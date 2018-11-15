@@ -16,9 +16,11 @@
 
 package marabillas.loremar.taskador.ui.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
@@ -27,12 +29,11 @@ import android.widget.TextView;
 
 import marabillas.loremar.taskador.R;
 import marabillas.loremar.taskador.account.DirectLogin;
-import marabillas.loremar.taskador.background.BackgroundServiceClient;
-import marabillas.loremar.taskador.background.BackgroundServiceConnection;
 import marabillas.loremar.taskador.background.BackgroundTaskManager;
 import marabillas.loremar.taskador.background.BackgroundTasker;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
 import marabillas.loremar.taskador.background.LoginManager;
+import marabillas.loremar.taskador.ui.LoginInterface;
 
 /**
  * Activity facilitating login screen. The login screen is shown when:
@@ -49,9 +50,7 @@ import marabillas.loremar.taskador.background.LoginManager;
  * You can also click 'Create New Account' at the bottom to go to signup screen to register a new
  * taskador account.
  */
-public class LoginActivity extends BaseActivity implements BackgroundServiceClient,
-        BackgroundServiceConnection.OnServiceConnectedListener, View
-                .OnClickListener {
+public class LoginActivity extends BaseActivity implements LoginInterface {
     private LoginBackgroundTasker loginBackgroundTasker;
     private EditText usernameBox;
     private EditText passwordBox;
@@ -130,5 +129,10 @@ public class LoginActivity extends BaseActivity implements BackgroundServiceClie
                         .show();
             }
         });
+    }
+
+    @Override
+    public void switchToAnotherScreen(@NonNull Class<? extends Activity> activityClass, @NonNull BackgroundTaskManager backgroundTaskManager, @Nullable Bundle input) {
+        switchScreen(activityClass, backgroundTaskManager, input);
     }
 }
