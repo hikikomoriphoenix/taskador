@@ -161,7 +161,7 @@ public class MainInAppActivityTest {
             }
         }
 
-        mainInApp.setBackgroundTasker(new MainInAppBackgroundTaskerTest());
+        mainInAppActivity.getMainInApp().setBackgroundTasker(new MainInAppBackgroundTaskerTest());
 
         await();
     }
