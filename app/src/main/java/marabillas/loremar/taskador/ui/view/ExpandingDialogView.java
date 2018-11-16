@@ -93,8 +93,8 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
 
-        int margin = getResources().getInteger(R.integer.expandingdialogview_margin);
-        int topMargin = getResources().getInteger(R.integer.expandingdialogview_topmargin);
+        int margin = getResources().getDimensionPixelSize(R.dimen.activity_maininapp_expandingdialogview_margin);
+        int topMargin = getResources().getDimensionPixelSize(R.dimen.activity_maininapp_expandingdialogview_topmargin);
 
         int endRight = screenWidth - margin;
         int endBottom = screenHeight - margin;
@@ -139,8 +139,8 @@ public class ExpandingDialogView extends LinearLayout implements Animator.Animat
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         params.height = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        int margin = getResources().getInteger(R.integer.expandingdialogview_margin);
-        int topMargin = getResources().getInteger(R.integer.expandingdialogview_topmargin);
+        int margin = getResources().getDimensionPixelSize(R.dimen.activity_maininapp_expandingdialogview_margin);
+        int topMargin = getResources().getDimensionPixelSize(R.dimen.activity_maininapp_expandingdialogview_topmargin);
         params.leftMargin = margin;
         params.topMargin = topMargin;
         params.rightMargin = margin;
