@@ -27,6 +27,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.background.SignupBackgroundTasker;
+import marabillas.loremar.taskador.ui.components.SignupInterface;
 
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 
@@ -43,14 +44,14 @@ public class SignupActivityTest {
         SignupActivity signupActivity = activityTestRule.getActivity();
 
         class SignupBackgroundTaskerTest implements SignupBackgroundTasker {
-            private SignupActivity activity;
+            private SignupInterface signup;
 
             @Override
             public void checkUsernameAvailability(String username) {
                 if (username.equals("1111")) {
-                    activity.onUsernameNotAvailable();
+                    signup.onUsernameNotAvailable();
                 } else {
-                    activity.onUsernameIsAvailable();
+                    signup.onUsernameIsAvailable();
                 }
             }
 
@@ -66,13 +67,13 @@ public class SignupActivityTest {
             }
 
             @Override
-            public void bindClient(SignupActivity client) {
-                activity = client;
+            public void bindClient(SignupInterface client) {
+                signup = client;
             }
 
             @Override
-            public SignupActivity getClient() {
-                return activity;
+            public SignupInterface getClient() {
+                return signup;
             }
         }
 

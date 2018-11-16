@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import marabillas.loremar.taskador.App;
 import marabillas.loremar.taskador.background.LoginBackgroundTasker;
+import marabillas.loremar.taskador.ui.components.LoginInterface;
 
 import static marabillas.loremar.taskador.utils.LogUtils.log;
 
@@ -41,7 +42,7 @@ public class LoginActivityTest {
         LoginActivity loginActivity = activityTestRule.getActivity();
 
         class LoginBackgroundTaskerTest implements LoginBackgroundTasker {
-            private LoginActivity activity;
+            private LoginInterface login;
 
             @Override
             public void login(String username, String password) {
@@ -54,13 +55,13 @@ public class LoginActivityTest {
             }
 
             @Override
-            public void bindClient(LoginActivity client) {
-                activity = client;
+            public void bindClient(LoginInterface client) {
+                login = client;
             }
 
             @Override
-            public LoginActivity getClient() {
-                return activity;
+            public LoginInterface getClient() {
+                return login;
             }
         }
 
