@@ -61,6 +61,13 @@ public interface SplashBackgroundTasker extends BackgroundTasker<SplashInterface
     void continueToNextScreen();
 
     /**
+     * Get the current status of task.
+     *
+     * @return string
+     */
+    String getStatus();
+
+    /**
      * An enumeration of background tasks to perform in splash screen.
      */
     enum Action {

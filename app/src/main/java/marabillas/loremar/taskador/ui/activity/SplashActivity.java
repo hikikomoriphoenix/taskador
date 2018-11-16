@@ -45,6 +45,8 @@ public class SplashActivity extends BaseActivity implements SplashInterface {
     private NextScreenTimer nextScreenTimer;
     private TextView statusView;
     private WaitingDotsView dotsView;
+    private boolean configurationChanged;
+    private boolean noDots; // Flag indicating whether to display or not to display bouncing dots
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +63,12 @@ public class SplashActivity extends BaseActivity implements SplashInterface {
         // BackgroundTaskManager to perform background tasks for its activities.
         if (input == null) {
             App.getInstance().setBackgroundTaskManagerSupport(true);
+        }
+
+        // Check if configuration changed.
+        if (savedInstanceState != null) {
+            configurationChanged = true;
+            noDots = savedInstanceState.getBoolean("no dots");
         }
 
         // Initiate timer. When countdown completes, allow to continue to next screen.
@@ -85,16 +93,27 @@ public class SplashActivity extends BaseActivity implements SplashInterface {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean("no dots", noDots);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
-        // Display bouncing dots to indicate ongoing process.
         dotsView = findViewById(R.id.waitingDotsView);
-        dotsView.setVisibility(View.VISIBLE);
-        // dots.animateContinuousWavesOfDots();
-        dotsView.animateSingleWavesofDots();
+        if (!noDots) {
+            // Display bouncing dots to indicate ongoing process.
+            dotsView.setVisibility(View.VISIBLE);
 
-        nextScreenTimer.start();
+            // dots.animateContinuousWavesOfDots();
+            dotsView.animateSingleWavesofDots();
+
+            nextScreenTimer.start();
+        } else {
+            dotsView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -110,7 +129,20 @@ public class SplashActivity extends BaseActivity implements SplashInterface {
         splashBackgroundTasker = (SplashBackgroundTasker) backgroundTaskManager;
         splashBackgroundTasker.bindClient(this);
 
-        splashBackgroundTasker.startSplashBackground(input);
+        if (configurationChanged) {
+            String status = splashBackgroundTasker.getStatus();
+            if (status != null && !noDots) {
+                // Try to restore status text.
+                setStatusText(status);
+            } else {
+                // If no dots to display, the following code makes sure to cause
+                // onShowStatusFirst to be invoked which displays the status and continue button.
+                splashBackgroundTasker.nextScreenTimerFinished();
+                splashBackgroundTasker.nextScreen();
+            }
+        } else {
+            splashBackgroundTasker.startSplashBackground(input);
+        }
     }
 
     @Override
@@ -132,9 +164,12 @@ public class SplashActivity extends BaseActivity implements SplashInterface {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Hide bouncing dots.
-                dotsView.stopAnimation();
-                dotsView.setVisibility(View.GONE);
+                if (!noDots) {
+                    // Hide bouncing dots.
+                    dotsView.stopAnimation();
+                    dotsView.setVisibility(View.GONE);
+                    noDots = true;
+                }
 
                 setStatusText(status);
 
