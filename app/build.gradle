@@ -26,13 +26,48 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release
+    }
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            // Get signing config values from outside the project directory. This avoids any
+            // chance of publishing the key password to the Github repository.
+            //
+            // taskador.signing is saved in gradle.properties and holds the path to the file
+            // containing signing config values.
+            if (project.hasProperty("taskador.signing")
+                    && new File(project.property("taskador.signing").toString()).exists()) {
+                Properties props = new Properties()
+                def propFile = new File(project.property("taskador.signing").toString())
+                if (propFile.canRead()) {
+                    props.load(new FileInputStream(propFile))
+                    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+                            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+                        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+                        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+                        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+                        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+                    } else {
+                        println 'androidproject.properties found but some entries are missing'
+                        android.buildTypes.release.signingConfig = null
+                    }
+                } else {
+                    println 'androidproject.properties file not found'
+                    android.buildTypes.release.signingConfig = null
+                }
+            }
         }
         buildTypes.each {
             it.buildConfigField 'String', "backend_url", taskador_back_end_address
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
