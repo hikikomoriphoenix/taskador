@@ -81,6 +81,11 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
         notifyDataSetChanged();
     }
 
+    public void addItem(IdTaskPair item) {
+        tasks.add(item);
+        notifyItemInserted(tasks.indexOf(item));
+    }
+
     public void removeItem(int position) {
         tasks.remove(position);
         notifyItemRemoved(position);

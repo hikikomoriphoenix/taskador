@@ -264,10 +264,10 @@ public class MainInAppManager extends BackgroundTaskManager implements
                     // list. Notify the recycler view's adapter that is bound to this list to
                     // update its view.
                     int id = data.getInt("id");
-                    todoTasks.add(new IdTaskPair(id, task));
+                    IdTaskPair entry = new IdTaskPair(id, task);
 
                     mainInApp.dismissProgressDialog();
-                    mainInApp.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
+                    mainInApp.getToDoTasksFragment().addTask(entry);
                 } catch (FailedToGetFieldException e) {
                     logError(e.getMessage());
                     mainInApp.dismissProgressDialog();
