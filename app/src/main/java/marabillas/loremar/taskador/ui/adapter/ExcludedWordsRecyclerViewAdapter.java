@@ -81,8 +81,10 @@ public class ExcludedWordsRecyclerViewAdapter extends
     }
 
     public void removeItem(int position) {
-        excludedWords.remove(position);
-        notifyItemRemoved(position);
+        if (position < excludedWords.size()) {
+            excludedWords.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     class ExcludedWordsViewHolder extends WordsRecyclerViewAdapter.WordsViewHolder {

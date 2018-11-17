@@ -86,8 +86,10 @@ public class TopWordsRecyclerViewAdapter extends
     }
 
     public void removeItem(int position) {
-        topWords.remove(position);
-        notifyItemRemoved(position);
+        if (position < topWords.size()) {
+            topWords.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     class TopWordsViewHolder extends WordsRecyclerViewAdapter.WordsViewHolder {
