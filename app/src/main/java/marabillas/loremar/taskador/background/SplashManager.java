@@ -99,8 +99,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                String text = getString(R.string.activity_splash_status_creating_new_account);
-                splash.setStatusText(text);
+                status = getString(R.string.activity_splash_status_creating_new_account);
+                splash.setStatusText(status);
 
                 // Prepare values for signup task
                 String username = input.getString("username");
@@ -117,8 +117,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                String text = getString(R.string.activity_splash_status_connecting);
-                splash.setStatusText(text);
+                status = getString(R.string.activity_splash_status_connecting);
+                splash.setStatusText(status);
 
                 try {
                     String token = getAuthToken(username);
@@ -134,8 +134,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                String text = getString(R.string.activity_splash_status_logging_in);
-                splash.setStatusText(text);
+                status = getString(R.string.activity_splash_status_logging_in);
+                splash.setStatusText(status);
 
                 String username = input.getString("username");
                 String password = input.getString("password");
@@ -150,8 +150,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                String text = getString(R.string.activity_splash_status_logging_out);
-                splash.setStatusText(text);
+                status = getString(R.string.activity_splash_status_logging_out);
+                splash.setStatusText(status);
 
                 // Clear current account
                 setCurrentAccountUsername(null);
@@ -160,6 +160,10 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
                 onTaskCompleteProceedToNextScreen(new Login());
             }
         });
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     @Override
@@ -406,8 +410,8 @@ public class SplashManager extends BackgroundTaskManager implements SplashBackgr
         try {
             String token = getAuthToken(username);
 
-            String text = getString(R.string.activity_splash_status_updating);
-            splash.setStatusText(text);
+            status = getString(R.string.activity_splash_status_updating);
+            splash.setStatusText(status);
 
             this.nextScreen = nextScreen;
 
