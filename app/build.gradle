@@ -32,7 +32,8 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
             signingConfig signingConfigs.release
 
             // Get signing config values from outside the project directory. This avoids any
