@@ -398,16 +398,18 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
 
     @Override
     public void onTaskMarkedFinishedAction() {
-        mainInAppBackgroundTasker.submitFinishedTask(selectedItemPosition);
+        if (selectedItemPosition != -1) {
+            mainInAppBackgroundTasker.submitFinishedTask(selectedItemPosition);
 
-        toDoTasksFragment.removeTask(selectedItemPosition);
+            toDoTasksFragment.removeTask(selectedItemPosition);
 
-        // Show a pop-up checkmark.
-        float x = selectedItemView.getTranslationX();
-        int[] l = new int[2];
-        selectedItemView.getLocationOnScreen(l);
-        float y = l[1];
-        new PopUpCheckMark(getContext()).popUp(x, y);
+            // Show a pop-up checkmark.
+            float x = selectedItemView.getTranslationX();
+            int[] l = new int[2];
+            selectedItemView.getLocationOnScreen(l);
+            float y = l[1];
+            new PopUpCheckMark(getContext()).popUp(x, y);
+        }
     }
 
     @Override
@@ -474,11 +476,19 @@ public class MainInApp implements InAppInterface, OnBackPressedInvoker {
         switch (currentViewState) {
             case TOP:
                 showProgressDialog(R.string.activity_maininapp_excludewordprogress);
-                mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 1);
+                if (selectedItemPosition != -1) {
+                    mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 1);
+                } else {
+                    dismissProgressDialog();
+                }
                 break;
             case EXCLUDED:
                 showProgressDialog(R.string.activity_maininapp_unexcludewordprogress);
-                mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 0);
+                if (selectedItemPosition != -1) {
+                    mainInAppBackgroundTasker.setExcluded(selectedItemPosition, 0);
+                } else {
+                    dismissProgressDialog();
+                }
                 break;
         }
     }
