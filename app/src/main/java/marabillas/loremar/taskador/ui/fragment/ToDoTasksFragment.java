@@ -100,18 +100,13 @@ public class ToDoTasksFragment extends Fragment {
         }
     }
 
-    /**
-     * Notify the recycler view's adapter to update its view for the newly added task in the list.
-     *
-     * @param position position of the new task in the list
-     */
-    public void notifyTaskAdded(final int position) {
+    public void addTask(final IdTaskPair entry) {
         MainInAppActivity mainInAppActivity = (MainInAppActivity) getActivity();
         if (mainInAppActivity != null) {
             mainInAppActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.notifyItemInserted(position);
+                    adapter.addItem(entry);
                 }
             });
         }
