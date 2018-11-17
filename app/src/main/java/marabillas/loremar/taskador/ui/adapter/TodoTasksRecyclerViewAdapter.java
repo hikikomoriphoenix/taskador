@@ -87,8 +87,10 @@ public class TodoTasksRecyclerViewAdapter extends RecyclerView.Adapter<TodoTasks
     }
 
     public void removeItem(int position) {
-        tasks.remove(position);
-        notifyItemRemoved(position);
+        if (position < tasks.size()) {
+            tasks.remove(position);
+            notifyItemRemoved(position);
+        }
     }
 
     class TodoTasksViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener, View.OnLongClickListener {
