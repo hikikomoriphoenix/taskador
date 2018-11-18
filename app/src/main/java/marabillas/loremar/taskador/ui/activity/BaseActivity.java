@@ -32,8 +32,15 @@ import marabillas.loremar.taskador.ui.components.ActivityInterface;
  * Base class for taskador's activities. It allows binding a {@link BackgroundTaskManager}
  * service to handle background tasks for the particular activity.
  */
-public abstract class BaseActivity extends Activity implements ActivityInterface {
+public abstract class BaseActivity extends Activity implements ActivityInterface, Thread.UncaughtExceptionHandler {
     private BackgroundServiceConnection backgroundServiceConnection;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(this);
+    }
 
     @Override
     public Context getContext() {
@@ -88,5 +95,15 @@ public abstract class BaseActivity extends Activity implements ActivityInterface
         // Switch activity and stop old service
         startActivity(intent);
         backgroundTaskManager.stopSelf();
+    }
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        Intent intent = new Intent(this, ExceptionActivity.class);
+        intent.putExtra("thread", t.getName());
+        intent.putExtra("exception", e.getMessage());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

@@ -16,6 +16,7 @@
 
 <resources>
     <string name="app_name">taskador</string>
+    <string name="uncaught_exception">Unexpected Error</string>
 
     <string name="activity_splash_status_default">""</string>
     <string name="activity_splash_status_connecting">Connecting online.</string>

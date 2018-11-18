@@ -180,4 +180,11 @@
         </item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">serif-monospace</item>
     </style>
+
+    <style name="ExceptionTheme" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
 </resources>
