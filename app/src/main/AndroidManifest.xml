@@ -46,6 +46,11 @@
         <activity
             android:name=".ui.activity.MainInAppActivity"
             android:theme="@style/MainInAppTheme" />
+        <activity
+            android:name=".ui.activity.ExceptionActivity"
+            android:theme="@style/ExceptionTheme"
+            android:process=":exception"
+            android:taskAffinity="marabillas.loremar.taskador.TASK.Exception" />
 
         <service
             android:name=".account.AuthenticatorService"

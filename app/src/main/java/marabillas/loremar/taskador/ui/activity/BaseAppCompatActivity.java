@@ -34,8 +34,15 @@ import marabillas.loremar.taskador.ui.components.ActivityCompatInterface;
  * service to handle background tasks for the particular activity.
  */
 public abstract class BaseAppCompatActivity extends AppCompatActivity implements
-        ActivityCompatInterface {
+        ActivityCompatInterface, Thread.UncaughtExceptionHandler {
     private BackgroundServiceConnection backgroundServiceConnection;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(this);
+    }
 
     @Override
     public Context getContext() {
@@ -92,5 +99,15 @@ public abstract class BaseAppCompatActivity extends AppCompatActivity implements
         // Switch activity and stop old service
         startActivity(intent);
         backgroundTaskManager.stopSelf();
+    }
+
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        Intent intent = new Intent(this, ExceptionActivity.class);
+        intent.putExtra("thread", t.getName());
+        intent.putExtra("exception", e.getMessage());
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }
