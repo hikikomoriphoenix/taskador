@@ -36,7 +36,6 @@ import marabillas.loremar.taskador.entries.IdTaskPair;
 import marabillas.loremar.taskador.entries.TaskDatePair;
 import marabillas.loremar.taskador.entries.WordCountPair;
 import marabillas.loremar.taskador.ui.components.InAppInterface;
-import marabillas.loremar.taskador.ui.components.MainInApp;
 import marabillas.loremar.taskador.ui.fragment.TopWordsFragment;
 
 import static marabillas.loremar.taskador.utils.AccountUtils.setCurrentAccountUsername;
@@ -79,8 +78,6 @@ public class MainInAppActivityTest {
             excludedWords.add("excludedWord" + i);
         }
 
-        MainInApp mainInApp = new MainInApp(mainInAppActivity);
-
         class MainInAppBackgroundTaskerTest implements MainInAppBackgroundTasker {
             private InAppInterface mainInApp;
 
@@ -93,8 +90,8 @@ public class MainInAppActivityTest {
             @Override
             public void submitNewTask(String task) {
                 mainInApp.dismissProgressDialog();
-                todoTasks.add(new IdTaskPair(0, task));
-                mainInApp.getToDoTasksFragment().notifyTaskAdded(todoTasks.size() - 1);
+                IdTaskPair entry = new IdTaskPair(0, task);
+                mainInApp.getToDoTasksFragment().addTask(entry);
             }
 
             @Override
