@@ -1,4 +1,6 @@
 # taskador
+[![releases-latest](https://img.shields.io/badge/releases-latest-blue.svg)](https://github.com/hikikomoriphoenix/taskador/releases/latest)
+
 A to-do list android app. It saves your list online. It also includes feature for listing frequently used words in your list.
 
 ## Download
