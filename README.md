@@ -1,6 +1,9 @@
 # taskador
 A to-do list android app. It saves your list online. It also includes feature for listing frequently used words in your list.
 
+## Download
+[taskador_v0.9.0.apk](https://github.com/hikikomoriphoenix/taskador/releases/download/v0.9.0/taskador_v0.9.0.apk)
+
 Note: This version is not thoroughly tested and may contain some bugs. Please open a new issue to notify the developer of any bugs.
 
 ## Screenshots
